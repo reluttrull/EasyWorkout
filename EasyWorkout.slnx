@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="EasyWorkout.Application/EasyWorkout.Application.csproj" />
+  <Project Path="easyworkout.client/easyworkout.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="EasyWorkout.Contracts/EasyWorkout.Contracts.csproj" />
+  <Project Path="EasyWorkout.Server/EasyWorkout.Api.csproj" />
+</Solution>

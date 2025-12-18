@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EasyWorkout.Application.Model
+namespace EasyWorkout.Contracts.Responses
 {
-    public class Workout
+    public class WorkoutResponse
     {
         public required Guid WorkoutId { get; init; }
         public required Guid AddedByUserId { get; init; }
         public required DateOnly AddedDate { get; init; }
         public required string Name { get; set; }
         public string? Notes { get; set; }
-        public required List<Exercise> Exercises { get; init; } = [];
+        public required IEnumerable<ExerciseResponse> Exercises { get; init; } = [];
     }
 }

@@ -10,7 +10,7 @@ namespace EasyWorkout.Application.Model
         public required Guid AddedByUserId { get; init; }
         public required DateOnly AddedDate { get; init; }
         public required string Name { get; set; }
-        public string Notes { get; set; } = string.Empty;
+        public string? Notes { get; set; }
         public List<ExerciseSet> ExerciseSets { get; init; } = [];
     }
 }

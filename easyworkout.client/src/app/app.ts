@@ -8,7 +8,7 @@ import { Component, signal } from '@angular/core';
   styleUrl: './app.css'
 })
 export class App implements OnInit {
-  public forecasts: WeatherForecast[] = [];
+  //public forecasts: WeatherForecast[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -17,14 +17,14 @@ export class App implements OnInit {
   }
 
   getForecasts() {
-    this.http.get<WeatherForecast[]>('/weatherforecast').subscribe(
-      (result) => {
-        this.forecasts = result;
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+    //this.http.get<WeatherForecast[]>('/weatherforecast').subscribe(
+    //  (result) => {
+    //    this.forecasts = result;
+    //  },
+    //  (error) => {
+    //    console.error(error);
+    //  }
+    //);
   }
 
   protected readonly title = signal('easyworkout.client');

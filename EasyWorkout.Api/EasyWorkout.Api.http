@@ -1,0 +1,7 @@
+﻿@EasyWorkout.Api_HostAddress = https://localhost:7011
+
+
+
+GET {{EasyWorkout.Api_HostAddress}}/api/workouts
+
+###

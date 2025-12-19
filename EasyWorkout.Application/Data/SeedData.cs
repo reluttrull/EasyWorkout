@@ -1,4 +1,5 @@
 ﻿using EasyWorkout.Application.Model;
+using EasyWorkout.Identity.Api.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,25 +8,16 @@ namespace EasyWorkout.Application.Data
 {
     public static class SeedData
     {
-        public static void Initialize(WorkoutsContext workoutsContext)
+        public static void Initialize(WorkoutsContext workoutsContext, List<User> testUsers)
         {
-            List<User> users =
-            [
-                new User()
-                {
-                    Id = Guid.NewGuid(),
-                    UserName = "TestUser",
-                    Email = "email@email.com",
-                    JoinedDate = DateOnly.FromDateTime(DateTime.UtcNow)
-                }
-            ];
+            if (testUsers.Count == 0) return;
 
             List<Workout> workouts =
             [
                 new Workout()
                 {
                     Id = Guid.NewGuid(),
-                    AddedByUserId = users[0].Id,
+                    AddedByUserId = testUsers[0].Id,
                     AddedDate = DateOnly.FromDateTime(DateTime.UtcNow),
                     Name = "Workout #1",
                     Exercises = [],
@@ -38,7 +30,7 @@ namespace EasyWorkout.Application.Data
                 new Exercise()
                 {
                     Id = Guid.NewGuid(),
-                    AddedByUserId = users[0].Id,
+                    AddedByUserId = testUsers[0].Id,
                     AddedDate = DateOnly.FromDateTime(DateTime.UtcNow),
                     Name = "Exercise #1",
                     Workouts = [workouts[0]]
@@ -60,9 +52,8 @@ namespace EasyWorkout.Application.Data
             ];
 
 
-            if (workoutsContext.Users.Count() == 0)
+            if (!workoutsContext.Workouts.Any())
             {
-                workoutsContext.Users.AddRange(users);
                 workoutsContext.Workouts.AddRange(workouts);
                 workoutsContext.Exercises.AddRange(exercises);
                 workoutsContext.ExerciseSets.AddRange(exerciseSets);

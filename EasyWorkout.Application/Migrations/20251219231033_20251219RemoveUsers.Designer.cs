@@ -12,22 +12,22 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyWorkout.Application.Migrations
 {
     [DbContext(typeof(WorkoutsContext))]
-    [Migration("20251219145817_ModelUpdate20251219a")]
-    partial class ModelUpdate20251219a
+    [Migration("20251219231033_20251219RemoveUsers")]
+    partial class _20251219RemoveUsers
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.0")
+                .HasAnnotation("ProductVersion", "10.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("EasyWorkout.Application.Model.CompletedExercise", b =>
                 {
-                    b.Property<Guid>("CompletedExerciseId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -48,7 +48,7 @@ namespace EasyWorkout.Application.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
-                    b.HasKey("CompletedExerciseId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CompletedWorkoutId");
 
@@ -57,7 +57,7 @@ namespace EasyWorkout.Application.Migrations
 
             modelBuilder.Entity("EasyWorkout.Application.Model.CompletedExerciseSet", b =>
                 {
-                    b.Property<Guid>("CompletedExerciseSetId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -87,7 +87,7 @@ namespace EasyWorkout.Application.Migrations
                     b.Property<int>("WeightUnit")
                         .HasColumnType("integer");
 
-                    b.HasKey("CompletedExerciseSetId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CompletedExerciseId");
 
@@ -96,7 +96,7 @@ namespace EasyWorkout.Application.Migrations
 
             modelBuilder.Entity("EasyWorkout.Application.Model.CompletedWorkout", b =>
                 {
-                    b.Property<Guid>("CompletedWorkoutId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -114,14 +114,14 @@ namespace EasyWorkout.Application.Migrations
                     b.Property<Guid>("WorkoutId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("CompletedWorkoutId");
+                    b.HasKey("Id");
 
                     b.ToTable("CompletedWorkouts");
                 });
 
             modelBuilder.Entity("EasyWorkout.Application.Model.Exercise", b =>
                 {
-                    b.Property<Guid>("ExerciseId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -140,14 +140,14 @@ namespace EasyWorkout.Application.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
-                    b.HasKey("ExerciseId");
+                    b.HasKey("Id");
 
                     b.ToTable("Exercises");
                 });
 
             modelBuilder.Entity("EasyWorkout.Application.Model.ExerciseSet", b =>
                 {
-                    b.Property<Guid>("ExerciseSetId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -176,7 +176,7 @@ namespace EasyWorkout.Application.Migrations
                     b.Property<int?>("WeightUnit")
                         .HasColumnType("integer");
 
-                    b.HasKey("ExerciseSetId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ExerciseId");
 
@@ -185,7 +185,7 @@ namespace EasyWorkout.Application.Migrations
 
             modelBuilder.Entity("EasyWorkout.Application.Model.Workout", b =>
                 {
-                    b.Property<Guid>("WorkoutId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -204,22 +204,22 @@ namespace EasyWorkout.Application.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
-                    b.HasKey("WorkoutId");
+                    b.HasKey("Id");
 
                     b.ToTable("Workouts");
                 });
 
             modelBuilder.Entity("ExerciseWorkout", b =>
                 {
-                    b.Property<Guid>("ExercisesExerciseId")
+                    b.Property<Guid>("ExercisesId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("WorkoutsWorkoutId")
+                    b.Property<Guid>("WorkoutsId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("ExercisesExerciseId", "WorkoutsWorkoutId");
+                    b.HasKey("ExercisesId", "WorkoutsId");
 
-                    b.HasIndex("WorkoutsWorkoutId");
+                    b.HasIndex("WorkoutsId");
 
                     b.ToTable("ExerciseWorkout");
                 });
@@ -255,13 +255,13 @@ namespace EasyWorkout.Application.Migrations
                 {
                     b.HasOne("EasyWorkout.Application.Model.Exercise", null)
                         .WithMany()
-                        .HasForeignKey("ExercisesExerciseId")
+                        .HasForeignKey("ExercisesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EasyWorkout.Application.Model.Workout", null)
                         .WithMany()
-                        .HasForeignKey("WorkoutsWorkoutId")
+                        .HasForeignKey("WorkoutsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

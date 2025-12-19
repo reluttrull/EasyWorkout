@@ -1,4 +1,5 @@
 using EasyWorkout.Application.Data;
+using EasyWorkout.Identity.Api.Data;
 using Microsoft.EntityFrameworkCore;
 
 string root = Directory.GetCurrentDirectory();
@@ -11,10 +12,14 @@ if (File.Exists(solutionDotEnvPath))
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = Environment.GetEnvironmentVariable("WORKOUTSDB_CONNECTIONSTRING");
+var workoutsConnectionString = Environment.GetEnvironmentVariable("WORKOUTSDB_CONNECTIONSTRING");
+var usersConnectionString = Environment.GetEnvironmentVariable("USERSDB_CONNECTIONSTRING");
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(usersConnectionString));
 
 builder.Services.AddDbContext<WorkoutsContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseNpgsql(workoutsConnectionString));
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -40,8 +45,10 @@ app.MapControllers();
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
 using (var scope = scopeFactory.CreateScope())
 {
+    var usersDb = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    SeedUserData.Initialize(usersDb);
     var workoutsDb = scope.ServiceProvider.GetRequiredService<WorkoutsContext>();
-    SeedData.Initialize(workoutsDb);
+    SeedData.Initialize(workoutsDb, [.. usersDb.Users]);
 }
 
 app.MapFallbackToFile("/index.html");

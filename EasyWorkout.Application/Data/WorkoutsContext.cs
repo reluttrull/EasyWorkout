@@ -1,4 +1,5 @@
 ﻿using EasyWorkout.Application.Model;
+using EasyWorkout.Identity.Api.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,5 @@ namespace EasyWorkout.Application.Data
         public DbSet<CompletedWorkout> CompletedWorkouts { get; set; }
         public DbSet<CompletedExercise> CompletedExercises { get; set; }
         public DbSet<CompletedExerciseSet> CompletedExerciseSets { get; set; }
-
-        public DbSet<User> Users { get; set; }
     }
 }

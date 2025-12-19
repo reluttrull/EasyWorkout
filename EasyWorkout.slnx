@@ -1,6 +1,8 @@
 <Solution>
   <Folder Name="/Solution Items/">
     <File Path=".env" />
+    <File Path=".gitignore" />
+    <File Path="ditchall.sql" />
     <File Path="docker-compose.yml" />
   </Folder>
   <Project Path="EasyWorkout.Api/EasyWorkout.Api.csproj" />
@@ -10,4 +12,5 @@
     <Deploy />
   </Project>
   <Project Path="EasyWorkout.Contracts/EasyWorkout.Contracts.csproj" />
+  <Project Path="EasyWorkout.Identity.Api/EasyWorkout.Identity.Api.csproj" Id="997b5b2a-2384-4f13-97d0-75ddb82beafb" />
 </Solution>

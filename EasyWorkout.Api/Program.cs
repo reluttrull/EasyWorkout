@@ -37,6 +37,13 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
+using (var scope = scopeFactory.CreateScope())
+{
+    var workoutsDb = scope.ServiceProvider.GetRequiredService<WorkoutsContext>();
+    SeedData.Initialize(workoutsDb);
+}
+
 app.MapFallbackToFile("/index.html");
 
 app.Run();

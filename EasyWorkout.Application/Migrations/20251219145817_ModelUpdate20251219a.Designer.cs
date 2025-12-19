@@ -3,6 +3,7 @@ using System;
 using EasyWorkout.Application.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyWorkout.Application.Migrations
 {
     [DbContext(typeof(WorkoutsContext))]
-    partial class WorkoutsContextModelSnapshot : ModelSnapshot
+    [Migration("20251219145817_ModelUpdate20251219a")]
+    partial class ModelUpdate20251219a
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,7 +27,7 @@ namespace EasyWorkout.Application.Migrations
 
             modelBuilder.Entity("EasyWorkout.Application.Model.CompletedExercise", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("CompletedExerciseId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -45,7 +48,7 @@ namespace EasyWorkout.Application.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CompletedExerciseId");
 
                     b.HasIndex("CompletedWorkoutId");
 
@@ -54,7 +57,7 @@ namespace EasyWorkout.Application.Migrations
 
             modelBuilder.Entity("EasyWorkout.Application.Model.CompletedExerciseSet", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("CompletedExerciseSetId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -84,7 +87,7 @@ namespace EasyWorkout.Application.Migrations
                     b.Property<int>("WeightUnit")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("CompletedExerciseSetId");
 
                     b.HasIndex("CompletedExerciseId");
 
@@ -93,7 +96,7 @@ namespace EasyWorkout.Application.Migrations
 
             modelBuilder.Entity("EasyWorkout.Application.Model.CompletedWorkout", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("CompletedWorkoutId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -111,14 +114,14 @@ namespace EasyWorkout.Application.Migrations
                     b.Property<Guid>("WorkoutId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("Id");
+                    b.HasKey("CompletedWorkoutId");
 
                     b.ToTable("CompletedWorkouts");
                 });
 
             modelBuilder.Entity("EasyWorkout.Application.Model.Exercise", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("ExerciseId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -137,14 +140,14 @@ namespace EasyWorkout.Application.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
-                    b.HasKey("Id");
+                    b.HasKey("ExerciseId");
 
                     b.ToTable("Exercises");
                 });
 
             modelBuilder.Entity("EasyWorkout.Application.Model.ExerciseSet", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("ExerciseSetId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -173,49 +176,16 @@ namespace EasyWorkout.Application.Migrations
                     b.Property<int?>("WeightUnit")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("ExerciseSetId");
 
                     b.HasIndex("ExerciseId");
 
                     b.ToTable("ExerciseSets");
                 });
 
-            modelBuilder.Entity("EasyWorkout.Application.Model.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<DateOnly>("JoinedDate")
-                        .HasColumnType("date");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
             modelBuilder.Entity("EasyWorkout.Application.Model.Workout", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("WorkoutId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -234,22 +204,22 @@ namespace EasyWorkout.Application.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
-                    b.HasKey("Id");
+                    b.HasKey("WorkoutId");
 
                     b.ToTable("Workouts");
                 });
 
             modelBuilder.Entity("ExerciseWorkout", b =>
                 {
-                    b.Property<Guid>("ExercisesId")
+                    b.Property<Guid>("ExercisesExerciseId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("WorkoutsId")
+                    b.Property<Guid>("WorkoutsWorkoutId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("ExercisesId", "WorkoutsId");
+                    b.HasKey("ExercisesExerciseId", "WorkoutsWorkoutId");
 
-                    b.HasIndex("WorkoutsId");
+                    b.HasIndex("WorkoutsWorkoutId");
 
                     b.ToTable("ExerciseWorkout");
                 });
@@ -285,13 +255,13 @@ namespace EasyWorkout.Application.Migrations
                 {
                     b.HasOne("EasyWorkout.Application.Model.Exercise", null)
                         .WithMany()
-                        .HasForeignKey("ExercisesId")
+                        .HasForeignKey("ExercisesExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EasyWorkout.Application.Model.Workout", null)
                         .WithMany()
-                        .HasForeignKey("WorkoutsId")
+                        .HasForeignKey("WorkoutsWorkoutId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

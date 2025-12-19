@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /docker-compose.yml
 /.env
+/ditchall.sql

@@ -7,8 +7,8 @@ POST {{EasyWorkout.Identity.Api_HostAddress}}/api/auth/login
 Content-Type: application/json
 
 {
-  "userName": "TestAddUserDb2",
-  "password": "@Hunter2"
+  "userName": "TestAddUserDb3",
+  "password": "@Hunter3"
 }
 
 ###
@@ -18,11 +18,11 @@ POST {{EasyWorkout.Identity.Api_HostAddress}}/api/auth/register
 Content-Type: application/json
 
 {       
-  "userName": "TestAddUserDb2",
+  "userName": "TestAddUserDb3",
   "email": "fakeemail@sdfkd.com",
-  "password": "@Hunter2",
-  "firstName": "Jane",
-  "lastName": "McElroy"
+  "password": "@Hunter3",
+  "firstName": "Jimmy",
+  "lastName": "McIntosh"
 }
 
 ###

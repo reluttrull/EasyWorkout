@@ -1,5 +1,7 @@
-﻿using EasyWorkout.Application.Data;
+﻿using EasyWorkout.Api.Auth;
+using EasyWorkout.Application.Data;
 using EasyWorkout.Application.Model;
+using EasyWorkout.Contracts.Requests;
 using EasyWorkout.Identity.Api;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,11 +20,29 @@ namespace EasyWorkout.Api.Controllers
             _logger = logger;
         }
 
-        [Authorize(AuthConstants.PaidMemberUserPolicyName)]
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
         [HttpPost(Endpoints.Workouts.Create)]
-        public async Task<IActionResult> Create() // will pass request object from body
+        public async Task<IActionResult> Create(CreateWorkoutRequest request)
         {
-            throw new NotImplementedException();
+            var userId = HttpContext.GetUserId();
+
+            if (_workoutsContext.Workouts.Any(w => w.Name == request.Name && w.AddedByUserId == userId))
+                return BadRequest($"Workout with the name {request.Name} already exists for user {userId}.");
+
+            Workout workout = new Workout()
+            {
+                Id = Guid.NewGuid(),
+                AddedByUserId = userId!.Value,
+                AddedDate = DateOnly.FromDateTime(DateTime.UtcNow),
+                Name = request.Name,
+                Notes = request.Notes,
+                Exercises = []
+            };
+
+            _workoutsContext.Workouts.Add(workout);
+            await _workoutsContext.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(Get), new { id = workout.Id }, workout);
         }
 
         [Authorize(AuthConstants.FreeMemberUserPolicyName)]
@@ -39,14 +59,14 @@ namespace EasyWorkout.Api.Controllers
             throw new NotImplementedException();
         }
 
-        [Authorize(AuthConstants.PaidMemberUserPolicyName)]
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
         [HttpPut(Endpoints.Workouts.Update)]
         public async Task<IActionResult> Update(Guid id) // will pass request object from body
         {
             throw new NotImplementedException();
         }
 
-        [Authorize(AuthConstants.PaidMemberUserPolicyName)]
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
         [HttpDelete(Endpoints.Workouts.Delete)]
         public async Task<IActionResult> Delete(Guid id)
         {

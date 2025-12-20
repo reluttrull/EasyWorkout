@@ -1,5 +1,5 @@
 ﻿@EasyWorkout.Api_HostAddress = https://localhost:7011
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJmYTc0NWRjMy1mOTEzLTQxMTUtOTllYy1mZmE4ODU5ZjA5MDAiLCJzdWIiOiJUZXN0QWRkVXNlckRiMiIsIm5hbWUiOiJKYW5lIE1jRWxyb3kiLCJmcmVlX21lbWJlciI6InRydWUiLCJuYmYiOjE3NjYyNjUzODksImV4cCI6MTc2NjI5NDE4OSwiaWF0IjoxNzY2MjY1Mzg5LCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MDMzIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzAxMSJ9.A8ksECAwZ7xS45M3Xc74O54veqxOIf_8Fa6ZQpSlDHM
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyMGNkOGUzNy0yZjE0LTRkMDMtYWQzNy0wZjU3Yzc1MmFiZjAiLCJzdWIiOiJUZXN0QWRkVXNlckRiMyIsIm5hbWUiOiJKaW1teSBNY0ludG9zaCIsInVzZXJpZCI6IjAxOWIzZGUyLWUzZDUtNzdkOC05YWZiLTAyYWY5YTIwNTgyNyIsImZyZWVfbWVtYmVyIjoidHJ1ZSIsIm5iZiI6MTc2NjI2OTg1MywiZXhwIjoxNzY2Mjk4NjUzLCJpYXQiOjE3NjYyNjk4NTMsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcwMzMiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MDExIn0.q4yPJ4rpZCaI-HyZvyipAPY3PITJLp_-NmckDgwNuDE
 
 
 
@@ -10,5 +10,17 @@ Authorization: Bearer {{token}}
 
 GET {{EasyWorkout.Api_HostAddress}}/api/workouts
 Authorization: Bearer {{token}}
+
+###
+
+
+POST {{EasyWorkout.Api_HostAddress}}/api/workouts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Workout added from api",
+  "notes": "dsfjlksdflkjsd ljkl kjslkj sdflkj sfdlkj sflkj dsfsf d"
+}
 
 ###

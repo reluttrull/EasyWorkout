@@ -28,7 +28,8 @@ namespace EasyWorkout.Identity.Api.Services
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName!),
-                new Claim(JwtRegisteredClaimNames.Name, $"{user.FirstName} {user.LastName}")
+                new Claim(JwtRegisteredClaimNames.Name, $"{user.FirstName} {user.LastName}"),
+                new("userid", user.Id.ToString())
             };
 
             // for now, everyone is a free member

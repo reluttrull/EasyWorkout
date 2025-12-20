@@ -1,7 +1,14 @@
 ﻿@EasyWorkout.Api_HostAddress = https://localhost:7011
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1ZjYyNzg3ZS0wM2NmLTRmNzItOTRjMy04OGQwN2ZlNWI3MzQiLCJzdWIiOiJUZXN0VXNlciIsIm5hbWUiOiIgIiwiZnJlZV9tZW1iZXIiOiJ0cnVlIiwibmJmIjoxNzY2MjUwMTc5LCJleHAiOjE3NjYyNzg5NzksImlhdCI6MTc2NjI1MDE3OSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzAzMyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcwMTEifQ.k_GHkD7mE1x9iNQwYLD-zJuGDmcSmYOnAeY_xJ21bUo
 
 
+
+POST {{EasyWorkout.Api_HostAddress}}/api/workouts
+Authorization: Bearer {{token}}
+
+###
 
 GET {{EasyWorkout.Api_HostAddress}}/api/workouts
+Authorization: Bearer {{token}}
 
 ###

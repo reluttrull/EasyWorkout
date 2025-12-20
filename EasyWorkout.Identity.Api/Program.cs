@@ -12,6 +12,15 @@ if (File.Exists(solutionDotEnvPath))
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowClient", policy =>
+        policy.WithOrigins("https://reluttrull.github.io", "https://localhost:55169")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials());
+});
+
 // Add services to the container.
 var usersConnectionString = Environment.GetEnvironmentVariable("USERSDB_CONNECTIONSTRING");
 
@@ -34,6 +43,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseCors("AllowClient");
 
 app.UseHttpsRedirection();
 

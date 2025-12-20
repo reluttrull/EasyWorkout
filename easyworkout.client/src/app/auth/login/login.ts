@@ -1,0 +1,37 @@
+import { Component } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
+
+@Component({
+  selector: 'app-login',
+  standalone: true,
+  imports: [ReactiveFormsModule],
+  templateUrl: './login.html'
+})
+export class LoginComponent {
+  
+  form!: FormGroup;
+
+  constructor(
+    private fb: FormBuilder,
+    private auth: AuthService,
+    private router: Router
+  ) {
+    console.log('got to login component');
+    
+    this.form = this.fb.nonNullable.group({
+      userName: [''],
+      password: ['']
+    });
+  }
+
+  submit() {
+    this.auth.login(
+      this.form.value.userName!,
+      this.form.value.password!
+    ).subscribe(() => {
+      this.router.navigate(['/workouts']);
+    });
+  }
+}

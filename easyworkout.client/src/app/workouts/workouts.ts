@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WorkoutsService } from './workouts.service';
+import { Workout } from './workouts.service';
 
 @Component({
   standalone: true,
@@ -8,9 +9,9 @@ import { WorkoutsService } from './workouts.service';
   templateUrl: './workouts.html'
 })
 export class WorkoutsComponent {
-  workouts: any[] = [];
+  workouts = signal<Workout[]>([]);
 
   constructor(private service: WorkoutsService) {
-    this.service.getAll().subscribe(w => this.workouts = w);
+    this.service.getAll().subscribe(w => this.workouts.set(w));
   }
 }

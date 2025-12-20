@@ -8,8 +8,8 @@
   <Project Path="EasyWorkout.Api/EasyWorkout.Api.csproj" />
   <Project Path="EasyWorkout.Application/EasyWorkout.Application.csproj" />
   <Project Path="easyworkout.client/easyworkout.client.esproj">
-    <Build />
-    <Deploy />
+    <Build Solution="Release|*" />
+    <Deploy Solution="Release|*" />
   </Project>
   <Project Path="EasyWorkout.Contracts/EasyWorkout.Contracts.csproj" />
   <Project Path="EasyWorkout.Identity.Api/EasyWorkout.Identity.Api.csproj" Id="997b5b2a-2384-4f13-97d0-75ddb82beafb" />

@@ -1,4 +1,4 @@
 <h2>My Workouts</h2>
-@for (workout of workouts; track $index) {
+@for (workout of workouts(); track $index) {
     <div>{{ workout.name }}</div>
 }

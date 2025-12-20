@@ -87,11 +87,11 @@ namespace EasyWorkout.Identity.Api.Controllers
             if (user == null)
                 return Unauthorized(new { message = "Invalid Username or Password" });
 
-            var accessToken = _tokenService.GenerateAccessToken(user);
+            string accessToken = _tokenService.GenerateAccessToken(user);
 
             await _context.SaveChangesAsync();
 
-            return Ok(accessToken);
+            return Ok(new { token = accessToken });
         }
     }
 }

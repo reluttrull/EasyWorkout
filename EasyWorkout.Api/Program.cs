@@ -1,6 +1,9 @@
 using EasyWorkout.Application.Data;
 using EasyWorkout.Identity.Api.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 string root = Directory.GetCurrentDirectory();
 string solutionDotEnvPath = Path.Combine(root, "../.env");
@@ -10,6 +13,7 @@ if (File.Exists(solutionDotEnvPath))
 }
 
 var builder = WebApplication.CreateBuilder(args);
+var config = builder.Configuration;
 
 // Add services to the container.
 var workoutsConnectionString = Environment.GetEnvironmentVariable("WORKOUTSDB_CONNECTIONSTRING");
@@ -20,6 +24,22 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddDbContext<WorkoutsContext>(options =>
     options.UseNpgsql(workoutsConnectionString));
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = config["Jwt:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = config["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("TOKEN_SECRET")!)),
+            ValidateIssuerSigningKey = true,
+            ValidateLifetime = true
+        };
+    });
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

@@ -1,6 +1,16 @@
-@EasyWorkout.Identity.Api_HostAddress = http://localhost:5211
+@EasyWorkout.Identity.Api_HostAddress = https://localhost:7033
 
 GET {{EasyWorkout.Identity.Api_HostAddress}}/weatherforecast/
 Accept: application/json
+
+###
+
+POST {{EasyWorkout.Identity.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "userName": "TestUser",
+  "password": "sdjflkjklsd"
+}
 
 ###

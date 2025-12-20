@@ -1,4 +1,4 @@
-﻿namespace EasyWorkout.Identity.Api.Model
+﻿namespace EasyWorkout.Contracts.Requests
 {
     public class LoginRequest
     {

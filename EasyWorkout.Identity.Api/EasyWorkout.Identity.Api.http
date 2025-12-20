@@ -1,7 +1,5 @@
 @EasyWorkout.Identity.Api_HostAddress = https://localhost:7033
 
-GET {{EasyWorkout.Identity.Api_HostAddress}}/weatherforecast/
-Accept: application/json
 
 ###
 

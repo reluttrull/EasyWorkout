@@ -1,4 +1,5 @@
-﻿using EasyWorkout.Identity.Api.Data;
+﻿using EasyWorkout.Contracts.Requests;
+using EasyWorkout.Identity.Api.Data;
 using EasyWorkout.Identity.Api.Model;
 using EasyWorkout.Identity.Api.Services;
 using Microsoft.AspNetCore.Http;

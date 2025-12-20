@@ -44,12 +44,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization(x =>
 {
-    x.AddPolicy(AuthConstants.AdminUserPolicyName,
+    x.AddPolicy(AuthConstants.AdminUserRoleName,
         p => p.RequireClaim(AuthConstants.AdminUserClaimName, "true"));
-    x.AddPolicy(AuthConstants.PaidMemberUserPolicyName,
+    x.AddPolicy(AuthConstants.PaidMemberUserRoleName,
         p => p.RequireAssertion(c => c.User.HasClaim(m => m is { Type: AuthConstants.PaidMemberUserClaimName, Value: "true" })
             || c.User.HasClaim(m => m is { Type: AuthConstants.AdminUserClaimName, Value: "true" })));
-    x.AddPolicy(AuthConstants.FreeMemberUserPolicyName,
+    x.AddPolicy(AuthConstants.FreeMemberUserRoleName,
         p => p.RequireAssertion(c => c.User.HasClaim(m => m is { Type: AuthConstants.FreeMemberUserClaimName, Value: "true" })
             || c.User.HasClaim(m => m is { Type: AuthConstants.PaidMemberUserClaimName, Value: "true" })
             || c.User.HasClaim(m => m is { Type: AuthConstants.AdminUserClaimName, Value: "true" })));

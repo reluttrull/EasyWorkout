@@ -1,5 +1,6 @@
 ﻿using EasyWorkout.Identity.Api.Model;
 using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -29,6 +30,7 @@ namespace EasyWorkout.Identity.Api.Services
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName!),
                 new Claim(JwtRegisteredClaimNames.Name, $"{user.FirstName} {user.LastName}")
             };
+
             // for now, everyone is a free member
             claims.Add(new Claim(AuthConstants.FreeMemberUserClaimName, "true"));
 

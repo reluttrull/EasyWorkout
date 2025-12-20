@@ -1,4 +1,5 @@
 using EasyWorkout.Identity.Api.Data;
+using EasyWorkout.Identity.Api.Model;
 using EasyWorkout.Identity.Api.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,9 @@ var usersConnectionString = Environment.GetEnvironmentVariable("USERSDB_CONNECTI
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(usersConnectionString));
+
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

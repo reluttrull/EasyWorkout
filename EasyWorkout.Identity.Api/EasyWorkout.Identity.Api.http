@@ -7,8 +7,22 @@ POST {{EasyWorkout.Identity.Api_HostAddress}}/api/auth/login
 Content-Type: application/json
 
 {
-  "userName": "TestUser",
-  "password": "sdjflkjklsd"
+  "userName": "TestAddUserDb2",
+  "password": "@Hunter2"
+}
+
+###
+
+
+POST {{EasyWorkout.Identity.Api_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{       
+  "userName": "TestAddUserDb2",
+  "email": "fakeemail@sdfkd.com",
+  "password": "@Hunter2",
+  "firstName": "Jane",
+  "lastName": "McElroy"
 }
 
 ###

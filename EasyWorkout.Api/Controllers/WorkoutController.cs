@@ -63,9 +63,15 @@ namespace EasyWorkout.Api.Controllers
 
         [Authorize(AuthConstants.FreeMemberUserPolicyName)]
         [HttpPut(Endpoints.Workouts.Update)]
-        public async Task<IActionResult> Update([FromRoute] Guid id, CancellationToken token) // will pass request object from body
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateWorkoutRequest request, CancellationToken token)
         {
-            throw new NotImplementedException();
+            var userId = HttpContext.GetUserId();
+
+            var existingWorkout = await _workoutService.GetByIdAsync(id, token);
+
+            var workout = await _workoutService.UpdateAsync(id, request, userId!.Value, token);
+            if (workout is null) return NotFound();
+            return Ok(workout.MapToResponse());
         }
 
         [Authorize(AuthConstants.FreeMemberUserPolicyName)]

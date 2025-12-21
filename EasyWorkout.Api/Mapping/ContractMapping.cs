@@ -20,6 +20,19 @@ namespace EasyWorkout.Api.Mapping
             };
         }
 
+        public static Workout MapToWorkout(this UpdateWorkoutRequest request, Workout workout)
+        {
+            return new Workout()
+            {
+                Id = workout.Id,
+                AddedByUserId = workout.AddedByUserId,
+                AddedDate = workout.AddedDate,
+                Name = request.Name,
+                Notes = request.Notes,
+                Exercises = workout.Exercises
+            };
+        }
+
         public static WorkoutResponse MapToResponse(this Workout workout)
         {
             return new WorkoutResponse()

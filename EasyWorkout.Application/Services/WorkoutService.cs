@@ -1,5 +1,6 @@
 ﻿using EasyWorkout.Application.Data;
 using EasyWorkout.Application.Model;
+using EasyWorkout.Contracts.Requests;
 using EasyWorkout.Identity.Api.Model;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,20 @@ namespace EasyWorkout.Application.Services
             return _workoutsContext.Workouts
                 .Where(w => w.Id == id)
                 .First();
+        }
+
+        public async Task<Workout?> UpdateAsync(Guid id, UpdateWorkoutRequest request, Guid userId, CancellationToken token = default)
+        {
+            var workoutToChange = _workoutsContext.Workouts.First(w => w.Id == id);
+            if (workoutToChange is null) return null;
+            if (workoutToChange.AddedByUserId != userId) return null;
+
+            workoutToChange.Name = request.Name;
+            workoutToChange.Notes = request.Notes;
+
+            await _workoutsContext.SaveChangesAsync(token);
+
+            return workoutToChange;
         }
     }
 }

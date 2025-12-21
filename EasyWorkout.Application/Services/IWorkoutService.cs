@@ -1,4 +1,5 @@
 ﻿using EasyWorkout.Application.Model;
+using EasyWorkout.Contracts.Requests;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,5 +13,7 @@ namespace EasyWorkout.Application.Services
         Task<Workout?> GetByIdAsync(Guid id, CancellationToken token = default);
 
         Task<IEnumerable<Workout>> GetAllForUserAsync(Guid userId, CancellationToken token = default);
+
+        Task<Workout?> UpdateAsync(Guid id, UpdateWorkoutRequest request, Guid userId, CancellationToken token = default);
     }
 }

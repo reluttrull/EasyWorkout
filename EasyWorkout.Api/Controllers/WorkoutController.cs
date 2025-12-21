@@ -53,6 +53,7 @@ namespace EasyWorkout.Api.Controllers
         public async Task<IActionResult> Get(Guid id, CancellationToken token)
         {
             var userId = HttpContext.GetUserId();
+            if (userId is null) return BadRequest("User not found.");
 
             var workout = await _workoutService.GetByIdAsync(id, token);
             if (workout is null) return NotFound($"Workout with id {id} not found.");
@@ -66,6 +67,7 @@ namespace EasyWorkout.Api.Controllers
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateWorkoutRequest request, CancellationToken token)
         {
             var userId = HttpContext.GetUserId();
+            if (userId is null) return BadRequest("User not found.");
 
             var existingWorkout = await _workoutService.GetByIdAsync(id, token);
 
@@ -78,7 +80,14 @@ namespace EasyWorkout.Api.Controllers
         [HttpDelete(Endpoints.Workouts.Delete)]
         public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
         {
-            throw new NotImplementedException();
+            var userId = HttpContext.GetUserId();
+            if (userId is null) return BadRequest("User not found.");
+
+            var success = await _workoutService.DeleteAsync(id, userId!.Value, token);
+            if (!success) return NotFound();
+            return Ok();
+
+
         }
 
     }

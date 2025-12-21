@@ -15,5 +15,7 @@ namespace EasyWorkout.Application.Services
         Task<IEnumerable<Workout>> GetAllForUserAsync(Guid userId, CancellationToken token = default);
 
         Task<Workout?> UpdateAsync(Guid id, UpdateWorkoutRequest request, Guid userId, CancellationToken token = default);
+
+        Task<bool> DeleteAsync(Guid id, Guid userId, CancellationToken token = default);
     }
 }

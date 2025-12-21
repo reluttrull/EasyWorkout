@@ -27,6 +27,16 @@ namespace EasyWorkout.Application.Services
             return result > 0;
         }
 
+        public async Task<bool> DeleteAsync(Guid id, Guid userId, CancellationToken token = default)
+        {
+            var workoutToDelete = _workoutsContext.Workouts.Single(w => w.Id == id);
+            if (workoutToDelete.AddedByUserId != userId) return false;
+
+            _workoutsContext.Workouts.Remove(workoutToDelete);
+            var result = await _workoutsContext.SaveChangesAsync(token);
+            return result > 0;
+        }
+
         public async Task<IEnumerable<Workout>> GetAllForUserAsync(Guid userId, CancellationToken token = default)
         {
             return _workoutsContext.Workouts

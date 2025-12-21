@@ -13,6 +13,6 @@ export class WorkoutsService {
   constructor(private http: HttpClient) {}
 
   getAll() {
-    return this.http.get<Workout[]>(this.baseUrl);
+    return this.http.get<Workout[]>(`${this.baseUrl}/me`);
   }
 }

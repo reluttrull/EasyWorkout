@@ -70,7 +70,7 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddSingleton<IWorkoutService, WorkoutService>();
+builder.Services.AddScoped<IWorkoutService, WorkoutService>();
 
 var app = builder.Build();
 
@@ -92,14 +92,14 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
-using (var scope = scopeFactory.CreateScope())
-{
-    var usersDb = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    SeedUserData.Initialize(usersDb);
-    var workoutsDb = scope.ServiceProvider.GetRequiredService<WorkoutsContext>();
-    SeedData.Initialize(workoutsDb, [.. usersDb.Users]);
-}
+//var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
+//using (var scope = scopeFactory.CreateScope())
+//{
+//    var usersDb = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+//    SeedUserData.Initialize(usersDb);
+//    var workoutsDb = scope.ServiceProvider.GetRequiredService<WorkoutsContext>();
+//    SeedData.Initialize(workoutsDb, [.. usersDb.Users]);
+//}
 
 app.MapFallbackToFile("/index.html");
 

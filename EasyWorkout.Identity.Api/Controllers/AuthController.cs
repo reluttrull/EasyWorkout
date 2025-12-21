@@ -5,6 +5,7 @@ using EasyWorkout.Identity.Api.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -80,18 +81,54 @@ namespace EasyWorkout.Identity.Api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] Contracts.Requests.LoginRequest request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == request.UserName);
-            // todo: deal with password!
+            
             if (user == null)
-                return Unauthorized(new { message = "Invalid Username or Password" });
+                return Unauthorized(new { message = "Invalid Username" });
+
+            var passwordValid = await _userManager.CheckPasswordAsync(user, request.Password);
+            if (!passwordValid)
+                return Unauthorized(new { message = "Invalid Password" });
 
             string accessToken = _tokenService.GenerateAccessToken(user);
+            var refreshToken = _tokenService.GenerateRefreshToken();
+
+            user.RefreshToken = refreshToken.Token;
+            user.RefreshTokenExpiry = refreshToken.Expires;
 
             await _context.SaveChangesAsync();
 
-            return Ok(new { token = accessToken });
+            return Ok(new { AccessToken = accessToken, RefreshToken = refreshToken.Token });
+        }
+
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshRequest request)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
+            if (user == null)
+            {
+                return Unauthorized(new { Message = "Invalid Refresh Token" });
+            }
+            if (user.RefreshTokenExpiry < DateTime.UtcNow)
+            {
+                return Unauthorized(new { Message = "Refresh Token Expired" });
+            }
+            var newAccessToken = _tokenService.GenerateAccessToken(user);
+            var newRefreshToken = _tokenService.GenerateRefreshToken();
+
+            user.RefreshToken = newRefreshToken.Token;
+            user.RefreshTokenExpiry = newRefreshToken.Expires;
+            await _context.SaveChangesAsync();
+
+            return Ok(
+                new 
+                {
+                    AccessToken = newAccessToken,
+                    RefreshToken = newRefreshToken.Token
+                });
         }
     }
 }

@@ -10,5 +10,7 @@ namespace EasyWorkout.Identity.Api.Model
         [MaxLength(100)]
         public string LastName { get; set; } = string.Empty;
         public DateOnly JoinedDate { get; init; }
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiry { get; set; }
     }
 }

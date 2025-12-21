@@ -14,12 +14,23 @@ export class AuthService {
 
   login(userName: string, password: string) {
     return this.http
-      .post<{ token: string }>(`${this.baseUrl}/login`, {
+      .post<{ accessToken: string, refreshToken: string  }>(`${this.baseUrl}/login`, {
         userName,
         password
       })
       .pipe(
-        tap(res => this.tokenService.set(res.token))
+        tap(res => this.tokenService.setTokens(res.accessToken, res.refreshToken))
+      );
+  }
+
+  refreshToken() {
+    const refreshToken = this.tokenService.getRefreshToken();
+    return this.http
+      .post<{ accessToken: string; refreshToken: string }>(`${this.baseUrl}/refresh`, {
+        refreshToken
+      })
+      .pipe(
+        tap(res => this.tokenService.setTokens(res.accessToken, res.refreshToken))
       );
   }
 

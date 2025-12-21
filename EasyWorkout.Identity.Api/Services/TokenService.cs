@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 
@@ -12,7 +13,7 @@ namespace EasyWorkout.Identity.Api.Services
     public class TokenService : ITokenService
     {
         private string tokenSecret = Environment.GetEnvironmentVariable("TOKEN_SECRET")!;
-        private static readonly TimeSpan tokenLifetime = TimeSpan.FromHours(8);
+        private static readonly TimeSpan tokenLifetime = TimeSpan.FromMinutes(15);
         private readonly IConfiguration _config;
         public TokenService(IConfiguration config)
         {
@@ -47,6 +48,18 @@ namespace EasyWorkout.Identity.Api.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var jwt = tokenHandler.WriteToken(token);
             return jwt;
+        }
+
+
+        (string Token, DateTime Expires) ITokenService.GenerateRefreshToken()
+        {
+            var randomNumber = new byte[64];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return (
+                Token: Convert.ToBase64String(randomNumber),
+                Expires: DateTime.UtcNow.AddDays(7)
+            );
         }
     }
 }

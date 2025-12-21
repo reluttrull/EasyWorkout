@@ -130,5 +130,20 @@ namespace EasyWorkout.Identity.Api.Controllers
                     RefreshToken = newRefreshToken.Token
                 });
         }
+
+        [HttpDelete("revoke/{refreshToken}")]
+        public async Task<IActionResult> RevokeToken(string refreshToken)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+            if (user is null) return NotFound($"User with specified token not found.");
+
+            user.RefreshToken = string.Empty;
+            user.RefreshTokenExpiry = new DateTime();
+
+            await _userManager.RemoveAuthenticationTokenAsync(user, "Default", "RefreshToken");
+            
+            await _context.SaveChangesAsync();
+            return Ok("Refresh token revoked.");
+        }
     }
 }

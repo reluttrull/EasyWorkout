@@ -26,3 +26,19 @@ Content-Type: application/json
 }
 
 ###
+
+
+POST {{EasyWorkout.Identity.Api_HostAddress}}/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "GWAW1Q+XqJERLLEId0ZrpLJInZC1rktEAlDYi35zlLQpJ+VA+5dd7L6nTb5jRun5zkrAjuE59BdPhKO9vj4R3g=="
+}
+
+###
+
+
+@refreshToken=GWAW1Q+XqJERLLEId0ZrpLJInZC1rktEAlDYi35zlLQpJ+VA+5dd7L6nTb5jRun5zkrAjuE59BdPhKO9vj4R3g==
+DELETE {{EasyWorkout.Identity.Api_HostAddress}}/api/auth/revoke/{{refreshToken}}
+
+###

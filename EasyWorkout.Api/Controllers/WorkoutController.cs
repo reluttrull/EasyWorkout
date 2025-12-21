@@ -1,6 +1,8 @@
 ﻿using EasyWorkout.Api.Auth;
+using EasyWorkout.Api.Mapping;
 using EasyWorkout.Application.Data;
 using EasyWorkout.Application.Model;
+using EasyWorkout.Application.Services;
 using EasyWorkout.Contracts.Requests;
 using EasyWorkout.Identity.Api;
 using Microsoft.AspNetCore.Authorization;
@@ -12,63 +14,63 @@ namespace EasyWorkout.Api.Controllers
     [ApiController]
     public class WorkoutController : ControllerBase
     {
-        private readonly WorkoutsContext _workoutsContext;
+        private readonly IWorkoutService _workoutService;
         private readonly ILogger _logger;
-        public WorkoutController(WorkoutsContext workoutsContext, ILogger<WorkoutController> logger)
+        public WorkoutController(IWorkoutService workoutService, ILogger<WorkoutController> logger)
         {
-            _workoutsContext = workoutsContext;
+            _workoutService = workoutService;
             _logger = logger;
         }
 
         [Authorize(AuthConstants.FreeMemberUserPolicyName)]
         [HttpPost(Endpoints.Workouts.Create)]
-        public async Task<IActionResult> Create(CreateWorkoutRequest request)
+        public async Task<IActionResult> Create([FromBody] CreateWorkoutRequest request, CancellationToken token)
         {
             var userId = HttpContext.GetUserId();
+            if (userId is null) return BadRequest("User not found.");
 
-            if (_workoutsContext.Workouts.Any(w => w.Name == request.Name && w.AddedByUserId == userId))
-                return BadRequest($"Workout with the name {request.Name} already exists for user {userId}.");
-
-            Workout workout = new Workout()
-            {
-                Id = Guid.NewGuid(),
-                AddedByUserId = userId!.Value,
-                AddedDate = DateOnly.FromDateTime(DateTime.UtcNow),
-                Name = request.Name,
-                Notes = request.Notes,
-                Exercises = []
-            };
-
-            _workoutsContext.Workouts.Add(workout);
-            await _workoutsContext.SaveChangesAsync();
+            var workout = request.MapToWorkout(userId!.Value);
+            await _workoutService.CreateAsync(workout, token);
 
             return CreatedAtAction(nameof(Get), new { id = workout.Id }, workout);
         }
 
         [Authorize(AuthConstants.FreeMemberUserPolicyName)]
-        [HttpGet(Endpoints.Workouts.GetAll)]
-        public async Task<IActionResult> GetAll()
+        [HttpGet(Endpoints.Workouts.GetAllForUser)]
+        public async Task<IActionResult> GetAllForUser(CancellationToken token)
         {
-            return Ok(_workoutsContext.Workouts);
+            var userId = HttpContext.GetUserId();
+            if (userId is null) return BadRequest("User not found.");
+
+            var workoutsForUser = await _workoutService.GetAllForUserAsync(userId!.Value, token);
+            var workoutResponsesForUser = workoutsForUser.Select(w => w.MapToResponse());
+
+            return Ok(workoutResponsesForUser);
         }
 
         [Authorize(AuthConstants.FreeMemberUserPolicyName)]
         [HttpGet(Endpoints.Workouts.Get)]
-        public async Task<IActionResult> Get(Guid id)
+        public async Task<IActionResult> Get(Guid id, CancellationToken token)
         {
-            throw new NotImplementedException();
+            var userId = HttpContext.GetUserId();
+
+            var workout = await _workoutService.GetByIdAsync(id, token);
+            if (workout is null) return NotFound($"Workout with id {id} not found.");
+            if (workout.AddedByUserId != userId) return BadRequest($"Workout with id {id} does not belong to user with id {userId}.");
+
+            return Ok(workout.MapToResponse());
         }
 
         [Authorize(AuthConstants.FreeMemberUserPolicyName)]
         [HttpPut(Endpoints.Workouts.Update)]
-        public async Task<IActionResult> Update(Guid id) // will pass request object from body
+        public async Task<IActionResult> Update([FromRoute] Guid id, CancellationToken token) // will pass request object from body
         {
             throw new NotImplementedException();
         }
 
         [Authorize(AuthConstants.FreeMemberUserPolicyName)]
         [HttpDelete(Endpoints.Workouts.Delete)]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
         {
             throw new NotImplementedException();
         }

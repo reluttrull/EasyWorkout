@@ -6,7 +6,7 @@ namespace EasyWorkout.Contracts.Responses
 {
     public class ExerciseSetResponse
     {
-        public required Guid ExerciseSetId { get; init; }
+        public required Guid Id { get; init; }
         public required Guid ExerciseId { get; init; }
         public required int SetNumber { get; set; }
         public int? Reps { get; set; }

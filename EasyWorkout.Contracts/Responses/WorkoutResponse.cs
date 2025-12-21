@@ -6,7 +6,7 @@ namespace EasyWorkout.Contracts.Responses
 {
     public class WorkoutResponse
     {
-        public required Guid WorkoutId { get; init; }
+        public required Guid Id { get; init; }
         public required Guid AddedByUserId { get; init; }
         public required DateOnly AddedDate { get; init; }
         public required string Name { get; set; }

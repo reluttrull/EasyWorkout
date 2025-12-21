@@ -1,4 +1,5 @@
 using EasyWorkout.Application.Data;
+using EasyWorkout.Application.Services;
 using EasyWorkout.Identity.Api;
 using EasyWorkout.Identity.Api.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -68,6 +69,8 @@ builder.Services.AddAuthorization(x =>
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddSingleton<IWorkoutService, WorkoutService>();
 
 var app = builder.Build();
 

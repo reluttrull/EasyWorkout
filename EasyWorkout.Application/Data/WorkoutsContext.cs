@@ -20,5 +20,11 @@ namespace EasyWorkout.Application.Data
         public DbSet<CompletedWorkout> CompletedWorkouts { get; set; }
         public DbSet<CompletedExercise> CompletedExercises { get; set; }
         public DbSet<CompletedExerciseSet> CompletedExerciseSets { get; set; }
+
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            // save enums as strings
+            configurationBuilder.Properties<Enum>().HaveConversion<string>();
+        }
     }
 }

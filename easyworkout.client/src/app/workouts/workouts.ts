@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WorkoutsService } from './workouts.service';
-import { Workout } from './workouts.service';
+import { Workout } from '../model/interfaces';
 
 @Component({
   standalone: true,

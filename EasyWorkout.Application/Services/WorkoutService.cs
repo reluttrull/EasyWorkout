@@ -2,6 +2,7 @@
 using EasyWorkout.Application.Model;
 using EasyWorkout.Contracts.Requests;
 using EasyWorkout.Identity.Api.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -41,14 +42,53 @@ namespace EasyWorkout.Application.Services
         {
             return _workoutsContext.Workouts
                 .Where(w => w.AddedByUserId == userId)
+                .Include(w => w.Exercises)
                 .AsEnumerable<Workout>();
         }
 
         public async Task<Workout?> GetByIdAsync(Guid id, CancellationToken token = default)
         {
-            return _workoutsContext.Workouts
-                .Where(w => w.Id == id)
-                .First();
+            var workout = _workoutsContext.Workouts.Single(w => w.Id == id);
+
+            await _workoutsContext.Entry(workout)
+                .Collection(w => w.Exercises)
+                .LoadAsync();
+
+            return workout;
+        }
+
+        public async Task<bool> AddExerciseAsync(Guid id, Guid exerciseId, Guid userId, CancellationToken token = default)
+        {
+            var workout = _workoutsContext.Workouts.Single(w => w.Id == id);
+            if (workout is null) return false;
+
+            var exercise = _workoutsContext.Exercises.Single(e => e.Id == exerciseId);
+            if (exercise is null) return false;
+
+            if (exercise.AddedByUserId != userId) return false;
+
+            workout.Exercises.Add(exercise);
+            exercise.Workouts.Add(workout);
+
+            var result = await _workoutsContext.SaveChangesAsync(token);
+            return result > 0;
+        }
+
+        public async Task<bool> RemoveExerciseAsync(Guid id, Guid exerciseId, Guid userId, CancellationToken token = default)
+        {
+            var workout = _workoutsContext.Workouts.Single(w => w.Id == id);
+            if (workout is null) return false;
+
+            var exercise = _workoutsContext.Exercises.Single(e => e.Id == exerciseId);
+            if (exercise is null) return false;
+
+            if (exercise.AddedByUserId != userId) return false;
+
+            workout.Exercises.Remove(exercise);
+            exercise.Workouts.Remove(workout);
+
+            var result = await _workoutsContext.SaveChangesAsync(token);
+            return result > 0;
         }
 
         public async Task<Workout?> UpdateAsync(Guid id, UpdateWorkoutRequest request, Guid userId, CancellationToken token = default)

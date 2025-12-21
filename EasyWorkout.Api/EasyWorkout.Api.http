@@ -1,6 +1,6 @@
 ﻿@EasyWorkout.Api_HostAddress = https://localhost:7011
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0YzhiZTgxYS1kYWI0LTRjNWMtOTkyZi1hNzhiODJlOGU5OWEiLCJzdWIiOiJUZXN0QWRkVXNlckRiMyIsIm5hbWUiOiJKaW1teSBNY0ludG9zaCIsInVzZXJpZCI6IjAxOWIzZGUyLWUzZDUtNzdkOC05YWZiLTAyYWY5YTIwNTgyNyIsImZyZWVfbWVtYmVyIjoidHJ1ZSIsIm5iZiI6MTc2NjM0NTk3NiwiZXhwIjoxNzY2Mzc0Nzc2LCJpYXQiOjE3NjYzNDU5NzYsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcwMzMiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MDExIn0.NOfPrlyeFCsdzw3A38vrrK1FiIVQ6Jf2jrKnG2I9GPM
-@id = f175471f-724c-4fbe-acfb-36fa163734f4
+@id = 57d47342-e21a-4004-8783-076433631045
 
 
 GET {{EasyWorkout.Api_HostAddress}}/api/workouts/me
@@ -32,6 +32,47 @@ Content-Type: application/json
 
 
 DELETE {{EasyWorkout.Api_HostAddress}}/api/workouts/{{id}}
+Authorization: Bearer {{token}}
+
+###
+
+
+
+POST {{EasyWorkout.Api_HostAddress}}/api/exercises
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "first exercise",
+  "notes": "don't die?"
+}
+
+###
+
+
+GET {{EasyWorkout.Api_HostAddress}}/api/exercises/me
+Authorization: Bearer {{token}}
+
+###
+
+
+@id = 57d47342-e21a-4004-8783-076433631045
+@exerciseId = 577d4457-b393-4236-a92b-8b12fb44ff40
+
+POST {{EasyWorkout.Api_HostAddress}}/api/workouts/{{id}}/exercises/{{exerciseId}}
+Authorization: Bearer {{token}}
+
+
+###
+
+
+GET {{EasyWorkout.Api_HostAddress}}/api/workouts/{{id}}
+Authorization: Bearer {{token}}
+
+###
+
+
+DELETE {{EasyWorkout.Api_HostAddress}}/api/workouts/{{id}}/exercises/{{exerciseId}}
 Authorization: Bearer {{token}}
 
 ###

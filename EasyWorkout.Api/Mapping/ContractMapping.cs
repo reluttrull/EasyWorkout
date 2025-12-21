@@ -2,6 +2,7 @@
 using EasyWorkout.Contracts.Requests;
 using EasyWorkout.Contracts.Responses;
 using System.Runtime.CompilerServices;
+using static EasyWorkout.Api.Endpoints;
 
 namespace EasyWorkout.Api.Mapping
 {
@@ -30,6 +31,34 @@ namespace EasyWorkout.Api.Mapping
                 Name = request.Name,
                 Notes = request.Notes,
                 Exercises = workout.Exercises
+            };
+        }
+
+        public static Exercise MapToExercise(this CreateExerciseRequest request, Guid userId)
+        {
+            return new Exercise()
+            {
+                Id = Guid.NewGuid(),
+                AddedByUserId = userId,
+                AddedDate = DateOnly.FromDateTime(DateTime.UtcNow),
+                Name = request.Name,
+                Notes = request.Notes,
+                Workouts = [],
+                ExerciseSets = []
+            };
+        }
+
+        public static Exercise MapToExercise(this UpdateExerciseRequest request, Exercise exercise)
+        {
+            return new Exercise()
+            {
+                Id = exercise.Id,
+                AddedByUserId = exercise.AddedByUserId,
+                AddedDate = exercise.AddedDate,
+                Name = request.Name,
+                Notes = request.Notes,
+                Workouts = exercise.Workouts,
+                ExerciseSets = exercise.ExerciseSets
             };
         }
 

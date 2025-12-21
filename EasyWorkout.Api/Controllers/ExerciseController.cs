@@ -1,0 +1,87 @@
+﻿using EasyWorkout.Api.Auth;
+using EasyWorkout.Api.Mapping;
+using EasyWorkout.Application.Services;
+using EasyWorkout.Contracts.Requests;
+using EasyWorkout.Identity.Api;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace EasyWorkout.Api.Controllers
+{
+    [ApiController]
+    public class ExerciseController : ControllerBase
+    {
+        private readonly IExerciseService _exerciseService;
+        private readonly ILogger _logger;
+        public ExerciseController(IExerciseService exerciseService, ILogger<WorkoutController> logger)
+        {
+            _exerciseService = exerciseService;
+            _logger = logger;
+        }
+
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
+        [HttpPost(Endpoints.Exercises.Create)]
+        public async Task<IActionResult> Create([FromBody] CreateExerciseRequest request, CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null) return BadRequest("User not found.");
+
+            var exercise = request.MapToExercise(userId!.Value);
+            await _exerciseService.CreateAsync(exercise, token);
+
+            return CreatedAtAction(nameof(Get), new { id = exercise.Id }, exercise);
+        }
+
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
+        [HttpGet(Endpoints.Exercises.GetAllForUser)]
+        public async Task<IActionResult> GetAllForUser(CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null) return BadRequest("User not found.");
+
+            var exercisesForUser = await _exerciseService.GetAllForUserAsync(userId!.Value, token);
+            var exerciseResponsesForUser = exercisesForUser.Select(e => e.MapToResponse());
+
+            return Ok(exerciseResponsesForUser);
+        }
+
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
+        [HttpGet(Endpoints.Exercises.Get)]
+        public async Task<IActionResult> Get(Guid id, CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null) return BadRequest("User not found.");
+
+            var exercise = await _exerciseService.GetByIdAsync(id, token);
+            if (exercise is null) return NotFound($"Exercise with id {id} not found.");
+            if (exercise.AddedByUserId != userId) return BadRequest($"Exercise with id {id} does not belong to user with id {userId}.");
+
+            return Ok(exercise.MapToResponse());
+        }
+
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
+        [HttpPut(Endpoints.Exercises.Update)]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateExerciseRequest request, CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null) return BadRequest("User not found.");
+
+            var exercise = await _exerciseService.UpdateAsync(id, request, userId!.Value, token);
+            if (exercise is null) return NotFound();
+            return Ok(exercise.MapToResponse());
+        }
+
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
+        [HttpDelete(Endpoints.Exercises.Delete)]
+        public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null) return BadRequest("User not found.");
+
+            var success = await _exerciseService.DeleteAsync(id, userId!.Value, token);
+            if (!success) return NotFound();
+            return Ok();
+        }
+    }
+}

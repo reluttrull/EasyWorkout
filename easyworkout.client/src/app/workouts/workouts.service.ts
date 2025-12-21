@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Workout } from '../model/interfaces';
 
-export interface Workout {
-  id: number;
-  name: string;
-}
 
 @Injectable({ providedIn: 'root' })
 export class WorkoutsService {

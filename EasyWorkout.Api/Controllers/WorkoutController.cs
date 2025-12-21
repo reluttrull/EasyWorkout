@@ -69,8 +69,6 @@ namespace EasyWorkout.Api.Controllers
             var userId = HttpContext.GetUserId();
             if (userId is null) return BadRequest("User not found.");
 
-            var existingWorkout = await _workoutService.GetByIdAsync(id, token);
-
             var workout = await _workoutService.UpdateAsync(id, request, userId!.Value, token);
             if (workout is null) return NotFound();
             return Ok(workout.MapToResponse());
@@ -86,8 +84,38 @@ namespace EasyWorkout.Api.Controllers
             var success = await _workoutService.DeleteAsync(id, userId!.Value, token);
             if (!success) return NotFound();
             return Ok();
+        }
 
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
+        [HttpPost(Endpoints.Workouts.AddExercise)]
+        public async Task<IActionResult> AddExercise([FromRoute] Guid id, Guid exerciseId, CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null) return BadRequest("User not found.");
 
+            var workout = await _workoutService.GetByIdAsync(id, token);
+            if (workout is null) return NotFound($"Workout with id {id} not found.");
+            if (workout.AddedByUserId != userId) return BadRequest($"Workout with id {id} does not belong to user with id {userId}.");
+
+            var success = await _workoutService.AddExerciseAsync(id, exerciseId, userId!.Value, token);
+            if (!success) return NotFound();
+            return Ok();
+        }
+
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
+        [HttpDelete(Endpoints.Workouts.RemoveExercise)]
+        public async Task<IActionResult> RemoveExercise([FromRoute] Guid id, Guid exerciseId, CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null) return BadRequest("User not found.");
+
+            var workout = await _workoutService.GetByIdAsync(id, token);
+            if (workout is null) return NotFound($"Workout with id {id} not found.");
+            if (workout.AddedByUserId != userId) return BadRequest($"Workout with id {id} does not belong to user with id {userId}.");
+
+            var success = await _workoutService.RemoveExerciseAsync(id, exerciseId, userId!.Value, token);
+            if (!success) return NotFound();
+            return Ok();
         }
 
     }

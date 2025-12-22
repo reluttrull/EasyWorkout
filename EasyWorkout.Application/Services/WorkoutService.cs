@@ -43,16 +43,20 @@ namespace EasyWorkout.Application.Services
             return _workoutsContext.Workouts
                 .Where(w => w.AddedByUserId == userId)
                 .Include(w => w.Exercises)
+                    .ThenInclude(e => e.ExerciseSets)
                 .AsEnumerable<Workout>();
         }
 
         public async Task<Workout?> GetByIdAsync(Guid id, CancellationToken token = default)
         {
-            var workout = _workoutsContext.Workouts.Single(w => w.Id == id);
+            var workout = _workoutsContext.Workouts.First(w => w.Id == id);
+            if (workout is null) return null;
 
             await _workoutsContext.Entry(workout)
                 .Collection(w => w.Exercises)
-                .LoadAsync();
+                .Query()
+                .Include(e => e.ExerciseSets)
+                .LoadAsync(token);
 
             return workout;
         }

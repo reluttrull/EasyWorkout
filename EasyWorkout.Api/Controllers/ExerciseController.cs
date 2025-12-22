@@ -83,5 +83,31 @@ namespace EasyWorkout.Api.Controllers
             if (!success) return NotFound();
             return Ok();
         }
+
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
+        [HttpPost(Endpoints.Exercises.CreateSet)]
+        public async Task<IActionResult> CreateSet([FromRoute] Guid id, [FromBody] CreateSetRequest request, CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null) return BadRequest("User not found.");
+
+            var exerciseSet = request.MapToExerciseSet(id);
+
+            var success = await _exerciseService.CreateSetAsync(id, exerciseSet, userId!.Value, token);
+            if (!success) return NotFound();
+            return Ok();
+        }
+
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
+        [HttpDelete(Endpoints.Exercises.DeleteSet)]
+        public async Task<IActionResult> DeleteSet([FromRoute] Guid id, Guid exerciseSetId, CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null) return BadRequest("User not found.");
+
+            var success = await _exerciseService.DeleteSetAsync(id, exerciseSetId, userId!.Value, token);
+            if (!success) return NotFound();
+            return Ok();
+        }
     }
 }

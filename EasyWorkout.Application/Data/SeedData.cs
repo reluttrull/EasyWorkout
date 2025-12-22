@@ -1,4 +1,5 @@
 ﻿using EasyWorkout.Application.Model;
+using EasyWorkout.Contracts.Model;
 using EasyWorkout.Identity.Api.Model;
 using System;
 using System.Collections.Generic;

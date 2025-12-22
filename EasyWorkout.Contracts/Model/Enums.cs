@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EasyWorkout.Application.Model
+namespace EasyWorkout.Contracts.Model
 {
     public class Enums
     {

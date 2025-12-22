@@ -23,6 +23,8 @@
             public const string GetAllForUser = $"{Base}/me";
             public const string Update = $"{Base}/{{id}}";
             public const string Delete = $"{Base}/{{id}}";
+            public const string CreateSet = $"{Base}/{{id}}/sets";
+            public const string DeleteSet = $"{Base}/{{id}}/sets/{{exerciseSetId}}";
         }
         
         public static class ExerciseSets

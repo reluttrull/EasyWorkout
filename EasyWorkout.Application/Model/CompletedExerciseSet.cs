@@ -1,4 +1,5 @@
 ﻿
+using EasyWorkout.Contracts.Model;
 using System.ComponentModel.DataAnnotations;
 
 namespace EasyWorkout.Application.Model

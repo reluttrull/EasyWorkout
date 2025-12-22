@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { tap } from 'rxjs';
 import { TokenService } from '../core/token.service';
 
@@ -9,7 +10,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private router: Router
   ) {}
 
   login(userName: string, password: string) {
@@ -40,5 +42,6 @@ export class AuthService {
 
   logout() {
     this.tokenService.clear();
+    this.router.navigate(['/login']);
   }
 }

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
+import { Exercise } from '../../model/interfaces';
 
 @Component({
   selector: 'app-exercise',
@@ -6,6 +7,6 @@ import { Component } from '@angular/core';
   templateUrl: './exercise.html',
   styleUrl: './exercise.css',
 })
-export class Exercise {
-
+export class ExerciseComponent {
+  exercise = input.required<Exercise>();
 }

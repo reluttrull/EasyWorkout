@@ -1,9 +1,17 @@
 <div>
-    <div>{{ workout().name }}</div>
-    <div>{{ workout().notes }}</div>
-    <div>{{ workout().addedDate }}</div>
-    <div>Exercises: {{ workout().exercises.length }}</div>
-    @if (detail()) {
-        <div>detail block</div>
+    <h2><strong>Workout:</strong> {{ workout().name }}</h2>
+    <div><strong>Notes:</strong> {{ workout().notes }}</div>
+    <div><strong>Date created:</strong> {{ workout().addedDate }}</div>
+    @if (workoutDetail) {
+        @for (exercise of workout().exercises; track exercise.id) {
+            <app-exercise [exercise]="exercise" />
+        }
+    } @else {
+        <div><strong>Number of exercises:</strong> {{ workout().exercises.length }}</div>
+    }
+    @if (!workoutDetail) {
+        <button (click)="toggleWorkoutDetail()">Show exercise detail</button>
+    } @else {
+        <button (click)="toggleWorkoutDetail()">Hide exercise detail</button>
     }
 </div>

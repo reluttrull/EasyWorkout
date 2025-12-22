@@ -18,7 +18,6 @@ export class LoginComponent {
     private auth: AuthService,
     private router: Router
   ) {
-    console.log('got to login component');
     
     this.form = this.fb.nonNullable.group({
       userName: [''],

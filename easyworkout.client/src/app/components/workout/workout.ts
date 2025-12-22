@@ -1,13 +1,18 @@
 import { Component, input } from '@angular/core';
 import { Workout } from '../../model/interfaces';
+import { ExerciseComponent } from '../exercise/exercise';
 
 @Component({
   selector: 'app-workout',
-  imports: [],
+  imports: [ExerciseComponent],
   templateUrl: './workout.html',
   styleUrl: './workout.css',
 })
 export class WorkoutComponent {
   workout = input.required<Workout>();
-  detail = input<boolean>(false);
+  workoutDetail = false;
+
+  toggleWorkoutDetail() {
+    this.workoutDetail = !this.workoutDetail;
+  }
 }

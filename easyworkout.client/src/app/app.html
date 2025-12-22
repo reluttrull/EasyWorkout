@@ -1,2 +1,5 @@
-<h1>Workout Tracker</h1>
+<h1>Easy Workout</h1>
+@if (isLoggedIn()) {
+    <button (click)="logout()">Logout</button>
+}
 <router-outlet></router-outlet>

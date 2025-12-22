@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, signal, computed } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { AuthService } from './auth/auth.service';
+import { TokenService } from './core/token.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,16 @@ import { RouterOutlet } from '@angular/router';
   imports: [RouterOutlet],
   templateUrl: './app.html'
 })
-export class AppComponent {}
+export class AppComponent {
+  constructor(private authService: AuthService, private tokenService: TokenService) {
+  }
+  
+  logout() {
+    this.authService.logout();
+  }  
+  
+  isLoggedIn = computed(() => {
+    console.log('sdjflsjdlkfs');
+    return this.tokenService.hasTokenSignal() ?? false;
+  });
+}

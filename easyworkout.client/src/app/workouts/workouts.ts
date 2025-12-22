@@ -7,7 +7,8 @@ import { WorkoutComponent } from '../components/workout/workout';
 @Component({
   standalone: true,
   imports: [CommonModule, WorkoutComponent],
-  templateUrl: './workouts.html'
+  templateUrl: './workouts.html',
+  styleUrl: './workouts.css'
 })
 export class WorkoutsComponent {
   workouts = signal<Workout[]>([]);

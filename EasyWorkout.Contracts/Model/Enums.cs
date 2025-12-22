@@ -8,17 +8,17 @@ namespace EasyWorkout.Contracts.Model
     {
         public enum WeightUnit
         {
-            Pounds,
-            Ounces,
-            Kilograms,
-            Grams,
-            Stones
+            Pounds = 0,
+            Ounces = 1,
+            Kilograms = 2,
+            Grams = 3,
+            Stones = 4
         }
         public enum DurationUnit
         {
-            Seconds,
-            Minutes,
-            Hours
+            Seconds = 0,
+            Minutes = 1,
+            Hours = 2
         }
     }
 }

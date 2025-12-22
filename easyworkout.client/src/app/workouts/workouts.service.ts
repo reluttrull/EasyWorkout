@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Workout, CreateWorkoutRequest } from '../model/interfaces';
+import { Workout, CreateWorkoutRequest, UpdateWorkoutRequest, WorkoutResponse } from '../model/interfaces';
 
 
 @Injectable({ providedIn: 'root' })
@@ -16,6 +16,10 @@ export class WorkoutsService {
 
   create(request: CreateWorkoutRequest) {
     return this.http.post<{ id: string }>(this.baseUrl, request);
+  }
+
+  update(id:string, request: UpdateWorkoutRequest) {
+    return this.http.put<WorkoutResponse>(`${this.baseUrl}/${id}`, request);
   }
 
   delete(id: string) {

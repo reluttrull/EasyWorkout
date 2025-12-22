@@ -1,3 +1,4 @@
+@if (!isEditMode) {
 <div>
     <h2><strong>Workout:</strong> {{ workout().name }}</h2>
     <div><strong>Notes:</strong> {{ workout().notes }}</div>
@@ -14,5 +15,17 @@
     } @else {
         <button (click)="toggleWorkoutDetail()">Hide exercise detail</button>
     }
+    <button (click)="edit()">Edit workout</button>
     <button (click)="delete()">Delete workout</button>
 </div>
+} @else {
+    <h2>Edit a Workout:</h2>
+    <form [formGroup]="form" (ngSubmit)="update()">
+        <label>Name</label>
+        <input placeholder="Name" formControlName="name" />
+        <label>Notes</label>
+        <input placeholder="Notes" formControlName="notes" />
+        <button type="submit">Save</button>
+    </form>
+    <button (click)="cancelEdit()">Cancel</button>
+}

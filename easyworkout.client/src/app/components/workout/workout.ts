@@ -1,23 +1,55 @@
 import { Component, input, output } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Workout } from '../../model/interfaces';
 import { ExerciseComponent } from '../exercise/exercise';
 import { WorkoutsService } from '../../workouts/workouts.service';
 
 @Component({
   selector: 'app-workout',
-  imports: [ExerciseComponent],
+  imports: [ReactiveFormsModule, ExerciseComponent],
   templateUrl: './workout.html',
   styleUrl: './workout.css',
 })
 export class WorkoutComponent {
+  onReturn = output();
+  form!: FormGroup;
   workout = input.required<Workout>();
   onWorkoutChanged = output();
   workoutDetail = false;
+  isEditMode = false;
 
-  constructor(private workoutsService: WorkoutsService) {}
+  constructor(private workoutsService: WorkoutsService, private fb:FormBuilder) {
+    this.form = this.fb.nonNullable.group({
+      name: [''],
+      notes: ['']
+    });
+  }
 
   toggleWorkoutDetail() {
     this.workoutDetail = !this.workoutDetail;
+  }
+
+  edit() {
+    this.form.setValue({
+      name: this.workout().name,
+      notes: this.workout().notes
+    });
+    this.isEditMode = true;
+  }
+
+  cancelEdit() {
+    this.isEditMode = false;
+  }
+
+  update() {
+    this.workoutsService.update(this.workout().id, this.form.value)
+      .subscribe({
+        next: () => {
+          this.onWorkoutChanged.emit();
+          this.isEditMode = false;
+        },
+        error: err => console.error(err)
+      });
   }
 
   delete() {

@@ -52,10 +52,11 @@ namespace EasyWorkout.Api.Controllers
         {
             var userId = HttpContext.GetUserId();
             if (userId is null) return BadRequest("User not found.");
+            var belongsToUser = await _exerciseService.BelongsToUserAsync(id, userId!.Value, token);
+            if (!belongsToUser) return BadRequest($"Exercise with id {id} does not belong to user {userId}.");
 
             var exercise = await _exerciseService.GetByIdAsync(id, token);
             if (exercise is null) return NotFound($"Exercise with id {id} not found.");
-            if (exercise.AddedByUserId != userId) return BadRequest($"Exercise with id {id} does not belong to user with id {userId}.");
 
             return Ok(exercise.MapToResponse());
         }
@@ -66,8 +67,10 @@ namespace EasyWorkout.Api.Controllers
         {
             var userId = HttpContext.GetUserId();
             if (userId is null) return BadRequest("User not found.");
+            var belongsToUser = await _exerciseService.BelongsToUserAsync(id, userId!.Value, token);
+            if (!belongsToUser) return BadRequest($"Exercise with id {id} does not belong to user {userId}.");
 
-            var exercise = await _exerciseService.UpdateAsync(id, request, userId!.Value, token);
+            var exercise = await _exerciseService.UpdateAsync(id, request, token);
             if (exercise is null) return NotFound();
             return Ok(exercise.MapToResponse());
         }
@@ -78,8 +81,10 @@ namespace EasyWorkout.Api.Controllers
         {
             var userId = HttpContext.GetUserId();
             if (userId is null) return BadRequest("User not found.");
+            var belongsToUser = await _exerciseService.BelongsToUserAsync(id, userId!.Value, token);
+            if (!belongsToUser) return BadRequest($"Exercise with id {id} does not belong to user {userId}.");
 
-            var success = await _exerciseService.DeleteAsync(id, userId!.Value, token);
+            var success = await _exerciseService.DeleteAsync(id, token);
             if (!success) return NotFound();
             return Ok();
         }
@@ -90,10 +95,12 @@ namespace EasyWorkout.Api.Controllers
         {
             var userId = HttpContext.GetUserId();
             if (userId is null) return BadRequest("User not found.");
+            var belongsToUser = await _exerciseService.BelongsToUserAsync(id, userId!.Value, token);
+            if (!belongsToUser) return BadRequest($"Exercise with id {id} does not belong to user {userId}.");
 
             var exerciseSet = request.MapToExerciseSet(id);
 
-            var success = await _exerciseService.CreateSetAsync(id, exerciseSet, userId!.Value, token);
+            var success = await _exerciseService.CreateSetAsync(id, exerciseSet, token);
             if (!success) return NotFound();
             return Ok();
         }
@@ -104,8 +111,10 @@ namespace EasyWorkout.Api.Controllers
         {
             var userId = HttpContext.GetUserId();
             if (userId is null) return BadRequest("User not found.");
+            var belongsToUser = await _exerciseService.BelongsToUserAsync(id, userId!.Value, token);
+            if (!belongsToUser) return BadRequest($"Exercise with id {id} does not belong to user {userId}.");
 
-            var success = await _exerciseService.DeleteSetAsync(id, exerciseSetId, userId!.Value, token);
+            var success = await _exerciseService.DeleteSetAsync(id, exerciseSetId, token);
             if (!success) return NotFound();
             return Ok();
         }

@@ -14,12 +14,14 @@ namespace EasyWorkout.Application.Services
 
         Task<IEnumerable<Workout>> GetAllForUserAsync(Guid userId, CancellationToken token = default);
 
-        Task<Workout?> UpdateAsync(Guid id, UpdateWorkoutRequest request, Guid userId, CancellationToken token = default);
+        Task<Workout?> UpdateAsync(Guid id, UpdateWorkoutRequest request, CancellationToken token = default);
 
-        Task<bool> DeleteAsync(Guid id, Guid userId, CancellationToken token = default);
+        Task<bool> DeleteAsync(Guid id, CancellationToken token = default);
 
-        Task<bool> AddExerciseAsync(Guid id, Guid exerciseId, Guid userId, CancellationToken token = default);
+        Task<bool> AddExerciseAsync(Guid id, Guid exerciseId, CancellationToken token = default);
 
-        Task<bool> RemoveExerciseAsync(Guid id, Guid exerciseId, Guid userId, CancellationToken token = default);
+        Task<bool> RemoveExerciseAsync(Guid id, Guid exerciseId, CancellationToken token = default);
+
+        Task<bool> BelongsToUserAsync(Guid id, Guid userId, CancellationToken token = default);
     }
 }

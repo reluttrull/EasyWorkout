@@ -27,7 +27,7 @@ Content-Type: application/json
 
 ###
 
-
+@refresh = 4hjBDcXqgtNzDn0xik+0izc03Q7HR/EYQZ/pCYg974nuz3WSSADHi2Mif86XsHC1+lQrOiEAekifwiNfU6SYng==
 POST {{EasyWorkout.Identity.Api_HostAddress}}/api/auth/refresh
 Content-Type: application/json
 

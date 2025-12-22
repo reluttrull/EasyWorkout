@@ -28,10 +28,9 @@ namespace EasyWorkout.Application.Services
             return result > 0;
         }
 
-        public async Task<bool> DeleteAsync(Guid id, Guid userId, CancellationToken token = default)
+        public async Task<bool> DeleteAsync(Guid id, CancellationToken token = default)
         {
             var workoutToDelete = _workoutsContext.Workouts.Single(w => w.Id == id);
-            if (workoutToDelete.AddedByUserId != userId) return false;
 
             _workoutsContext.Workouts.Remove(workoutToDelete);
             var result = await _workoutsContext.SaveChangesAsync(token);
@@ -61,15 +60,13 @@ namespace EasyWorkout.Application.Services
             return workout;
         }
 
-        public async Task<bool> AddExerciseAsync(Guid id, Guid exerciseId, Guid userId, CancellationToken token = default)
+        public async Task<bool> AddExerciseAsync(Guid id, Guid exerciseId, CancellationToken token = default)
         {
             var workout = _workoutsContext.Workouts.Single(w => w.Id == id);
             if (workout is null) return false;
 
             var exercise = _workoutsContext.Exercises.Single(e => e.Id == exerciseId);
             if (exercise is null) return false;
-
-            if (exercise.AddedByUserId != userId) return false;
 
             workout.Exercises.Add(exercise);
             exercise.Workouts.Add(workout);
@@ -78,15 +75,13 @@ namespace EasyWorkout.Application.Services
             return result > 0;
         }
 
-        public async Task<bool> RemoveExerciseAsync(Guid id, Guid exerciseId, Guid userId, CancellationToken token = default)
+        public async Task<bool> RemoveExerciseAsync(Guid id, Guid exerciseId, CancellationToken token = default)
         {
             var workout = _workoutsContext.Workouts.Single(w => w.Id == id);
             if (workout is null) return false;
 
             var exercise = _workoutsContext.Exercises.Single(e => e.Id == exerciseId);
             if (exercise is null) return false;
-
-            if (exercise.AddedByUserId != userId) return false;
 
             workout.Exercises.Remove(exercise);
             exercise.Workouts.Remove(workout);
@@ -95,11 +90,10 @@ namespace EasyWorkout.Application.Services
             return result > 0;
         }
 
-        public async Task<Workout?> UpdateAsync(Guid id, UpdateWorkoutRequest request, Guid userId, CancellationToken token = default)
+        public async Task<Workout?> UpdateAsync(Guid id, UpdateWorkoutRequest request, CancellationToken token = default)
         {
             var workoutToChange = _workoutsContext.Workouts.First(w => w.Id == id);
             if (workoutToChange is null) return null;
-            if (workoutToChange.AddedByUserId != userId) return null;
 
             workoutToChange.Name = request.Name;
             workoutToChange.Notes = request.Notes;
@@ -107,6 +101,11 @@ namespace EasyWorkout.Application.Services
             await _workoutsContext.SaveChangesAsync(token);
 
             return workoutToChange;
+        }
+
+        public async Task<bool> BelongsToUserAsync(Guid id, Guid userId, CancellationToken token = default)
+        {
+            return _workoutsContext.Workouts.Any(w => w.Id == id && w.AddedByUserId == userId);
         }
     }
 }

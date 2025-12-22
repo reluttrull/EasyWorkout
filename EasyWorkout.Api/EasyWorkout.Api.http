@@ -1,105 +1,23 @@
 ﻿@EasyWorkout.Api_HostAddress = https://localhost:7011
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0ZWIxOGE1ZC0wYzcxLTRhNTctODdhZC04M2NiZDVlNTZlNWIiLCJzdWIiOiJUZXN0QWRkVXNlckRiMyIsIm5hbWUiOiJKaW1teSBNY0ludG9zaCIsInVzZXJpZCI6IjAxOWIzZGUyLWUzZDUtNzdkOC05YWZiLTAyYWY5YTIwNTgyNyIsImZyZWVfbWVtYmVyIjoidHJ1ZSIsIm5iZiI6MTc2NjQxODU2NiwiZXhwIjoxNzY2NDE5NDY1LCJpYXQiOjE3NjY0MTg1NjYsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcwMzMiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MDExIn0.e7e1Iz1DrMo04h2FcmuI5_soJnQUA4atIIaxPeywHqk
-@id = 57d47342-e21a-4004-8783-076433631045
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0YjMxNzVmNC1hZTI0LTRhMTUtYmRhNi03ZTliMWQ2YTAxNGIiLCJzdWIiOiJUZXN0QWRkVXNlckRiMyIsIm5hbWUiOiJKaW1teSBNY0ludG9zaCIsInVzZXJpZCI6IjAxOWIzZGUyLWUzZDUtNzdkOC05YWZiLTAyYWY5YTIwNTgyNyIsImZyZWVfbWVtYmVyIjoidHJ1ZSIsIm5iZiI6MTc2NjQyMjI3NiwiZXhwIjoxNzY2NDIzMTc2LCJpYXQiOjE3NjY0MjIyNzYsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcwMzMiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MDExIn0.aDB4eF4QnEUzfx1AHNrjcC5C5hMyls023EWcG3Pjx-s
 
 
 GET {{EasyWorkout.Api_HostAddress}}/api/workouts/me
 Authorization: Bearer {{token}}
 ###
 
-
-POST {{EasyWorkout.Api_HostAddress}}/api/workouts
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-  "name": "third workout name"
-}
-
-###
-
-
-PUT {{EasyWorkout.Api_HostAddress}}/api/workouts/{{id}}
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-  "name": "third workout name updated",
-  "notes": "adding notes sdfksfjlkdsjf sljklsdk lsdf"
-}
-###
-
-
-
-DELETE {{EasyWorkout.Api_HostAddress}}/api/workouts/{{id}}
-Authorization: Bearer {{token}}
-
-###
-
-
-
-POST {{EasyWorkout.Api_HostAddress}}/api/exercises
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-  "name": "first exercise",
-  "notes": "don't die?"
-}
-
-###
-
-
-GET {{EasyWorkout.Api_HostAddress}}/api/exercises/me
-Authorization: Bearer {{token}}
-
-###
-
-
-@id = 57d47342-e21a-4004-8783-076433631045
-@exerciseId = 577d4457-b393-4236-a92b-8b12fb44ff40
-
-POST {{EasyWorkout.Api_HostAddress}}/api/workouts/{{id}}/exercises/{{exerciseId}}
-Authorization: Bearer {{token}}
-
-
-###
-
-
-GET {{EasyWorkout.Api_HostAddress}}/api/workouts/{{id}}
-Authorization: Bearer {{token}}
-
-###
-
-
-DELETE {{EasyWorkout.Api_HostAddress}}/api/workouts/{{id}}/exercises/{{exerciseId}}
-Authorization: Bearer {{token}}
-
-###
-
-@id = 577d4457-b393-4236-a92b-8b12fb44ff40
+@id=577d4457-b393-4236-a92b-8b12fb44ff40
 POST {{EasyWorkout.Api_HostAddress}}/api/exercises/{{id}}/sets
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "setNumber": 1,
-  "reps": 8,
-  "weight": 45,
-  "weightUnit": 0
+  "setNumber": 3
 }
 
 ###
 
-@exerciseSetId = e9331972-9d87-45c8-96df-2f05d8ccb064
+@exerciseSetId = 083e30e6-9cfe-47f7-9555-f08756fea3d9
 DELETE {{EasyWorkout.Api_HostAddress}}/api/exercises/{{id}}/sets/{{exerciseSetId}}
 Authorization: Bearer {{token}}
-
 ###
-
-@id = 57d47342-e21a-4004-8783-076433631045
-GET {{EasyWorkout.Api_HostAddress}}/api/workouts/{{id}}
-Authorization: Bearer {{token}}
-
-###
-

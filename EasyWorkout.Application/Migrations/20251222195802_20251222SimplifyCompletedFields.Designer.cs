@@ -3,6 +3,7 @@ using System;
 using EasyWorkout.Application.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyWorkout.Application.Migrations
 {
     [DbContext(typeof(WorkoutsContext))]
-    partial class WorkoutsContextModelSnapshot : ModelSnapshot
+    [Migration("20251222195802_20251222SimplifyCompletedFields")]
+    partial class _20251222SimplifyCompletedFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,7 +34,7 @@ namespace EasyWorkout.Application.Migrations
                     b.Property<DateTime>("CompletedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("CompletedWorkoutId")
+                    b.Property<Guid?>("CompletedWorkoutId")
                         .HasColumnType("uuid");
 
                     b.Property<double>("Duration")
@@ -188,9 +191,7 @@ namespace EasyWorkout.Application.Migrations
                 {
                     b.HasOne("EasyWorkout.Application.Model.CompletedWorkout", null)
                         .WithMany("CompletedExerciseSets")
-                        .HasForeignKey("CompletedWorkoutId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CompletedWorkoutId");
 
                     b.HasOne("EasyWorkout.Application.Model.ExerciseSet", "ExerciseSet")
                         .WithMany()

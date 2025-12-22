@@ -9,9 +9,9 @@ namespace EasyWorkout.Application.Model
         public required Guid CompletedByUserId { get; init; }
         public Guid WorkoutId { get; init; }
         [Required]
-        public required DateOnly CompletedDate { get; init; }
-        [MaxLength(1000)]
-        public string Notes { get; set; } = string.Empty;
-        public required List<CompletedExercise> CompletedExercises { get; init; } = [];
+        public required DateTime CompletedDate { get; init; }
+        [MaxLength(250)]
+        public string CompletedNotes { get; set; } = string.Empty;
+        public required List<CompletedExerciseSet> CompletedExerciseSets { get; init; } = [];
     }
 }

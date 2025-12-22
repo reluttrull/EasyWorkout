@@ -9,9 +9,9 @@ namespace EasyWorkout.Application.Model
         public required Guid AddedByUserId { get; init; }
         public required DateOnly AddedDate { get; init; }
         [Required]
-        [MaxLength(100)]
+        [MaxLength(75)]
         public required string Name { get; set; }
-        [MaxLength(1000)]
+        [MaxLength(250)]
         public string? Notes { get; set; }
         public List<Workout> Workouts { get; set; } = [];
         public List<ExerciseSet> ExerciseSets { get; init; } = [];

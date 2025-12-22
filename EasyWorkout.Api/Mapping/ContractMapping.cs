@@ -73,8 +73,7 @@ namespace EasyWorkout.Api.Mapping
                 Weight = request.Weight,
                 WeightUnit = request.WeightUnit,
                 Duration = request.Duration,
-                DurationUnit = request.DurationUnit,
-                Notes = request.Notes
+                DurationUnit = request.DurationUnit
             };
         }
 
@@ -115,8 +114,7 @@ namespace EasyWorkout.Api.Mapping
                 Weight = exerciseSet.Weight,
                 WeightUnit = exerciseSet.WeightUnit.ToString(),
                 Duration = exerciseSet.Duration,
-                DurationUnit = exerciseSet.DurationUnit.ToString(),
-                Notes = exerciseSet.Notes
+                DurationUnit = exerciseSet.DurationUnit.ToString()
             };
         }
     }

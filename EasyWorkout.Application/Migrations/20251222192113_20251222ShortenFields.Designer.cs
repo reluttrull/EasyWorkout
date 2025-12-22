@@ -3,6 +3,7 @@ using System;
 using EasyWorkout.Application.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyWorkout.Application.Migrations
 {
     [DbContext(typeof(WorkoutsContext))]
-    partial class WorkoutsContextModelSnapshot : ModelSnapshot
+    [Migration("20251222192113_20251222ShortenFields")]
+    partial class _20251222ShortenFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,36 @@ namespace EasyWorkout.Application.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("EasyWorkout.Application.Model.CompletedExercise", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CompletedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CompletedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CompletedWorkoutId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ExerciseId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompletedWorkoutId");
+
+                    b.ToTable("CompletedExercises");
+                });
 
             modelBuilder.Entity("EasyWorkout.Application.Model.CompletedExerciseSet", b =>
                 {
@@ -31,14 +64,20 @@ namespace EasyWorkout.Application.Migrations
                     b.Property<DateTime>("CompletedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("CompletedWorkoutId")
+                    b.Property<Guid>("CompletedExerciseId")
                         .HasColumnType("uuid");
 
                     b.Property<double>("Duration")
                         .HasColumnType("double precision");
 
-                    b.Property<Guid>("ExerciseSetId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("DurationUnit")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<int>("Reps")
                         .HasColumnType("integer");
@@ -49,11 +88,13 @@ namespace EasyWorkout.Application.Migrations
                     b.Property<double>("Weight")
                         .HasColumnType("double precision");
 
+                    b.Property<string>("WeightUnit")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CompletedWorkoutId");
-
-                    b.HasIndex("ExerciseSetId");
+                    b.HasIndex("CompletedExerciseId");
 
                     b.ToTable("CompletedExerciseSets");
                 });
@@ -70,7 +111,7 @@ namespace EasyWorkout.Application.Migrations
                     b.Property<DateTime>("CompletedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("CompletedNotes")
+                    b.Property<string>("Notes")
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
@@ -184,21 +225,22 @@ namespace EasyWorkout.Application.Migrations
                     b.ToTable("ExerciseWorkout");
                 });
 
-            modelBuilder.Entity("EasyWorkout.Application.Model.CompletedExerciseSet", b =>
+            modelBuilder.Entity("EasyWorkout.Application.Model.CompletedExercise", b =>
                 {
                     b.HasOne("EasyWorkout.Application.Model.CompletedWorkout", null)
-                        .WithMany("CompletedExerciseSets")
+                        .WithMany("CompletedExercises")
                         .HasForeignKey("CompletedWorkoutId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
 
-                    b.HasOne("EasyWorkout.Application.Model.ExerciseSet", "ExerciseSet")
-                        .WithMany()
-                        .HasForeignKey("ExerciseSetId")
+            modelBuilder.Entity("EasyWorkout.Application.Model.CompletedExerciseSet", b =>
+                {
+                    b.HasOne("EasyWorkout.Application.Model.CompletedExercise", null)
+                        .WithMany("CompletedExerciseSets")
+                        .HasForeignKey("CompletedExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ExerciseSet");
                 });
 
             modelBuilder.Entity("EasyWorkout.Application.Model.ExerciseSet", b =>
@@ -225,9 +267,14 @@ namespace EasyWorkout.Application.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EasyWorkout.Application.Model.CompletedWorkout", b =>
+            modelBuilder.Entity("EasyWorkout.Application.Model.CompletedExercise", b =>
                 {
                     b.Navigation("CompletedExerciseSets");
+                });
+
+            modelBuilder.Entity("EasyWorkout.Application.Model.CompletedWorkout", b =>
+                {
+                    b.Navigation("CompletedExercises");
                 });
 
             modelBuilder.Entity("EasyWorkout.Application.Model.Exercise", b =>

@@ -8,7 +8,9 @@ namespace EasyWorkout.Application.Model
     {
         [Key]
         public required Guid Id { get; init; }
-        public required Guid CompletedExerciseId { get; init; }
+        public required Guid ExerciseSetId { get; init; }
+        public required Guid CompletedWorkoutId { get; init; }
+        public required DateTime CompletedDate { get; init; }
         [Required]
         [Range(1, 100, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public required int SetNumber { get; set; }
@@ -16,11 +18,8 @@ namespace EasyWorkout.Application.Model
         public int Reps { get; set; }
         [Range(0, 1200, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public double Weight { get; set; }
-        public Enums.WeightUnit WeightUnit { get; set; }
         [Range(0, 3600, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public double Duration { get; set; }
-        public Enums.DurationUnit DurationUnit { get; set; }
-        [MaxLength(1000)]
-        public string Notes { get; set; } = string.Empty;
+        public required ExerciseSet ExerciseSet { get; set; }
     }
 }

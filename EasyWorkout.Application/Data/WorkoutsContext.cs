@@ -18,7 +18,6 @@ namespace EasyWorkout.Application.Data
         public DbSet<ExerciseSet> ExerciseSets { get; set; }
 
         public DbSet<CompletedWorkout> CompletedWorkouts { get; set; }
-        public DbSet<CompletedExercise> CompletedExercises { get; set; }
         public DbSet<CompletedExerciseSet> CompletedExerciseSets { get; set; }
 
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

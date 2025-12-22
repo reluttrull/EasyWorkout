@@ -19,7 +19,5 @@ namespace EasyWorkout.Application.Model
         [Range(0, 3600, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public double? Duration { get; set; }
         public Enums.DurationUnit? DurationUnit { get; set; }
-        [MaxLength(1000)]
-        public string? Notes { get; set; }
     }
 }

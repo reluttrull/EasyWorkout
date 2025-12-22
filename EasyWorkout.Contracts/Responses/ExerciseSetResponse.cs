@@ -14,6 +14,5 @@ namespace EasyWorkout.Contracts.Responses
         public string? WeightUnit { get; set; }
         public double? Duration { get; set; }
         public string? DurationUnit { get; set; }
-        public string? Notes { get; set; }
     }
 }

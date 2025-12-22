@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import { Routes, provideRouter, withRouterConfig } from '@angular/router';
 
 export const routes: Routes = [
   {
@@ -13,3 +13,5 @@ export const routes: Routes = [
   },
   { path: '', redirectTo: 'workouts', pathMatch: 'full' }
 ];
+
+provideRouter(routes, withRouterConfig({ onSameUrlNavigation: 'reload' }));

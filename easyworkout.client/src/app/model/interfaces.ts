@@ -27,3 +27,8 @@ export interface Workout {
   notes: string;
   exercises: Exercise[];
 }
+
+export interface CreateWorkoutRequest {
+  name: string;
+  notes: string;
+}

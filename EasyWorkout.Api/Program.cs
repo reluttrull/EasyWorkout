@@ -69,6 +69,7 @@ builder.Services.AddAuthorization(x =>
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddOpenApiDocument();
 
 builder.Services.AddScoped<IWorkoutService, WorkoutService>();
 builder.Services.AddScoped<IExerciseService, ExerciseService>();
@@ -81,7 +82,9 @@ app.MapStaticAssets();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseOpenApi();
+    app.MapOpenApi(); 
+    app.UseSwaggerUi();
 }
 
 app.UseCors("AllowClient");

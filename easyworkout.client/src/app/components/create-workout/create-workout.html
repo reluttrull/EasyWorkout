@@ -1,0 +1,9 @@
+<h2>Create a Workout:</h2>
+<form [formGroup]="form" (ngSubmit)="submit()">
+    <label>Name</label>
+    <input placeholder="Name" formControlName="name" />
+    <label>Notes</label>
+    <input placeholder="Notes" formControlName="notes" />
+    <button type="submit">Create</button>
+</form>
+<button (click)="return()">Cancel</button>

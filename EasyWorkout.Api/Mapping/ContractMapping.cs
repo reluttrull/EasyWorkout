@@ -1,6 +1,7 @@
 ﻿using EasyWorkout.Application.Model;
 using EasyWorkout.Contracts.Requests;
 using EasyWorkout.Contracts.Responses;
+using EasyWorkout.Identity.Api.Model;
 using System.Runtime.CompilerServices;
 using static EasyWorkout.Api.Endpoints;
 
@@ -115,6 +116,16 @@ namespace EasyWorkout.Api.Mapping
                 WeightUnit = exerciseSet.WeightUnit.ToString(),
                 Duration = exerciseSet.Duration,
                 DurationUnit = exerciseSet.DurationUnit.ToString()
+            };
+        }
+
+        public static UserResponse MapToResponse(this User user)
+        {
+            return new UserResponse()
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                JoinedDate = user.JoinedDate
             };
         }
     }

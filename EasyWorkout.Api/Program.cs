@@ -73,6 +73,7 @@ builder.Services.AddOpenApiDocument();
 
 builder.Services.AddScoped<IWorkoutService, WorkoutService>();
 builder.Services.AddScoped<IExerciseService, ExerciseService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

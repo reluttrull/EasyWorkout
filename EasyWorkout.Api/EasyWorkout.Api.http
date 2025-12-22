@@ -1,5 +1,5 @@
 ﻿@EasyWorkout.Api_HostAddress = https://localhost:7011
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0YjMxNzVmNC1hZTI0LTRhMTUtYmRhNi03ZTliMWQ2YTAxNGIiLCJzdWIiOiJUZXN0QWRkVXNlckRiMyIsIm5hbWUiOiJKaW1teSBNY0ludG9zaCIsInVzZXJpZCI6IjAxOWIzZGUyLWUzZDUtNzdkOC05YWZiLTAyYWY5YTIwNTgyNyIsImZyZWVfbWVtYmVyIjoidHJ1ZSIsIm5iZiI6MTc2NjQyMjI3NiwiZXhwIjoxNzY2NDIzMTc2LCJpYXQiOjE3NjY0MjIyNzYsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcwMzMiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MDExIn0.aDB4eF4QnEUzfx1AHNrjcC5C5hMyls023EWcG3Pjx-s
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1ZmUwYzg0MC1lYmVkLTQyMjMtODI5ZS1iOWI3YTBiMzM1ZmQiLCJzdWIiOiJUZXN0QWRkVXNlckRiMyIsIm5hbWUiOiJKaW1teSBNY0ludG9zaCIsInVzZXJpZCI6IjAxOWIzZGUyLWUzZDUtNzdkOC05YWZiLTAyYWY5YTIwNTgyNyIsImZyZWVfbWVtYmVyIjoidHJ1ZSIsIm5iZiI6MTc2NjQ0NzEyMywiZXhwIjoxNzY2NDQ4MDIzLCJpYXQiOjE3NjY0NDcxMjMsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcwMzMiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MDExIn0.ArAE08gZzyoURAC62yRiVm1vpi5oCUgdoFwxCsnXUNw
 
 
 GET {{EasyWorkout.Api_HostAddress}}/api/workouts/me
@@ -20,4 +20,22 @@ Content-Type: application/json
 @exerciseSetId = 083e30e6-9cfe-47f7-9555-f08756fea3d9
 DELETE {{EasyWorkout.Api_HostAddress}}/api/exercises/{{id}}/sets/{{exerciseSetId}}
 Authorization: Bearer {{token}}
+###
+
+
+@id = 019b3de2-e3d5-77d8-9afb-02af9a205827
+GET {{EasyWorkout.Api_HostAddress}}/api/users/{{id}}
+Authorization: Bearer {{token}}
+###
+
+
+PUT {{EasyWorkout.Api_HostAddress}}/api/users/{{id}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "firstName": "change first name",
+  "lastName": "change last name"
+}
+
 ###

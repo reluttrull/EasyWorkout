@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Set } from './set';
+import { SetComponent } from './set';
 
 describe('Set', () => {
-  let component: Set;
-  let fixture: ComponentFixture<Set>;
+  let component: SetComponent;
+  let fixture: ComponentFixture<SetComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Set]
+      imports: [SetComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(Set);
+    fixture = TestBed.createComponent(SetComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

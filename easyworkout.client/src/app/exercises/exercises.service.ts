@@ -1,0 +1,20 @@
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { Exercise } from '../model/interfaces';
+
+
+@Injectable({ providedIn: 'root' })
+export class ExercisesService {
+  private baseUrl = 'https://localhost:7011/api/exercises';
+
+  constructor(private http: HttpClient, private router: Router) {}
+
+  getAll() {
+    return this.http.get<Exercise[]>(`${this.baseUrl}/me`);
+  }
+
+  delete(id: string) {
+    return this.http.delete<any>(`${this.baseUrl}/${id}`);
+  }
+}

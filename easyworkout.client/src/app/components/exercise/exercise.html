@@ -2,5 +2,17 @@
     <h3><strong>Exercise:</strong> {{ exercise().name }}</h3>
     <div><strong>Notes:</strong> {{ exercise().notes }}</div>
     <div><strong>Date created:</strong> {{ exercise().addedDate }}</div>
-    <div><strong>Number of sets:</strong> {{ exercise().exerciseSets.length }}</div>
+    
+    @if (exerciseDetail) {
+        @for (set of exercise().exerciseSets; track set.id) {
+            <app-set [set]="set" />
+        }
+    } @else {
+        <div><strong>Number of sets:</strong> {{ exercise().exerciseSets.length }}</div>
+    }
+    @if (!exerciseDetail) {
+        <button (click)="toggleExerciseDetail()">Show set detail</button>
+    } @else {
+        <button (click)="toggleExerciseDetail()">Hide set detail</button>
+    }
 </div>

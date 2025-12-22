@@ -1,0 +1,13 @@
+<h2>My Exercises</h2>
+<ul>
+@for (exercise of exercises(); track $index) {
+    <li>
+        <app-exercise [exercise]="exercise" (onExerciseChanged)="reload()" />
+    </li>
+}
+</ul>
+@if (isCreateVisible) {
+    <app-create-exercise (onReturn)="handleCancelCreate()" />
+} @else {
+    <button (click)="showAddWorkout()">Add workout</button>
+}

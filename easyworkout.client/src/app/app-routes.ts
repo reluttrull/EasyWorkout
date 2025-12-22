@@ -11,6 +11,11 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./workouts/workouts.routes').then(m => m.WORKOUTS_ROUTES)
   },
+  {
+    path: 'exercises',
+    loadChildren: () =>
+      import('./exercises/exercises.routes').then(m => m.EXERCISES_ROUTES)
+  },
   { path: '', redirectTo: 'workouts', pathMatch: 'full' }
 ];
 

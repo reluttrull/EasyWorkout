@@ -18,7 +18,6 @@ export class AppComponent {
   }  
   
   isLoggedIn = computed(() => {
-    console.log('sdjflsjdlkfs');
     return this.tokenService.hasTokenSignal() ?? false;
   });
 }

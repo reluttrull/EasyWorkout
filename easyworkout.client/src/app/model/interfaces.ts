@@ -1,14 +1,4 @@
-export interface ExerciseSet {
-  id: string;
-  exerciseId: string;
-  setNumber: number;
-  reps: number;
-  weight: number;
-  weightUnit: string;
-  duration: number;
-  durationUnit: string;
-  notes: string;
-}
+import { WeightUnit, DurationUnit } from './enums';
 
 export interface Exercise {
   id: string;
@@ -16,7 +6,18 @@ export interface Exercise {
   addedDate: Date;
   name: string;
   notes: string;
-  exerciseSets: ExerciseSet[];
+  exerciseSets: Set[];
+}
+
+export interface Set {
+  id: string;
+  exerciseId: string;
+  setNumber: number;
+  reps: number;
+  weight: number;
+  weightUnit: WeightUnit;
+  duration: number;
+  durationUnit: DurationUnit;
 }
 
 export interface Workout {

@@ -22,7 +22,6 @@ export class WorkoutsComponent {
   reload() {
     this.service.getAll().subscribe(w => {
       this.workouts.set(w);
-      console.log('sdljsdflkjsfdlkjsdflkjsdflkjsfd');
   });
   }
 

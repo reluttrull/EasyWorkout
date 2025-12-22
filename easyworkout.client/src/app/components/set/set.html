@@ -1,1 +1,10 @@
-<p>set works!</p>
+<div>
+    <span><strong>Set #:</strong> {{ set().setNumber }}</span>
+    - <span><strong>Reps:</strong> {{ set().reps }}</span>
+    @if (set().weight) {
+        - <span><strong>Weight</strong> ({{ set().weightUnit }}): {{ set().weight }}</span>
+    }
+    @if (set().duration) {
+        - <span><strong>Duration</strong> ({{ set().durationUnit }}) {{ set().duration }}</span>
+    }
+</div>

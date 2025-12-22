@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, input, computed } from '@angular/core';
+import { Set } from '../../model/interfaces';
+import { WeightUnit, DurationUnit } from '../../model/enums';
 
 @Component({
   selector: 'app-set',
@@ -6,6 +8,6 @@ import { Component } from '@angular/core';
   templateUrl: './set.html',
   styleUrl: './set.css',
 })
-export class Set {
-
+export class SetComponent {
+  set = input.required<Set>();
 }

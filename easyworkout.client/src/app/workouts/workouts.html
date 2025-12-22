@@ -2,10 +2,7 @@
 <ul>
 @for (workout of workouts(); track $index) {
     <li>
-        <div>{{ workout.name }}</div>
-        <div>{{ workout.notes }}</div>
-        <div>{{ workout.addedDate }}</div>
-        <div>Exercises: {{ workout.exercises.length }}</div>
+        <app-workout [workout]="workout" [detail]="false" />
     </li>
 }
 </ul>

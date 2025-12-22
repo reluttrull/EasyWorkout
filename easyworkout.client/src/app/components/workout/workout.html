@@ -1,0 +1,9 @@
+<div>
+    <div>{{ workout().name }}</div>
+    <div>{{ workout().notes }}</div>
+    <div>{{ workout().addedDate }}</div>
+    <div>Exercises: {{ workout().exercises.length }}</div>
+    @if (detail()) {
+        <div>detail block</div>
+    }
+</div>

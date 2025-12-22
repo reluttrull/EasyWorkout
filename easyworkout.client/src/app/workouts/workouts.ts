@@ -2,10 +2,11 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WorkoutsService } from './workouts.service';
 import { Workout } from '../model/interfaces';
+import { WorkoutComponent } from '../components/workout/workout';
 
 @Component({
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, WorkoutComponent],
   templateUrl: './workouts.html'
 })
 export class WorkoutsComponent {

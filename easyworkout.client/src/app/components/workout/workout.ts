@@ -37,6 +37,10 @@ export class WorkoutComponent {
 
   closeAddExercise() {
     this.isAddMode = false;
+    this.reloadWorkout();
+  }
+
+  reloadWorkout() {
     this.onWorkoutChanged.emit();
   }
 

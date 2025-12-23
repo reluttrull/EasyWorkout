@@ -8,10 +8,12 @@ using EasyWorkout.Identity.Api;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace EasyWorkout.Api.Controllers
 {
     [ApiController]
+    [EnableRateLimiting("fixed")]
     public class WorkoutController : ControllerBase
     {
         private readonly IWorkoutService _workoutService;

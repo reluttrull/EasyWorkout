@@ -3,9 +3,11 @@ using EasyWorkout.Application.Services;
 using EasyWorkout.Identity.Api;
 using EasyWorkout.Identity.Api.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Threading.RateLimiting;
 
 string root = Directory.GetCurrentDirectory();
 string solutionDotEnvPath = Path.Combine(root, "../.env");
@@ -15,6 +17,11 @@ if (File.Exists(solutionDotEnvPath))
 }
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.UseKestrel(options =>
+{
+    options.AddServerHeader = false;
+});
 
 builder.Services.AddCors(options =>
 {
@@ -71,6 +78,18 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddOpenApiDocument();
 
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddFixedWindowLimiter("fixed", opt =>
+    {
+        opt.PermitLimit = 10;
+        opt.Window = TimeSpan.FromSeconds(10);
+        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        opt.QueueLimit = 2;
+    });
+});
+
 builder.Services.AddScoped<IWorkoutService, WorkoutService>();
 builder.Services.AddScoped<IExerciseService, ExerciseService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -91,6 +110,8 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowClient");
 
 app.UseHttpsRedirection();
+
+app.UseRateLimiter();
 
 app.UseAuthentication();
 app.UseAuthorization();

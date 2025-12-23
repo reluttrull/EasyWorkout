@@ -1,7 +1,9 @@
 using EasyWorkout.Identity.Api.Data;
 using EasyWorkout.Identity.Api.Model;
 using EasyWorkout.Identity.Api.Services;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.RateLimiting;
 
 string root = Directory.GetCurrentDirectory();
 string solutionDotEnvPath = Path.Combine(root, "../.env");
@@ -11,6 +13,11 @@ if (File.Exists(solutionDotEnvPath))
 }
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.UseKestrel(options =>
+{
+    options.AddServerHeader = false;
+});
 
 builder.Services.AddCors(options =>
 {
@@ -34,6 +41,18 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddFixedWindowLimiter("fixed", opt =>
+    {
+        opt.PermitLimit = 10;
+        opt.Window = TimeSpan.FromSeconds(10);
+        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        opt.QueueLimit = 2;
+    });
+});
+
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();
@@ -47,6 +66,8 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowClient");
 
 app.UseHttpsRedirection();
+
+app.UseRateLimiter();
 
 app.UseAuthorization();
 

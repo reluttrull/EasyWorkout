@@ -7,14 +7,16 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Security.Claims;
 
 namespace EasyWorkout.Identity.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [EnableRateLimiting("fixed")]
     public class AuthController : ControllerBase
     {
         private readonly UserManager<User> _userManager;

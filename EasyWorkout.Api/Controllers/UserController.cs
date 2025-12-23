@@ -15,10 +15,12 @@ namespace EasyWorkout.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly ILogger _logger;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, ILogger logger)
         {
             _userService = userService;
+            _logger = logger;
         }
 
         [Authorize(AuthConstants.FreeMemberUserPolicyName)]
@@ -26,7 +28,11 @@ namespace EasyWorkout.Api.Controllers
         public async Task<IActionResult> Get(CancellationToken token)
         {
             var userId = HttpContext.GetUserId();
-            if (userId is null) return BadRequest("User not found.");
+            if (userId is null)
+            {
+                _logger.LogWarning("Userid not found in context.");
+                return BadRequest("User not found.");
+            }
 
             var user = await _userService.GetByIdAsync(userId!.Value, token);
             if (user is null) return NotFound($"User with id {userId!.Value} not found.");
@@ -39,11 +45,20 @@ namespace EasyWorkout.Api.Controllers
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateUserRequest request, CancellationToken token)
         {
             var userId = HttpContext.GetUserId();
-            if (userId is null) return BadRequest("User not found.");
-            if (userId != id) return BadRequest("User id does not match requested id.");
+            if (userId is null)
+            {
+                _logger.LogWarning("Userid not found in context.");
+                return BadRequest("User not found.");
+            }
+            if (userId != id)
+            {
+                _logger.LogWarning("User id context {userId} does not match requested user id {id}.", userId, id);
+                return BadRequest("User id does not match requested id.");
+            }
 
             var user = await _userService.UpdateAsync(id, request, token);
             if (user is null) return NotFound();
+            _logger.LogInformation("User with id {id} updated account info.", userId);
             return Ok(user.MapToResponse());
         }
     }

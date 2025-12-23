@@ -6,7 +6,7 @@
         
         @if (exerciseDetail) {
             @for (set of exercise().exerciseSets; track set.id) {
-                <app-set [set]="set" />
+                <app-set [set]="set" [exerciseId]="exercise().id" (onSetChanged)="reload()" />
             }
             @if (isCreateSetVisible) {
                 <app-create-set [exerciseId]="exercise().id" (onCreate)="reload()" (onReturn)="returnCreateSet()" />

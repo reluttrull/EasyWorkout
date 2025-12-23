@@ -21,6 +21,10 @@ export class ExercisesService {
   createSet(id:string, request: CreateSetRequest) {
     return this.http.post<any>(`${this.baseUrl}/${id}/sets`, request);
   }
+  
+  deleteSet(id:string, setId:string) {
+    return this.http.delete<any>(`${this.baseUrl}/${id}/sets/${setId}`);
+  }
 
   update(id:string, request: UpdateExerciseRequest) {
     return this.http.put<ExerciseResponse>(`${this.baseUrl}/${id}`, request);

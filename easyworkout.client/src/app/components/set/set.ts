@@ -1,6 +1,6 @@
-import { Component, input, computed } from '@angular/core';
+import { Component, input, output } from '@angular/core';
+import { ExercisesService } from '../../exercises/exercises.service';
 import { Set } from '../../model/interfaces';
-import { WeightUnit, DurationUnit } from '../../model/enums';
 
 @Component({
   selector: 'app-set',
@@ -10,4 +10,25 @@ import { WeightUnit, DurationUnit } from '../../model/enums';
 })
 export class SetComponent {
   set = input.required<Set>();
+  exerciseId = input.required<string>();
+  onSetChanged = output();
+  
+  constructor(private exercisesService: ExercisesService) { }
+
+  
+  delete(setId:string) {
+    if(confirm('Are you sure you want to delete this set?')) {
+      console.log('id', this.set().id);
+      this.exercisesService.deleteSet(this.exerciseId(), setId)
+        .subscribe({
+          next: () => {
+            this.onSetChanged.emit();
+          },
+          error: err => console.error(err)
+        });
+      console.log("Item deleted");
+    } else {
+      console.log("Deletion cancelled");
+    }
+  }
 }

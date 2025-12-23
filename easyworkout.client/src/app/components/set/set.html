@@ -9,4 +9,6 @@
     @if (set().duration) {
         - <span><strong>Duration</strong> ({{ set().durationUnit }}) {{ set().duration }}</span>
     }
+    
+    <button (click)="delete(set().id)">Delete set</button>
 </div>

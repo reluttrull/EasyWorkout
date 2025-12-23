@@ -31,30 +31,30 @@ export interface Workout {
 
 export interface CreateWorkoutRequest {
   name: string;
-  notes: string;
+  notes?: string | null;
 }
 
 export interface UpdateWorkoutRequest {
   name: string;
-  notes: string;
+  notes?: string | null;
 }
 
 export interface WorkoutResponse {
   id: string;
   addedByUserId: string;
   addedDate: Date;
-  name: String;
-  notes: String;
+  name: string;
+  notes?: string | null;
 }
 
 export interface CreateExerciseRequest {
   name: string;
-  notes: string;
+  notes?: string | null;
 }
 
 export interface UpdateExerciseRequest {
   name: string;
-  notes: string;
+  notes?: string | null;
 }
 
 export interface ExerciseResponse {
@@ -62,7 +62,16 @@ export interface ExerciseResponse {
   addedByUserId: string;
   addedDate: Date;
   name: string;
-  notes: string;
+  notes?: string | null;
+}
+
+export interface CreateSetRequest {
+  reps?: number | null;
+  weight?: number | null;
+  weightUnit?: WeightUnit | null;
+  duration?: number | null;
+  durationUnit?: DurationUnit | null;
+  notes?: string | null;
 }
 
 export interface UserResponse {

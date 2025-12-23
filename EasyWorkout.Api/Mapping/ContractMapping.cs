@@ -63,13 +63,13 @@ namespace EasyWorkout.Api.Mapping
             };
         }
 
-        public static ExerciseSet MapToExerciseSet(this CreateSetRequest request, Guid exerciseId)
+        public static ExerciseSet MapToExerciseSet(this CreateSetRequest request, Guid exerciseId, int? setNumber)
         {
             return new ExerciseSet()
             {
                 Id = Guid.NewGuid(),
                 ExerciseId = exerciseId,
-                SetNumber = request.SetNumber,
+                SetNumber = setNumber ?? 0,
                 Reps = request.Reps,
                 Weight = request.Weight,
                 WeightUnit = request.WeightUnit,

@@ -1,13 +1,13 @@
 export enum WeightUnit {
-    Pounds = 0,
-    Ounces = 1,
-    Kilograms = 2,
-    Grams = 3,
-    Stones = 4
+    Pounds = "Pounds",
+    Ounces = "Ounces",
+    Kilograms = "Kilograms",
+    Grams = "Grams",
+    Stones = "Stones"
 }
 
 export enum DurationUnit {
-    Seconds = 0,
-    Minutes = 1,
-    Hours = 2
+    Seconds = "Seconds",
+    Minutes = "Minutes",
+    Hours = "Hours"
 }

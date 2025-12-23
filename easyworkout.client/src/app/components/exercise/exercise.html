@@ -8,6 +8,11 @@
             @for (set of exercise().exerciseSets; track set.id) {
                 <app-set [set]="set" />
             }
+            @if (isCreateSetVisible) {
+                <app-create-set [exerciseId]="exercise().id" (onCreate)="reload()" (onReturn)="returnCreateSet()" />
+            } @else {
+                <button (click)="clickCreateSet()">Create set</button>
+            }
         } @else {
             <div><strong>Number of sets:</strong> {{ exercise().exerciseSets.length }}</div>
         }

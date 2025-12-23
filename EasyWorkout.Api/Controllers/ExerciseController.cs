@@ -98,7 +98,9 @@ namespace EasyWorkout.Api.Controllers
             var belongsToUser = await _exerciseService.BelongsToUserAsync(id, userId!.Value, token);
             if (!belongsToUser) return BadRequest($"Exercise with id {id} does not belong to user {userId}.");
 
-            var exerciseSet = request.MapToExerciseSet(id);
+            var setNumber = await _exerciseService.GetNextSetIndexAsync(id, token);
+
+            var exerciseSet = request.MapToExerciseSet(id, setNumber);
 
             var success = await _exerciseService.CreateSetAsync(id, exerciseSet, token);
             if (!success) return NotFound();

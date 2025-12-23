@@ -4,10 +4,11 @@ import { WorkoutsService } from '../../workouts/workouts.service';
 import { ExercisesService } from '../../exercises/exercises.service';
 import { Exercise } from '../../model/interfaces';
 import { SetComponent } from '../set/set';
+import { CreateSet } from '../create-set/create-set';
 
 @Component({
   selector: 'app-exercise',
-  imports: [ReactiveFormsModule, SetComponent],
+  imports: [ReactiveFormsModule, SetComponent, CreateSet],
   templateUrl: './exercise.html',
   styleUrl: './exercise.css',
 })
@@ -18,6 +19,7 @@ export class ExerciseComponent {
   onExerciseChanged = output();
   exerciseDetail = false;
   isEditMode = false;
+  isCreateSetVisible = false;
 
   constructor(
     private workoutsService: WorkoutsService, 
@@ -32,6 +34,14 @@ export class ExerciseComponent {
   toggleExerciseDetail() {
     this.exerciseDetail = !this.exerciseDetail;
   }  
+  
+  clickCreateSet() {
+    this.isCreateSetVisible = true;
+  }  
+
+  returnCreateSet() {
+    this.isCreateSetVisible = false;
+  }
 
   edit() {
     this.form.setValue({
@@ -43,6 +53,10 @@ export class ExerciseComponent {
 
   cancelEdit() {
     this.isEditMode = false;
+  }
+
+  reload() {
+    this.onExerciseChanged.emit();
   }
 
   update() {

@@ -1,6 +1,8 @@
 <div>
-    <span><strong>Set #:</strong> {{ set().setNumber }}</span>
-    - <span><strong>Reps:</strong> {{ set().reps }}</span>
+    <span><strong>Set #:</strong> {{ set().setNumber + 1 }}</span>
+    @if (set().reps) {
+        - <span><strong>Reps:</strong> {{ set().reps }}</span>
+    }
     @if (set().weight) {
         - <span><strong>Weight</strong> ({{ set().weightUnit }}): {{ set().weight }}</span>
     }

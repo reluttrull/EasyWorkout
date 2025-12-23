@@ -23,5 +23,7 @@ namespace EasyWorkout.Application.Services
         Task<bool> DeleteSetAsync(Guid id, Guid exerciseSetId, CancellationToken token = default);
 
         Task<bool> BelongsToUserAsync(Guid id, Guid userId, CancellationToken token = default);
+
+        Task<int?> GetNextSetIndexAsync(Guid id, CancellationToken token = default);
     }
 }

@@ -1,0 +1,25 @@
+<h2>Add a set:</h2>
+<form [formGroup]="form" (ngSubmit)="submit()">
+    <label>Reps</label>
+    <input placeholder="Reps" formControlName="reps" type="number" />
+    <label>Weight</label>
+    <input placeholder="Weight" formControlName="weight" type="number" />
+    <label>Weight units:</label>
+    <select title="Weight Units" placeholder="Weight Units" formControlName="weightUnit">
+        <option value="">--Please choose an option--</option>
+        @for (weightUnit of weightUnitOptions; track $index) {
+            <option [value]="weightUnit">{{weightUnit}}</option>
+        }
+    </select>
+    <label>Duration</label>
+    <input placeholder="Duration" formControlName="duration" type="number" />
+    <label>Duration units:</label>
+    <select title="Duration Units" placeholder="Duration Units" formControlName="durationUnit">
+        <option value="">--Please choose an option--</option>
+        @for (durationUnit of durationUnitOptions; track $index) {
+            <option [value]="durationUnit">{{durationUnit}}</option>
+        }
+    </select>
+    <button type="submit">Create</button>
+</form>
+<button (click)="return()">Cancel</button>

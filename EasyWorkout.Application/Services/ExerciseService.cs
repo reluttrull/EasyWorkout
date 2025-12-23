@@ -101,5 +101,16 @@ namespace EasyWorkout.Application.Services
         {
             return _workoutsContext.Exercises.Any(e => e.Id == id && e.AddedByUserId == userId);
         }
+
+        public async Task<int?> GetNextSetIndexAsync(Guid id, CancellationToken token = default)
+        {
+            var exercise = await GetByIdAsync(id);
+            if (exercise is null) return null;
+
+            var sortedSetNumbers = exercise.ExerciseSets.OrderByDescending(es => es.SetNumber).Select(es => es.SetNumber);
+            if (sortedSetNumbers.Count() == 0) return 0;
+
+            return sortedSetNumbers.FirstOrDefault() + 1;
+        }
     }
 }

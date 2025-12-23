@@ -1,5 +1,6 @@
 <h1>Easy Workout</h1>
 @if (isLoggedIn()) {
+    <div>{{ user() | greeting }}</div>
     <button (click)="logout()">Logout</button>
 }
 <router-outlet></router-outlet>

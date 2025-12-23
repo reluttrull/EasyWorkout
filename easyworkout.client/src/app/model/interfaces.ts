@@ -64,3 +64,9 @@ export interface ExerciseResponse {
   name: string;
   notes: string;
 }
+
+export interface UserResponse {
+  firstName: string;
+  lastName: string;
+  joinedDate: Date;
+}

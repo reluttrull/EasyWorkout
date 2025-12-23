@@ -2,10 +2,11 @@ import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { WorkoutsService } from '../workouts/workouts.service';
 import { WorkoutResponse } from '../model/interfaces';
+import { OrderByPipe } from '../pipes/order-by-pipe';
 
 @Component({
   selector: 'app-do-workout',
-  imports: [],
+  imports: [OrderByPipe],
   templateUrl: './do-workout.html',
   styleUrl: './do-workout.css',
 })

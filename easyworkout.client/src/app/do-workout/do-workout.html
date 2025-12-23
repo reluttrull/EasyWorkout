@@ -1,9 +1,9 @@
 <h2>Doing workout...</h2>
 <h3>{{ workoutGoal().name }}</h3>
-@for (exercise of workoutGoal().exercises; track $index) {
+@for (exercise of workoutGoal().exercises | orderBy:'addedDate':'asc'; track $index) {
     <div>
         <h4>Exercise #{{ $index + 1 }}: {{ exercise.name }}</h4>
-        @for (set of exercise.exerciseSets; track set.id) {
+        @for (set of exercise.exerciseSets | orderBy:'setNumber':'asc'; track set.id) {
             <div>
                 <span>{{ set.setNumber }}</span>
                 @if (set.reps) {

@@ -4,7 +4,7 @@
     <div><strong>Notes:</strong> {{ workout().notes }}</div>
     <div><strong>Date created:</strong> {{ workout().addedDate }}</div>
     @if (workoutDetail) {
-        @for (exercise of workout().exercises; track exercise.id) {
+        @for (exercise of workout().exercises | orderBy:'addedDate':'asc'; track exercise.id) {
             <app-exercise [exercise]="exercise" [workoutId]="workout().id" (onExerciseChanged)="reloadWorkout()" /> 
         }
         @if (isAddMode) {

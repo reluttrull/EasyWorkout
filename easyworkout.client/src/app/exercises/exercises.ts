@@ -4,10 +4,11 @@ import { ExercisesService } from './exercises.service';
 import { Exercise } from '../model/interfaces';
 import { ExerciseComponent } from '../components/exercise/exercise';
 import { CreateExercise } from '../components/create-exercise/create-exercise';
+import { OrderByPipe } from '../pipes/order-by-pipe';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, ExerciseComponent, CreateExercise],
+  imports: [CommonModule, ExerciseComponent, CreateExercise, OrderByPipe],
   templateUrl: './exercises.html',
   styleUrl: './exercises.css'
 })

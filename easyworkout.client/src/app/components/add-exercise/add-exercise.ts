@@ -4,10 +4,11 @@ import { WorkoutsService } from '../../workouts/workouts.service';
 import { ExercisesService } from '../../exercises/exercises.service';
 import { ExerciseBrief } from '../exercise-brief/exercise-brief';
 import { CreateExercise } from '../create-exercise/create-exercise';
+import { OrderByPipe } from '../../pipes/order-by-pipe';
 
 @Component({
   selector: 'app-add-exercise',
-  imports: [ExerciseBrief, CreateExercise],
+  imports: [ExerciseBrief, CreateExercise, OrderByPipe],
   templateUrl: './add-exercise.html',
   styleUrl: './add-exercise.css',
 })

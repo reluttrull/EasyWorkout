@@ -5,10 +5,11 @@ import { ExercisesService } from '../../exercises/exercises.service';
 import { Exercise } from '../../model/interfaces';
 import { SetComponent } from '../set/set';
 import { CreateSet } from '../create-set/create-set';
+import { OrderByPipe } from '../../pipes/order-by-pipe';
 
 @Component({
   selector: 'app-exercise',
-  imports: [ReactiveFormsModule, SetComponent, CreateSet],
+  imports: [ReactiveFormsModule, SetComponent, CreateSet, OrderByPipe],
   templateUrl: './exercise.html',
   styleUrl: './exercise.css',
 })

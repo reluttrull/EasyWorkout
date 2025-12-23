@@ -5,7 +5,7 @@
         <div><strong>Date created:</strong> {{ exercise().addedDate }}</div>
         
         @if (exerciseDetail) {
-            @for (set of exercise().exerciseSets; track set.id) {
+            @for (set of exercise().exerciseSets | orderBy:'setNumber':'asc'; track set.id) {
                 <app-set [set]="set" [exerciseId]="exercise().id" (onSetChanged)="reload()" />
             }
             @if (isCreateSetVisible) {

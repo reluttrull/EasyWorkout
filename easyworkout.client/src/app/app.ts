@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { AuthService } from './auth/auth.service';
 import { TokenService } from './core/token.service';
 import { AccountService } from './account/account.service';
-import { GreetingPipe } from './account/greeting-pipe';
+import { GreetingPipe } from './pipes/greeting-pipe';
 import { UserResponse } from './model/interfaces';
 
 @Component({

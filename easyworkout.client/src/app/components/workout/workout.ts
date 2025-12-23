@@ -5,10 +5,11 @@ import { Workout } from '../../model/interfaces';
 import { ExerciseComponent } from '../exercise/exercise';
 import { AddExercise } from '../add-exercise/add-exercise';
 import { WorkoutsService } from '../../workouts/workouts.service';
+import { OrderByPipe } from '../../pipes/order-by-pipe';
 
 @Component({
   selector: 'app-workout',
-  imports: [ReactiveFormsModule, ExerciseComponent, AddExercise],
+  imports: [ReactiveFormsModule, ExerciseComponent, AddExercise, OrderByPipe],
   templateUrl: './workout.html',
   styleUrl: './workout.css',
 })

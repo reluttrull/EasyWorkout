@@ -46,3 +46,8 @@ export interface WorkoutResponse {
   name: String;
   notes: String;
 }
+
+export interface CreateExerciseRequest {
+  name: string;
+  notes: string;
+}

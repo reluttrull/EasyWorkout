@@ -2,11 +2,12 @@ import { Component, input, output } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Workout } from '../../model/interfaces';
 import { ExerciseComponent } from '../exercise/exercise';
+import { AddExercise } from '../add-exercise/add-exercise';
 import { WorkoutsService } from '../../workouts/workouts.service';
 
 @Component({
   selector: 'app-workout',
-  imports: [ReactiveFormsModule, ExerciseComponent],
+  imports: [ReactiveFormsModule, ExerciseComponent, AddExercise],
   templateUrl: './workout.html',
   styleUrl: './workout.css',
 })
@@ -17,6 +18,7 @@ export class WorkoutComponent {
   onWorkoutChanged = output();
   workoutDetail = false;
   isEditMode = false;
+  isAddMode = false;
 
   constructor(private workoutsService: WorkoutsService, private fb:FormBuilder) {
     this.form = this.fb.nonNullable.group({
@@ -27,6 +29,15 @@ export class WorkoutComponent {
 
   toggleWorkoutDetail() {
     this.workoutDetail = !this.workoutDetail;
+  }
+
+  openAddExercise() {
+    this.isAddMode = true;
+  }
+
+  closeAddExercise() {
+    this.isAddMode = false;
+    this.onWorkoutChanged.emit();
   }
 
   edit() {

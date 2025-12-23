@@ -25,4 +25,12 @@ export class WorkoutsService {
   delete(id: string) {
     return this.http.delete<any>(`${this.baseUrl}/${id}`);
   }
+
+  addExercise(id:string, exerciseId:string) {
+    return this.http.post<any>(`${this.baseUrl}/${id}/exercises/${exerciseId}`, {});
+  }
+
+  removeExercise(id:string, exerciseId:string) {
+    return this.http.delete<any>(`${this.baseUrl}/${id}/exercises/${exerciseId}`);
+  }
 }

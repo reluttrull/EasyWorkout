@@ -62,11 +62,15 @@ namespace EasyWorkout.Application.Services
 
         public async Task<bool> AddExerciseAsync(Guid id, Guid exerciseId, CancellationToken token = default)
         {
-            var workout = _workoutsContext.Workouts.Single(w => w.Id == id);
+            var workout = await GetByIdAsync(id, token);
             if (workout is null) return false;
+            if (workout.Exercises.Any(e => e.Id == exerciseId)) return false;
 
             var exercise = _workoutsContext.Exercises.Single(e => e.Id == exerciseId);
             if (exercise is null) return false;
+            await _workoutsContext.Entry(exercise)
+                .Collection(e => e.Workouts)
+                .LoadAsync(token);
 
             workout.Exercises.Add(exercise);
             exercise.Workouts.Add(workout);
@@ -77,11 +81,14 @@ namespace EasyWorkout.Application.Services
 
         public async Task<bool> RemoveExerciseAsync(Guid id, Guid exerciseId, CancellationToken token = default)
         {
-            var workout = _workoutsContext.Workouts.Single(w => w.Id == id);
+            var workout = await GetByIdAsync(id, token);
             if (workout is null) return false;
 
             var exercise = _workoutsContext.Exercises.Single(e => e.Id == exerciseId);
             if (exercise is null) return false;
+            await _workoutsContext.Entry(exercise)
+                .Collection(e => e.Workouts)
+                .LoadAsync(token);
 
             workout.Exercises.Remove(exercise);
             exercise.Workouts.Remove(workout);

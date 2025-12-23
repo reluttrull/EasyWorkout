@@ -7,14 +7,23 @@
         @for (exercise of workout().exercises; track exercise.id) {
             <app-exercise [exercise]="exercise" />
         }
+        @if (isAddMode) {
+            <app-add-exercise (onClose)="closeAddExercise()" [workoutId]="workout().id" />
+        } @else {
+            <div>
+                <button (click)="openAddExercise()">Add exercise</button>
+            </div>
+        }
     } @else {
         <div><strong>Number of exercises:</strong> {{ workout().exercises.length }}</div>
     }
-    @if (!workoutDetail) {
-        <button (click)="toggleWorkoutDetail()">Show exercise detail</button>
-    } @else {
-        <button (click)="toggleWorkoutDetail()">Hide exercise detail</button>
-    }
+    <div>
+        @if (!workoutDetail) {
+            <button (click)="toggleWorkoutDetail()">Show exercise detail</button>
+        } @else {
+            <button (click)="toggleWorkoutDetail()">Hide exercise detail</button>
+        }
+    </div>
     <button>Start workout!</button>
     <button (click)="edit()">Edit workout</button>
     <button (click)="delete()">Delete workout</button>

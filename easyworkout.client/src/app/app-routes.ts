@@ -1,4 +1,5 @@
 import { Routes, provideRouter, withRouterConfig } from '@angular/router';
+import { DoWorkout } from './/do-workout/do-workout';
 
 export const routes: Routes = [
   {
@@ -15,6 +16,10 @@ export const routes: Routes = [
     path: 'exercises',
     loadChildren: () =>
       import('./exercises/exercises.routes').then(m => m.EXERCISES_ROUTES)
+  },
+  {
+    path: 'do-workout/:id',
+    component: DoWorkout
   },
   { path: '', redirectTo: 'workouts', pathMatch: 'full' }
 ];

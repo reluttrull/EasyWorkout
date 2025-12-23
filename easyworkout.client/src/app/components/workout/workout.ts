@@ -1,5 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Workout } from '../../model/interfaces';
 import { ExerciseComponent } from '../exercise/exercise';
 import { AddExercise } from '../add-exercise/add-exercise';
@@ -20,7 +21,7 @@ export class WorkoutComponent {
   isEditMode = false;
   isAddMode = false;
 
-  constructor(private workoutsService: WorkoutsService, private fb:FormBuilder) {
+  constructor(private workoutsService: WorkoutsService, private fb:FormBuilder, private router:Router) {
     this.form = this.fb.nonNullable.group({
       name: [''],
       notes: ['']
@@ -42,6 +43,10 @@ export class WorkoutComponent {
 
   reloadWorkout() {
     this.onWorkoutChanged.emit();
+  }
+
+  startWorkout() {
+    this.router.navigate([`/do-workout/${this.workout().id}`]);
   }
 
   edit() {

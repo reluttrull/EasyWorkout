@@ -23,7 +23,7 @@ export class ExercisesComponent {
     this.service.getAll().subscribe(e => this.exercises.set(e));
   }
 
-  showAddWorkout() {
+  showAddExercise() {
     this.isCreateVisible = true;
   }
 

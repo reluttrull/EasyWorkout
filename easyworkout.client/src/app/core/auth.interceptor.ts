@@ -37,37 +37,44 @@ function handle401Error(
   authService: AuthService,
   tokenService: TokenService
 ): Observable<any> {
+
+  const refreshToken = tokenService.getRefreshToken();
+
+  // don't logout or redirect if user wasn't logged in
+  if (!refreshToken) {
+    return throwError(() => new Error('Anonymous request'));
+  }
+
   if (!isRefreshing) {
     isRefreshing = true;
     refreshTokenSubject.next(null);
 
     return authService.refreshToken().pipe(
-      switchMap((response: any) => {
+      switchMap(res => {
         isRefreshing = false;
-        refreshTokenSubject.next(response.accessToken);
+        refreshTokenSubject.next(res.accessToken);
+
         return next(request.clone({
           setHeaders: {
-            Authorization: `Bearer ${response.accessToken}`
+            Authorization: `Bearer ${res.accessToken}`
           }
         }));
       }),
-      catchError((err) => {
+      catchError(err => {
         isRefreshing = false;
         authService.logout();
         return throwError(() => err);
       })
     );
-  } else {
-    return refreshTokenSubject.pipe(
-      filter(token => token != null),
-      take(1),
-      switchMap(token => {
-        return next(request.clone({
-          setHeaders: {
-            Authorization: `Bearer ${token}`
-          }
-        }));
-      })
-    );
   }
+
+  return refreshTokenSubject.pipe(
+    filter(token => token != null),
+    take(1),
+    switchMap(token =>
+      next(request.clone({
+        setHeaders: { Authorization: `Bearer ${token}` }
+      }))
+    )
+  );
 }

@@ -66,11 +66,18 @@ export class ExerciseComponent {
   }
   
   delete(exerciseId:string) {
-    this.exercisesService.delete(exerciseId).subscribe({
-      next: () => {
-        this.onExerciseChanged.emit();
-      },
-      error: err => console.error(err)
-    });
+    if(confirm(`Are you sure you want to delete exercise ${this.exercise().name}?  It will also be deleted from every workout it's attached to.`)) {
+      console.log('id', this.exercise().id);
+      this.exercisesService.delete(this.exercise().id)
+        .subscribe({
+          next: () => {
+            this.onExerciseChanged.emit();
+          },
+          error: err => console.error(err)
+        });
+      console.log("Item deleted");
+    } else {
+      console.log("Deletion cancelled");
+    }
   }
 }

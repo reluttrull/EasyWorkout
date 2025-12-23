@@ -18,12 +18,21 @@ export class RegisterComponent {
     private router: Router
   ) {
     this.form = this.fb.nonNullable.group({
+      userName: [''],
       email: [''],
-      password: ['']
+      firstName: [''],
+      lastName: [''],
+      password: [''],
+      confirmPassword: [''],
     });
   }
 
   submit() {
+    console.log('sdjflksdj');
+    if (this.form.value.password != this.form.value.confirmPassword) {
+      // todo: show validation error
+      return;
+    }
     this.auth.register(this.form.value).subscribe(() => {
       this.router.navigate(['/login']);
     });

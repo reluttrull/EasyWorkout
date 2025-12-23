@@ -68,19 +68,18 @@ export class WorkoutComponent {
   }
 
   delete() {
-  if(confirm("Are you sure you want to delete workout " + this.workout().name + "?")) {
-    // Implement delete/action functionality here if confirmed
-    console.log('id', this.workout().id);
-    this.workoutsService.delete(this.workout().id)
-      .subscribe({
-        next: () => {
-          this.onWorkoutChanged.emit();
-        },
-        error: err => console.error(err)
-      });
-    console.log("Item deleted");
-  } else {
-    console.log("Deletion cancelled");
+    if(confirm("Are you sure you want to delete workout " + this.workout().name + "?")) {
+      console.log('id', this.workout().id);
+      this.workoutsService.delete(this.workout().id)
+        .subscribe({
+          next: () => {
+            this.onWorkoutChanged.emit();
+          },
+          error: err => console.error(err)
+        });
+      console.log("Item deleted");
+    } else {
+      console.log("Deletion cancelled");
+    }
   }
-}
 }

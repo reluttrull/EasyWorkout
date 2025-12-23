@@ -4,12 +4,11 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { AppComponent } from './app/app';
 import { routes } from './app/app-routes';
-import { jwtInterceptor } from './app/core/jwt.interceptor';
 import { authInterceptor } from './app/core/auth.interceptor';
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptors([jwtInterceptor, authInterceptor]))
+    provideHttpClient(withInterceptors([authInterceptor]))
   ]
 });

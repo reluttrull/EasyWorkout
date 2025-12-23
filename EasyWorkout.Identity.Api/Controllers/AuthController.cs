@@ -74,6 +74,7 @@ namespace EasyWorkout.Identity.Api.Controllers
                     _logger.LogError("Failed to add claim to user.  Errors: {e}", errorsText);
                 }
 
+                _logger.LogInformation("User successfully created with id {id} and username {username}.", user.Id, user.UserName);
                 return CreatedAtAction(nameof(Register), null);
             }
             catch (Exception e)
@@ -102,6 +103,7 @@ namespace EasyWorkout.Identity.Api.Controllers
 
             await _context.SaveChangesAsync();
 
+            _logger.LogDebug("User successfully logged in with id {id} and username {username}.", user.Id, user.UserName);
             return Ok(new { AccessToken = accessToken, RefreshToken = refreshToken.Token });
         }
 
@@ -145,6 +147,7 @@ namespace EasyWorkout.Identity.Api.Controllers
             await _userManager.RemoveAuthenticationTokenAsync(user, "Default", "RefreshToken");
             
             await _context.SaveChangesAsync();
+            _logger.LogDebug("User successfully logged out with id {id} and username {username}.", user.Id, user.UserName);
             return Ok("Refresh token revoked.");
         }
     }

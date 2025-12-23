@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
@@ -7,9 +7,11 @@ import { AuthService } from '../auth.service';
   selector: 'app-register',
   standalone: true,
   imports: [ReactiveFormsModule],
-  templateUrl: './register.html'
+  templateUrl: './register.html',
+  styleUrl: './register.css'
 })
 export class RegisterComponent {
+  validationErrors = signal<string[]>([]);
   form!: FormGroup;
 
   constructor(
@@ -28,13 +30,26 @@ export class RegisterComponent {
   }
 
   submit() {
-    console.log('sdjflksdj');
+    this.validationErrors.set([]);
     if (this.form.value.password != this.form.value.confirmPassword) {
       // todo: show validation error
+      this.validationErrors.update(errs => [...errs, 'Typed passwords do not match.']);
       return;
     }
-    this.auth.register(this.form.value).subscribe(() => {
-      this.router.navigate(['/login']);
+    this.auth.register(this.form.value).subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        if (err.status == 400 && err.error?.errors) {
+          for (const key of Object.keys(err.error.errors)) {
+            this.validationErrors.update(errs => [...errs, ...err.error.errors[key]]);
+          }
+        } else {
+          this.validationErrors.update(errs => [...errs, 'An unexpected error occurred.']);
+        };
+        return;
+      }
     });
   }
 }

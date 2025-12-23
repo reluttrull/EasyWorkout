@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
@@ -10,7 +10,7 @@ import { AuthService } from '../auth.service';
   templateUrl: './login.html'
 })
 export class LoginComponent {
-  
+  validationErrors = signal<string[]>([]);
   form!: FormGroup;
 
   constructor(
@@ -26,11 +26,17 @@ export class LoginComponent {
   }
 
   submit() {
+    this.validationErrors.set([]);
     this.auth.login(
       this.form.value.userName!,
       this.form.value.password!
-    ).subscribe(() => {
-      this.router.navigate(['/workouts']);
+    ).subscribe({
+      next: () => {
+        this.router.navigate(['/workouts']);
+      },
+      error: (err) => {
+        this.validationErrors.update(errs => [...errs, err.error?.message ?? 'Login failed.']);
+      }
     });
   }
 }

@@ -5,3 +5,8 @@
     <input placeholder="Password" type="password" formControlName="password" />
     <button type="submit">Login</button>
 </form>
+<div>
+    @for (error of validationErrors(); track $index) {
+        <div class="error">{{ error }}</div>
+    }
+</div>

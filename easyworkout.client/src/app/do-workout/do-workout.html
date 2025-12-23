@@ -1,1 +1,21 @@
-<p>do-workout works! id: {{ id }}</p>
+<h2>Doing workout...</h2>
+<h3>{{ workoutGoal().name }}</h3>
+@for (exercise of workoutGoal().exercises; track $index) {
+    <div>
+        <h4>Exercise #{{ $index + 1 }}: {{ exercise.name }}</h4>
+        @for (set of exercise.exerciseSets; track set.id) {
+            <div>
+                <span>{{ set.setNumber }}</span>
+                @if (set.reps) {
+                    - <span>{{ set.reps }} reps</span>
+                }
+                @if (set.weight) {
+                    - <span>{{ set.weight }} {{ set.weightUnit }}</span>
+                }
+                @if (set.duration) {
+                    - <span>{{ set.duration }} {{ set.durationUnit }}</span>
+                }
+            </div>
+        }
+    </div>
+}

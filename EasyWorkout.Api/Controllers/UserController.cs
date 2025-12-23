@@ -17,7 +17,7 @@ namespace EasyWorkout.Api.Controllers
         private readonly IUserService _userService;
         private readonly ILogger _logger;
 
-        public UserController(IUserService userService, ILogger logger)
+        public UserController(IUserService userService, ILogger<UserController> logger)
         {
             _userService = userService;
             _logger = logger;

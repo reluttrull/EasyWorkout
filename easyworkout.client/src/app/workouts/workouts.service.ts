@@ -14,6 +14,10 @@ export class WorkoutsService {
     return this.http.get<Workout[]>(`${this.baseUrl}/me`);
   }
 
+  get(id:string) {
+    return this.http.get<WorkoutResponse>(`${this.baseUrl}/${id}`);
+  }
+
   create(request: CreateWorkoutRequest) {
     return this.http.post<{ id: string }>(this.baseUrl, request);
   }

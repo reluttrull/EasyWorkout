@@ -5,7 +5,7 @@ export interface Exercise {
   addedByUserId: string;
   addedDate: Date;
   name: string;
-  notes: string;
+  notes?: string | null;
   exerciseSets: Set[];
 }
 
@@ -25,7 +25,7 @@ export interface Workout {
   addedByUserId: string;
   addedDate: Date;
   name: string;
-  notes: string;
+  notes?: string | null;
   exercises: Exercise[];
 }
 
@@ -45,6 +45,7 @@ export interface WorkoutResponse {
   addedDate: Date;
   name: string;
   notes?: string | null;
+  exercises: ExerciseResponse[];
 }
 
 export interface CreateExerciseRequest {
@@ -63,6 +64,7 @@ export interface ExerciseResponse {
   addedDate: Date;
   name: string;
   notes?: string | null;
+  exerciseSets: Set[];
 }
 
 export interface CreateSetRequest {

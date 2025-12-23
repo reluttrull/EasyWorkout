@@ -51,3 +51,16 @@ export interface CreateExerciseRequest {
   name: string;
   notes: string;
 }
+
+export interface UpdateExerciseRequest {
+  name: string;
+  notes: string;
+}
+
+export interface ExerciseResponse {
+  id: string;
+  addedByUserId: string;
+  addedDate: Date;
+  name: string;
+  notes: string;
+}

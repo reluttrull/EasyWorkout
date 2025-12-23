@@ -12,8 +12,8 @@ import { WorkoutsService } from '../../workouts/workouts.service';
   styleUrl: './workout.css',
 })
 export class WorkoutComponent {
-  onReturn = output();
   form!: FormGroup;
+  onReturn = output();
   workout = input.required<Workout>();
   onWorkoutChanged = output();
   workoutDetail = false;

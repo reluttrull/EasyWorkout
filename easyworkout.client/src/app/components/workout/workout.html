@@ -29,13 +29,15 @@
     <button (click)="delete()">Delete workout</button>
 </div>
 } @else {
-    <h2>Edit a Workout:</h2>
-    <form [formGroup]="form" (ngSubmit)="update()">
-        <label>Name</label>
-        <input placeholder="Name" formControlName="name" />
-        <label>Notes</label>
-        <input placeholder="Notes" formControlName="notes" />
-        <button type="submit">Save</button>
-    </form>
-    <button (click)="cancelEdit()">Cancel</button>
+    <div>
+        <h2>Edit Workout:</h2>
+        <form [formGroup]="form" (ngSubmit)="update()">
+            <label>Name</label>
+            <input placeholder="Name" formControlName="name" />
+            <label>Notes</label>
+            <input placeholder="Notes" formControlName="notes" />
+            <button type="submit">Save</button>
+        </form>
+        <button (click)="cancelEdit()">Cancel</button>
+    </div>
 }

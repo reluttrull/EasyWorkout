@@ -1,20 +1,37 @@
-<div>
-    <h3><strong>Exercise:</strong> {{ exercise().name }}</h3>
-    <div><strong>Notes:</strong> {{ exercise().notes }}</div>
-    <div><strong>Date created:</strong> {{ exercise().addedDate }}</div>
-    
-    @if (exerciseDetail) {
-        @for (set of exercise().exerciseSets; track set.id) {
-            <app-set [set]="set" />
+@if (!isEditMode) {
+    <div>
+        <h3><strong>Exercise:</strong> {{ exercise().name }}</h3>
+        <div><strong>Notes:</strong> {{ exercise().notes }}</div>
+        <div><strong>Date created:</strong> {{ exercise().addedDate }}</div>
+        
+        @if (exerciseDetail) {
+            @for (set of exercise().exerciseSets; track set.id) {
+                <app-set [set]="set" />
+            }
+        } @else {
+            <div><strong>Number of sets:</strong> {{ exercise().exerciseSets.length }}</div>
         }
-    } @else {
-        <div><strong>Number of sets:</strong> {{ exercise().exerciseSets.length }}</div>
-    }
-    @if (!exerciseDetail) {
-        <button (click)="toggleExerciseDetail()">Show set detail</button>
-    } @else {
-        <button (click)="toggleExerciseDetail()">Hide set detail</button>
-    }
-    <button (click)="remove(exercise().id)">Remove exercise</button>
-    <button (click)="delete(exercise().id)">Delete exercise</button>
-</div>
+        @if (!exerciseDetail) {
+            <button (click)="toggleExerciseDetail()">Show set detail</button>
+        } @else {
+            <button (click)="toggleExerciseDetail()">Hide set detail</button>
+        }
+        <button (click)="edit()">Edit exercise</button>
+        @if (workoutId()) {
+            <button (click)="remove(exercise().id)">Remove exercise</button>
+        }
+        <button (click)="delete(exercise().id)">Delete exercise</button>
+    </div>
+} @else {
+    <div>
+        <h2>Edit Exercise:</h2>
+        <form [formGroup]="form" (ngSubmit)="update()">
+            <label>Name</label>
+            <input placeholder="Name" formControlName="name" />
+            <label>Notes</label>
+            <input placeholder="Notes" formControlName="notes" />
+            <button type="submit">Save</button>
+        </form>
+        <button (click)="cancelEdit()">Cancel</button>
+    </div>
+}

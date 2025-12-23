@@ -1,4 +1,5 @@
 import { Component, input, output } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { WorkoutsService } from '../../workouts/workouts.service';
 import { ExercisesService } from '../../exercises/exercises.service';
 import { Exercise } from '../../model/interfaces';
@@ -6,26 +7,57 @@ import { SetComponent } from '../set/set';
 
 @Component({
   selector: 'app-exercise',
-  imports: [SetComponent],
+  imports: [ReactiveFormsModule, SetComponent],
   templateUrl: './exercise.html',
   styleUrl: './exercise.css',
 })
 export class ExerciseComponent {
+  form!: FormGroup;
   exercise = input.required<Exercise>();
-  workoutId = input.required<string>();
+  workoutId = input<string>();
   onExerciseChanged = output();
   exerciseDetail = false;
+  isEditMode = false;
 
-  constructor(private workoutsService: WorkoutsService, private exercisesService: ExercisesService) {
-    
+  constructor(
+    private workoutsService: WorkoutsService, 
+    private exercisesService: ExercisesService,
+    private fb:FormBuilder) {
+      this.form = this.fb.nonNullable.group({
+        name: [''],
+        notes: ['']
+      });
   }
 
   toggleExerciseDetail() {
     this.exerciseDetail = !this.exerciseDetail;
   }  
+
+  edit() {
+    this.form.setValue({
+      name: this.exercise().name,
+      notes: this.exercise().notes
+    });
+    this.isEditMode = !this.isEditMode;
+  }
+
+  cancelEdit() {
+    this.isEditMode = false;
+  }
+
+  update() {
+    this.exercisesService.update(this.exercise().id, this.form.value)
+      .subscribe({
+        next: () => {
+          this.onExerciseChanged.emit();
+          this.isEditMode = false;
+        },
+        error: err => console.error(err)
+      });
+  }
   
   remove(exerciseId:string) {
-    this.workoutsService.removeExercise(this.workoutId(), exerciseId).subscribe({
+    this.workoutsService.removeExercise(this.workoutId()??'', exerciseId).subscribe({
       next: () => {
         this.onExerciseChanged.emit();
       },

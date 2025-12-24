@@ -6,8 +6,8 @@ import { UserResponse } from '../model/interfaces';
 })
 export class GreetingPipe implements PipeTransform {
 
-  transform(value: UserResponse): string {
-    return `Welcome, ${value.firstName}!`;
+  transform(value: UserResponse | null): string {
+    return `Welcome, ${value?.firstName}!`;
   }
 
 }

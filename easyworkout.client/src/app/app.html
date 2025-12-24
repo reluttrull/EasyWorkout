@@ -1,6 +1,13 @@
-<h1>Easy Workout</h1>
-@if (isLoggedIn()) {
-    <div>{{ user() | greeting }}</div>
-    <button (click)="logout()">Logout</button>
-}
-<router-outlet></router-outlet>
+<div id="root">
+    <div class="two-column-flex-container">
+        <a href="/" class="logo"><h1>Easy Workout</h1></a>
+        <div>
+            @if (isLoggedIn()) {
+                <div>{{ user() | greeting }}</div>
+                <div><a href="account">Account</a></div>
+                <button (click)="logout()">Logout</button>
+            }
+        </div>
+    </div>
+    <router-outlet></router-outlet>
+</div>

@@ -1,4 +1,4 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, effect } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from './auth/auth.service';
 import { TokenService } from './core/token.service';
@@ -10,12 +10,22 @@ import { UserResponse } from './model/interfaces';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, GreetingPipe],
-  templateUrl: './app.html'
+  templateUrl: './app.html',
+  styleUrl: './app.css'
 })
 export class AppComponent {
-  user = signal<UserResponse>({firstName:'', lastName:'', joinedDate:new Date(0)});
-  constructor(private authService: AuthService, private tokenService: TokenService, private accountService: AccountService) {
-    this.accountService.get().subscribe(u => this.user.set(u));
+  user = signal<UserResponse | null>(null);
+  constructor(
+    private authService: AuthService, 
+    private tokenService: TokenService, 
+    private accountService: AccountService) {
+    effect(() => {
+      if (this.isLoggedIn()) {
+        this.accountService.get().subscribe(u => this.user.set(u));
+      } else {
+        this.user.set(null);
+      }
+    });
   }
   
   logout() {

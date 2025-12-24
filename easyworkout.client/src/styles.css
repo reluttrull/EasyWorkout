@@ -1,4 +1,23 @@
+ul {
+    list-style-type: none;
+}
+
 .error {
     color: red;
     font-weight: bold;
+}
+
+.box {
+    border: 1px solid #333;
+    margin: 5px;
+    padding: 5px;
+}
+
+.two-column-flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding-bottom: 10px;
 }

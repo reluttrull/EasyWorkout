@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AccountService } from './account.service';
 import { UserResponse } from '../model/interfaces';
 
@@ -9,13 +9,6 @@ import { UserResponse } from '../model/interfaces';
   styleUrl: './account.css',
 })
 export class Account {
-  user = signal<UserResponse>({
-    firstName: '',
-    lastName: '',
-    joinedDate: new Date(0)
-  });
-
-  constructor(private accountService: AccountService) { 
-    this.accountService.get().subscribe(u => this.user.set(u));
-  }
+  private accountService = inject(AccountService);
+  user = this.accountService.user;
 }

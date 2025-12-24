@@ -1,13 +1,20 @@
 import { Routes, provideRouter, withRouterConfig } from '@angular/router';
 import { DoWorkout } from './do-workout/do-workout';
 import { Account } from './account/account';
+import { Home } from './components/home/home';
+import { LoginComponent } from './auth/login/login';
+import { RegisterComponent } from './auth/register/register';
+import { authGuard } from './auth/auth.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    loadChildren: () =>
-      import('./auth/auth.routes').then(m => m.AUTH_ROUTES)
+    component: Home,
+    pathMatch: 'full',
+    canActivate: [authGuard]
   },
+  { path: 'login', component: LoginComponent, pathMatch: 'full' },
+  { path: 'register', component: RegisterComponent, pathMatch: 'full' },
   {
     path: 'workouts',
     loadChildren: () =>
@@ -20,11 +27,13 @@ export const routes: Routes = [
   },
   {
     path: 'do-workout/:id',
-    component: DoWorkout
+    component: DoWorkout,
+    canActivate: [authGuard]
   },
   {
     path: 'account',
-    component: Account
+    component: Account,
+    canActivate: [authGuard]
   },
   { path: '', redirectTo: 'workouts', pathMatch: 'full' }
 ];

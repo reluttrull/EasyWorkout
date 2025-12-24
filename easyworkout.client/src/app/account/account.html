@@ -1,4 +1,4 @@
 <h2>Account information</h2>
-<div><strong>First name:</strong> {{ user().firstName }}</div>
-<div><strong>Last name:</strong> {{ user().lastName }}</div>
-<div><strong>Member since:</strong> {{ user().joinedDate }}</div>
+<div><strong>First name:</strong> {{ user()?.firstName }}</div>
+<div><strong>Last name:</strong> {{ user()?.lastName }}</div>
+<div><strong>Member since:</strong> {{ user()?.joinedDate }}</div>

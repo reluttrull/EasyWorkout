@@ -5,7 +5,7 @@ const REFRESH_TOKEN_KEY = 'refresh_token';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService {
-  public hasTokenSignal = signal<boolean>(localStorage.getItem(ACCESS_TOKEN_KEY) != null);
+  public hasTokenSignal = signal<boolean>(this.hasToken());
 
   setTokens(accessToken: string, refreshToken: string): void {
     localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);

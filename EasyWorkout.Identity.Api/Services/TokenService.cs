@@ -58,7 +58,7 @@ namespace EasyWorkout.Identity.Api.Services
             rng.GetBytes(randomNumber);
             return (
                 Token: Convert.ToBase64String(randomNumber),
-                Expires: DateTime.UtcNow.AddDays(7)
+                Expires: DateTime.UtcNow.AddDays(14)
             );
         }
     }

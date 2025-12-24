@@ -12,6 +12,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const tokenService = inject(TokenService);
   const authService = inject(AuthService);
 
+  if (req.url.includes('/auth/refresh')) {
+    return next(req);
+  }
+
   const token = tokenService.getAccessToken();
   if (token) {
     req = req.clone({

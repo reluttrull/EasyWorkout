@@ -1,21 +1,43 @@
-<h2>Doing workout...</h2>
-<h3>{{ workoutGoal().name }}</h3>
-@for (exercise of workoutGoal().exercises | orderBy:'addedDate':'asc'; track $index) {
+<form [formGroup]="form">
+  <h2>Doing workout...</h2>
+  <h3>{{ workoutGoal().name }}</h3>
+
+  @for (exercise of workoutGoal().exercises | orderBy:'addedDate':'asc'; track $index) {
     <div>
-        <h4>Exercise #{{ $index + 1 }}: {{ exercise.name }}</h4>
-        @for (set of exercise.exerciseSets | orderBy:'setNumber':'asc'; track set.id) {
-            <div>
-                <span>{{ set.setNumber }}</span>
-                @if (set.reps) {
-                    - <span>{{ set.reps }} reps</span>
-                }
-                @if (set.weight) {
-                    - <span>{{ set.weight }} {{ set.weightUnit }}</span>
-                }
-                @if (set.duration) {
-                    - <span>{{ set.duration }} {{ set.durationUnit }}</span>
-                }
-            </div>
-        }
+      <h4>Exercise #{{ $index + 1 }}: {{ exercise.name }}</h4>
+
+      @for (set of exercise.exerciseSets | orderBy:'setNumber':'asc'; track set.id; let i = $index) {
+        <div [formGroup]="setsArray.at(i)">
+          <span>Set {{ set.setNumber }}: </span>
+
+          @if (set.reps) {
+            <input
+              type="number"
+              formControlName="reps"
+              placeholder="Actual reps"
+            /> / <span>{{ set.reps }} reps</span>
+          }
+
+          @if (set.weight) {
+            - <input
+              type="number"
+              formControlName="weight"
+              placeholder="Actual weight"
+            /> / 
+            <span>{{ set.weight }} {{ set.weightUnit }}</span>
+          }
+
+          @if (set.duration) {
+            - <input
+              type="number"
+              formControlName="duration"
+              placeholder="Actual duration"
+            /> / 
+            <span>{{ set.duration }} {{ set.durationUnit }}</span>
+          }
+        </div>
+      }
     </div>
-}
+  }
+  <button (click)="submit()">Finish and save</button>
+</form>

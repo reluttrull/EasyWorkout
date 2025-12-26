@@ -69,6 +69,8 @@ export interface CompletedWorkoutResponse {
   id: string;
   completedByUserId: string;
   workoutId: string;
+  originalName?: string | null;
+  originalNotes?: string | null;
   completedDate: Date;
   completedNotes?: string | null;
   completedExerciseSets: CompletedExerciseSetResponse[]
@@ -76,13 +78,19 @@ export interface CompletedWorkoutResponse {
 
 export interface CompletedExerciseSetResponse {
   id: string;
+  exerciseName: string;
   exerciseSetId: string;
   completedWorkoutId: string;
   completedDate: Date;
   setNumber: number;
   reps?: number | null;
+  goalReps?: number | null;
   weight?: number | null;
+  goalWeight?: number | null;
+  weightUnit?: string | null;
   duration?: number | null;
+  goalDuration?: number | null;
+  durationUnit?: string | null;
 }
 
 export interface CreateExerciseRequest {

@@ -31,6 +31,14 @@ namespace EasyWorkout.Application.Services
             return result > 0;
         }
 
+        public async Task<IEnumerable<CompletedWorkout>> GetAllForUserAsync(Guid userId, CancellationToken token = default)
+        {
+            return _workoutsContext.CompletedWorkouts
+                .Where(w => w.CompletedByUserId == userId)
+                .Include(w => w.CompletedExerciseSets)
+                .AsEnumerable<CompletedWorkout>();
+        }
+
         public async Task<CompletedWorkout?> GetByIdAsync(Guid id, CancellationToken token = default)
         {
             var completedWorkout = _workoutsContext.CompletedWorkouts.First(cw => cw.Id == id);

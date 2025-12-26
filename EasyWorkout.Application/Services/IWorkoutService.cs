@@ -10,9 +10,11 @@ namespace EasyWorkout.Application.Services
     {
         Task<bool> CreateAsync(Workout workout, CancellationToken token = default);
 
-        Task<Workout?> GetByIdAsync(Guid id, CancellationToken token = default);
+        Task<WorkoutDetailed?> GetByIdDetailedAsync(Guid id, CancellationToken token = default);
 
-        Task<IEnumerable<Workout>> GetAllForUserAsync(Guid userId, CancellationToken token = default);
+        Task<IEnumerable<WorkoutDetailed>> GetAllDetailedForUserAsync(Guid userId, CancellationToken token = default);
+
+        Task<Workout?> GetByIdAsync(Guid id, CancellationToken token = default);
 
         Task<Workout?> UpdateAsync(Guid id, UpdateWorkoutRequest request, CancellationToken token = default);
 
@@ -23,5 +25,7 @@ namespace EasyWorkout.Application.Services
         Task<bool> RemoveExerciseAsync(Guid id, Guid exerciseId, CancellationToken token = default);
 
         Task<bool> BelongsToUserAsync(Guid id, Guid userId, CancellationToken token = default);
+
+        Task<DateTime?> GetLastCompletedDateAsync(Guid id, CancellationToken token = default);
     }
 }

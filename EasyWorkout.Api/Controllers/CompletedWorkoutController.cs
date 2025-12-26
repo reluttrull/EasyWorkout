@@ -65,5 +65,22 @@ namespace EasyWorkout.Api.Controllers
 
             return Ok(completedWorkout.MapToResponse());
         }
+
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
+        [HttpGet(Endpoints.CompletedWorkouts.GetAllForUser)]
+        public async Task<IActionResult> GetAllForUser(CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null)
+            {
+                _logger.LogWarning("Userid not found in context.");
+                return BadRequest("User not found.");
+            }
+
+            var completedWorkoutsForUser = await _completedWorkoutService.GetAllForUserAsync(userId!.Value, token);
+            var completedWorkoutResponsesForUser = completedWorkoutsForUser.Select(w => w.MapToResponse());
+
+            return Ok(completedWorkoutResponsesForUser);
+        }
     }
 }

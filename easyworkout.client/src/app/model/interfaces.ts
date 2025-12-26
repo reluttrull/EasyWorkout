@@ -61,6 +61,7 @@ export interface WorkoutResponse {
   addedDate: Date;
   name: string;
   notes?: string | null;
+  lastCompletedDate?: Date | null;
   exercises: ExerciseResponse[];
 }
 

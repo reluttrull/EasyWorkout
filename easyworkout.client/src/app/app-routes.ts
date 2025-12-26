@@ -1,5 +1,6 @@
 import { Routes, provideRouter, withRouterConfig } from '@angular/router';
 import { DoWorkout } from './do-workout/do-workout';
+import { CompletedWorkoutsComponent } from './completed-workouts/completed-workouts';
 import { Account } from './account/account';
 import { Home } from './components/home/home';
 import { LoginComponent } from './auth/login/login';
@@ -28,6 +29,11 @@ export const routes: Routes = [
   {
     path: 'do-workout/:id',
     component: DoWorkout,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'completed-workouts',
+    component: CompletedWorkoutsComponent,
     canActivate: [authGuard]
   },
   {

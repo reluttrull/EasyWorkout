@@ -5,7 +5,7 @@ import { FinishWorkoutRequest, CompletedWorkoutResponse } from '../model/interfa
 
 
 @Injectable({ providedIn: 'root' })
-export class DoWorkoutService {
+export class CompletedWorkoutsService {
   private baseUrl = 'https://localhost:7011/api/completed-workouts';
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -14,8 +14,11 @@ export class DoWorkoutService {
     return this.http.get<CompletedWorkoutResponse>(`${this.baseUrl}/${id}`);
   }
 
+  getAll() {
+    return this.http.get<CompletedWorkoutResponse[]>(`${this.baseUrl}/me`);
+  }
+
   create(request: FinishWorkoutRequest) {
-    console.log(`sending request to ${this.baseUrl}`, request);
     return this.http.post<{ id: string }>(this.baseUrl, request);
   }
 }

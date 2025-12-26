@@ -107,6 +107,20 @@ namespace EasyWorkout.Api.Mapping
             };
         }
 
+        public static WorkoutResponse MapToResponse(this Workout workout, DateTime? lastCompletedDate)
+        {
+            return new WorkoutResponse()
+            {
+                Id = workout.Id,
+                AddedByUserId = workout.AddedByUserId,
+                AddedDate = workout.AddedDate,
+                Name = workout.Name,
+                Notes = workout.Notes,
+                LastCompletedDate = lastCompletedDate,
+                Exercises = workout.Exercises.Select(e => e.MapToResponse())
+            };
+        }
+
         public static WorkoutResponse MapToResponse(this Workout workout)
         {
             return new WorkoutResponse()

@@ -1,8 +1,8 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { WorkoutsService } from '../workouts/workouts.service';
-import { DoWorkoutService } from '../do-workout/do-workout.service';
+import { CompletedWorkoutsService } from '../completed-workouts/completed-workouts.service';
 import { WorkoutResponse, FinishWorkoutRequest, FinishExerciseSetRequest } from '../model/interfaces';
 import { OrderByPipe } from '../pipes/order-by-pipe';
 
@@ -33,8 +33,9 @@ export class DoWorkout implements OnInit {
   
   constructor(
     private route: ActivatedRoute, 
+    private router: Router,
     private workoutsService: WorkoutsService, 
-    private doWorkoutService : DoWorkoutService,
+    private completedWorkoutsService : CompletedWorkoutsService,
     private orderByPipe: OrderByPipe) {}
 
   ngOnInit(): void {
@@ -115,12 +116,10 @@ export class DoWorkout implements OnInit {
         })
       });
     }
-
-    console.log(request);
     
-    this.doWorkoutService.create(request).subscribe({
+    this.completedWorkoutsService.create(request).subscribe({
       next: (result) => {
-        // do something after post
+        this.router.navigate(['/workouts']);
       },
       error: err => console.error(err)
     });

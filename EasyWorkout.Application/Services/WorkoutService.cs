@@ -1,6 +1,7 @@
 ﻿using EasyWorkout.Application.Data;
 using EasyWorkout.Application.Model;
 using EasyWorkout.Contracts.Requests;
+using EasyWorkout.Contracts.Responses;
 using EasyWorkout.Identity.Api.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -37,13 +38,19 @@ namespace EasyWorkout.Application.Services
             return result > 0;
         }
 
-        public async Task<IEnumerable<Workout>> GetAllForUserAsync(Guid userId, CancellationToken token = default)
+        public async Task<IEnumerable<WorkoutDetailed>> GetAllDetailedForUserAsync(Guid userId, CancellationToken token = default)
         {
-            return _workoutsContext.Workouts
+            return await _workoutsContext.Workouts
                 .Where(w => w.AddedByUserId == userId)
                 .Include(w => w.Exercises)
                     .ThenInclude(e => e.ExerciseSets)
-                .AsEnumerable<Workout>();
+                .Select(w => new WorkoutDetailed(
+                    w,
+                    _workoutsContext.CompletedWorkouts
+                        .Where(cw => cw.WorkoutId == w.Id)
+                        .Max(cw => (DateTime?)cw.CompletedDate)
+                ))
+                .ToListAsync(token);
         }
 
         public async Task<Workout?> GetByIdAsync(Guid id, CancellationToken token = default)
@@ -58,6 +65,22 @@ namespace EasyWorkout.Application.Services
                 .LoadAsync(token);
 
             return workout;
+        }
+
+        public async Task<WorkoutDetailed?> GetByIdDetailedAsync(Guid id, CancellationToken token = default)
+        {
+            var workout = _workoutsContext.Workouts.First(w => w.Id == id);
+            if (workout is null) return null;
+
+            await _workoutsContext.Entry(workout)
+                .Collection(w => w.Exercises)
+                .Query()
+                .Include(e => e.ExerciseSets)
+                .LoadAsync(token);
+
+            var lastCompletedDate = await GetLastCompletedDateAsync(workout.Id, token);
+
+            return new WorkoutDetailed(workout, lastCompletedDate);
         }
 
         public async Task<bool> AddExerciseAsync(Guid id, Guid exerciseId, CancellationToken token = default)
@@ -113,6 +136,15 @@ namespace EasyWorkout.Application.Services
         public async Task<bool> BelongsToUserAsync(Guid id, Guid userId, CancellationToken token = default)
         {
             return _workoutsContext.Workouts.Any(w => w.Id == id && w.AddedByUserId == userId);
+        }
+
+        public async Task<DateTime?> GetLastCompletedDateAsync(Guid workoutId, CancellationToken token = default)
+        {
+            return await _workoutsContext.CompletedWorkouts
+                .Where(cw => cw.WorkoutId == workoutId)
+                .OrderByDescending(cw => cw.CompletedDate)
+                .Select(cw => (DateTime?)cw.CompletedDate)
+                .FirstOrDefaultAsync(token);
         }
     }
 }

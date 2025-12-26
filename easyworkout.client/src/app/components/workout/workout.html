@@ -2,7 +2,8 @@
     @if (!isEditMode) {
         <h2><strong>Workout:</strong> {{ workout().name }}</h2>
         <div><strong>Notes:</strong> {{ workout().notes }}</div>
-        <div><strong>Date created:</strong> {{ workout().addedDate }}</div>
+        <div><strong>Date created:</strong> {{ workout().addedDate | date:"MMM dd, yyyy 'at' hh:mm a" }}</div>
+        <div><em>Last completed:</em> {{ workout().lastCompletedDate | date:"MMM dd, yyyy 'at' hh:mm a" }}</div>
         @if (workoutDetail) {
             <ul>
             @for (exercise of workout().exercises | orderBy:'addedDate':'asc'; track exercise.id) {

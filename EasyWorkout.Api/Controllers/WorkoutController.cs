@@ -4,6 +4,7 @@ using EasyWorkout.Application.Data;
 using EasyWorkout.Application.Model;
 using EasyWorkout.Application.Services;
 using EasyWorkout.Contracts.Requests;
+using EasyWorkout.Contracts.Responses;
 using EasyWorkout.Identity.Api;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -54,10 +55,10 @@ namespace EasyWorkout.Api.Controllers
                 return BadRequest("User not found.");
             }
 
-            var workoutsForUser = await _workoutService.GetAllForUserAsync(userId!.Value, token);
-            var workoutResponsesForUser = workoutsForUser.Select(w => w.MapToResponse());
+            var detailedWorkoutsForUser = await _workoutService.GetAllDetailedForUserAsync(userId!.Value, token);
+            var workoutResponsesForUser = detailedWorkoutsForUser.Select(w => w.Workout.MapToResponse(w.LastCompletedDate));
 
-            return Ok(workoutResponsesForUser);
+            return Ok(workoutResponsesForUser.AsEnumerable());
         }
 
         [Authorize(AuthConstants.FreeMemberUserPolicyName)]
@@ -77,10 +78,10 @@ namespace EasyWorkout.Api.Controllers
                 return BadRequest($"Workout with id {id} does not belong to user {userId}.");
             }
 
-            var workout = await _workoutService.GetByIdAsync(id, token);
-            if (workout is null) return NotFound($"Workout with id {id} not found.");
+            var detailedWorkout = await _workoutService.GetByIdDetailedAsync(id, token);
+            if (detailedWorkout is null) return NotFound($"Workout with id {id} not found.");
 
-            return Ok(workout.MapToResponse());
+            return Ok(detailedWorkout.Workout.MapToResponse(detailedWorkout.LastCompletedDate));
         }
 
         [Authorize(AuthConstants.FreeMemberUserPolicyName)]

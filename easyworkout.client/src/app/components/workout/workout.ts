@@ -1,7 +1,8 @@
 import { Component, input, output } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Workout } from '../../model/interfaces';
+import { WorkoutResponse } from '../../model/interfaces';
 import { ExerciseComponent } from '../exercise/exercise';
 import { AddExercise } from '../add-exercise/add-exercise';
 import { WorkoutsService } from '../../workouts/workouts.service';
@@ -9,14 +10,14 @@ import { OrderByPipe } from '../../pipes/order-by-pipe';
 
 @Component({
   selector: 'app-workout',
-  imports: [ReactiveFormsModule, ExerciseComponent, AddExercise, OrderByPipe],
+  imports: [ReactiveFormsModule, ExerciseComponent, AddExercise, DatePipe, OrderByPipe],
   templateUrl: './workout.html',
   styleUrl: './workout.css',
 })
 export class WorkoutComponent {
   form!: FormGroup;
   onReturn = output();
-  workout = input.required<Workout>();
+  workout = input.required<WorkoutResponse>();
   onWorkoutChanged = output();
   workoutDetail = false;
   isEditMode = false;

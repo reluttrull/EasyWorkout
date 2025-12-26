@@ -2,42 +2,34 @@
   <h2>Doing workout...</h2>
   <h3>{{ workoutGoal().name }}</h3>
 
-  @for (exercise of workoutGoal().exercises | orderBy:'addedDate':'asc'; track $index) {
-    <div>
-      <h4>Exercise #{{ $index + 1 }}: {{ exercise.name }}</h4>
+  @for (exercise of orderedExercises; track exercise.id; let exIndex = $index) {
+    <div [formGroup]="exercisesArray.at(exIndex)">
+      <h4>Exercise #{{ exIndex + 1 }}: {{ exercise.name }}</h4>
 
-      @for (set of exercise.exerciseSets | orderBy:'setNumber':'asc'; track set.id; let i = $index) {
-        <div [formGroup]="setsArray.at(i)">
-          <span>Set {{ set.setNumber }}: </span>
+      <div formArrayName="sets">
+        @for (set of exercise.exerciseSets; track set.id; let setIndex = $index) {
+          <div [formGroupName]="setIndex">
+            <span>Set {{ set.setNumber }}:</span>
 
-          @if (set.reps) {
-            <input
-              type="number"
-              formControlName="reps"
-              placeholder="Actual reps"
-            /> / <span>{{ set.reps }} reps</span>
-          }
+            @if (set.reps) {
+              <input type="number" title="reps" formControlName="reps" /> /
+              <span>{{ set.reps }} reps</span>
+            }
 
-          @if (set.weight) {
-            - <input
-              type="number"
-              formControlName="weight"
-              placeholder="Actual weight"
-            /> / 
-            <span>{{ set.weight }} {{ set.weightUnit }}</span>
-          }
+            @if (set.weight) {
+              - <input type="number" title="weight" formControlName="weight" /> /
+              <span>{{ set.weight }} {{ set.weightUnit }}</span>
+            }
 
-          @if (set.duration) {
-            - <input
-              type="number"
-              formControlName="duration"
-              placeholder="Actual duration"
-            /> / 
-            <span>{{ set.duration }} {{ set.durationUnit }}</span>
-          }
-        </div>
-      }
+            @if (set.duration) {
+              - <input type="number" title="duration" formControlName="duration" /> /
+              <span>{{ set.duration }} {{ set.durationUnit }}</span>
+            }
+          </div>
+        }
+      </div>
     </div>
   }
+
   <button (click)="submit()">Finish and save</button>
 </form>

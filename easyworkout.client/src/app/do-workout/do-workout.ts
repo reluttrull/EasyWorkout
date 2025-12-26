@@ -2,13 +2,14 @@ import { Component, OnInit, signal, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { WorkoutsService } from '../workouts/workouts.service';
-import { WorkoutResponse } from '../model/interfaces';
+import { DoWorkoutService } from '../do-workout/do-workout.service';
+import { WorkoutResponse, FinishWorkoutRequest, FinishExerciseSetRequest } from '../model/interfaces';
 import { OrderByPipe } from '../pipes/order-by-pipe';
 
 @Component({
   selector: 'app-do-workout',
   providers: [OrderByPipe],
-  imports: [ReactiveFormsModule, OrderByPipe],
+  imports: [ReactiveFormsModule],
   templateUrl: './do-workout.html',
   styleUrl: './do-workout.css',
 })
@@ -30,7 +31,11 @@ export class DoWorkout implements OnInit {
   });
 
   
-  constructor(private route: ActivatedRoute, private workoutsService: WorkoutsService, private orderByPipe: OrderByPipe) {}
+  constructor(
+    private route: ActivatedRoute, 
+    private workoutsService: WorkoutsService, 
+    private doWorkoutService : DoWorkoutService,
+    private orderByPipe: OrderByPipe) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -46,49 +51,79 @@ export class DoWorkout implements OnInit {
   get exercisesArray() {
     return this.form.controls.exercises;
   }
-initForm() {
-  this.exercisesArray.clear();
 
-  const orderedExercises = this.orderByPipe.transform(
-    this.workoutGoal().exercises,
-    'addedDate',
-    'asc'
-  );
+  initForm() {
+    this.exercisesArray.clear();
 
-  for (const exercise of orderedExercises) {
-    const setsArray = this.fb.array<FormGroup>([]);
-
-    exercise.exerciseSets = this.orderByPipe.transform(
-      exercise.exerciseSets,
-      'setNumber',
+    const orderedExercises = this.orderByPipe.transform(
+      this.workoutGoal().exercises,
+      'addedDate',
       'asc'
     );
 
-    for (const set of exercise.exerciseSets) {
-      setsArray.push(
+    for (const exercise of orderedExercises) {
+      const setsArray = this.fb.array<FormGroup>([]);
+
+      exercise.exerciseSets = this.orderByPipe.transform(
+        exercise.exerciseSets,
+        'setNumber',
+        'asc'
+      );
+
+      for (const set of exercise.exerciseSets) {
+        setsArray.push(
+          this.fb.group({
+            exerciseSetId: [set.id],
+            completedDate: [new Date().toJSON()],
+            setNumber: [set.setNumber],
+            weight: [null],
+            reps: [null],
+            duration: [null]
+          })
+        );
+      }
+
+      this.exercisesArray.push(
         this.fb.group({
-          setId: [set.id],
-          weight: [null],
-          reps: [null],
-          duration: [null]
+          exerciseId: [exercise.id],
+          sets: setsArray
         })
       );
     }
 
-    this.exercisesArray.push(
-      this.fb.group({
-        exerciseId: [exercise.id],
-        sets: setsArray
-      })
-    );
+    this.orderedExercises = orderedExercises;
   }
 
-  this.orderedExercises = orderedExercises;
-}
-
-
   submit() {
-    console.log(this.form.value.exercises);
+
+    let request: FinishWorkoutRequest = {
+      workoutId: this.id!,
+      completedDate: new Date(),
+      completedNotes: null,
+      completedExerciseSets: []
+    };
+
+    for (const exercise of this.form.value.exercises??[]) {
+      exercise.sets.forEach((set:FinishExerciseSetRequest) => {
+        request.completedExerciseSets.push({
+          exerciseSetId: set.exerciseSetId,
+          completedDate: set.completedDate,
+          setNumber: set.setNumber,
+          reps: set.reps,
+          weight: set.weight,
+          duration: set.duration
+        })
+      });
+    }
+
+    console.log(request);
+    
+    this.doWorkoutService.create(request).subscribe({
+      next: (result) => {
+        // do something after post
+      },
+      error: err => console.error(err)
+    });
   }
 
 }

@@ -39,6 +39,22 @@ export interface UpdateWorkoutRequest {
   notes?: string | null;
 }
 
+export interface FinishWorkoutRequest {
+  workoutId: string;
+  completedDate: Date;
+  completedNotes?: string | null;
+  completedExerciseSets: FinishExerciseSetRequest[];
+}
+
+export interface FinishExerciseSetRequest {
+  exerciseSetId: string;
+  completedDate: string;
+  setNumber: number;
+  reps?: number | null;
+  weight?: number | null;
+  duration?: number | null;
+}
+
 export interface WorkoutResponse {
   id: string;
   addedByUserId: string;
@@ -46,6 +62,26 @@ export interface WorkoutResponse {
   name: string;
   notes?: string | null;
   exercises: ExerciseResponse[];
+}
+
+export interface CompletedWorkoutResponse {
+  id: string;
+  completedByUserId: string;
+  workoutId: string;
+  completedDate: Date;
+  completedNotes?: string | null;
+  completedExerciseSets: CompletedExerciseSetResponse[]
+}
+
+export interface CompletedExerciseSetResponse {
+  id: string;
+  exerciseSetId: string;
+  completedWorkoutId: string;
+  completedDate: Date;
+  setNumber: number;
+  reps?: number | null;
+  weight?: number | null;
+  duration?: number | null;
 }
 
 export interface CreateExerciseRequest {

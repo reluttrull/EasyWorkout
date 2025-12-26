@@ -78,6 +78,35 @@ namespace EasyWorkout.Api.Mapping
             };
         }
 
+        public static CompletedWorkout MapToCompletedWorkout(this FinishWorkoutRequest request, Guid userId)
+        {
+            Guid completedWorkoutId = Guid.NewGuid();
+            return new CompletedWorkout()
+            {
+                Id = completedWorkoutId,
+                CompletedByUserId = userId,
+                WorkoutId = request.WorkoutId,
+                CompletedDate = request.CompletedDate,
+                CompletedNotes = request.CompletedNotes,
+                CompletedExerciseSets = [.. request.CompletedExerciseSets.Select(e => e.MapToCompletedExerciseSet(completedWorkoutId))]
+            };
+        }
+
+        public static CompletedExerciseSet MapToCompletedExerciseSet(this FinishExerciseSetRequest request, Guid completedWorkoutId)
+        {
+            return new CompletedExerciseSet()
+            {
+                Id = Guid.NewGuid(),
+                ExerciseSetId = request.ExerciseSetId,
+                CompletedWorkoutId = completedWorkoutId,
+                CompletedDate = request.CompletedDate,
+                SetNumber = request.SetNumber,
+                Reps = request.Reps,
+                Weight = request.Weight,
+                Duration = request.Duration
+            };
+        }
+
         public static WorkoutResponse MapToResponse(this Workout workout)
         {
             return new WorkoutResponse()
@@ -116,6 +145,35 @@ namespace EasyWorkout.Api.Mapping
                 WeightUnit = exerciseSet.WeightUnit.ToString(),
                 Duration = exerciseSet.Duration,
                 DurationUnit = exerciseSet.DurationUnit.ToString()
+            };
+        }
+
+        public static CompletedWorkoutResponse MapToResponse(this CompletedWorkout completedWorkout)
+        {
+            var completedWorkoutId = completedWorkout.Id;
+            return new CompletedWorkoutResponse()
+            {
+                Id = completedWorkoutId,
+                CompletedByUserId = completedWorkout.CompletedByUserId,
+                WorkoutId = completedWorkout.WorkoutId,
+                CompletedDate = completedWorkout.CompletedDate,
+                CompletedNotes = completedWorkout.CompletedNotes,
+                CompletedExerciseSets = completedWorkout.CompletedExerciseSets.Select(cs => cs.MapToResponse(completedWorkoutId))
+            };
+        }
+
+        public static CompletedExerciseSetResponse MapToResponse(this CompletedExerciseSet completedSet, Guid completedWorkoutId)
+        {
+            return new CompletedExerciseSetResponse()
+            {
+                Id = completedSet.Id,
+                ExerciseSetId = completedSet.ExerciseSetId,
+                CompletedWorkoutId = completedWorkoutId,
+                CompletedDate = completedSet.CompletedDate,
+                SetNumber = completedSet.SetNumber,
+                Reps = completedSet.Reps,
+                Weight = completedSet.Weight,
+                Duration = completedSet.Duration
             };
         }
 

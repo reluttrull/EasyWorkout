@@ -92,6 +92,7 @@ builder.Services.AddRateLimiter(options =>
 
 builder.Services.AddScoped<IWorkoutService, WorkoutService>();
 builder.Services.AddScoped<IExerciseService, ExerciseService>();
+builder.Services.AddScoped<ICompletedWorkoutService, CompletedWorkoutService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();

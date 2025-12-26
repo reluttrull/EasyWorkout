@@ -15,11 +15,11 @@ namespace EasyWorkout.Application.Model
         [Range(1, 100, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public required int SetNumber { get; set; }
         [Range(1, 100, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
-        public int Reps { get; set; }
+        public int? Reps { get; set; }
         [Range(0, 1200, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
-        public double Weight { get; set; }
+        public double? Weight { get; set; }
         [Range(0, 3600, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
-        public double Duration { get; set; }
-        public required ExerciseSet ExerciseSet { get; set; }
+        public double? Duration { get; set; }
+        public ExerciseSet ExerciseSet { get; set; }
     }
 }

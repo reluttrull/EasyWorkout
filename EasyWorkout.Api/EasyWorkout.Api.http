@@ -1,5 +1,5 @@
 ﻿@EasyWorkout.Api_HostAddress = https://localhost:7011
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJmYWNiM2QyMi1mMjYwLTRjMDgtOWVmOS0xNmU2NWI5MTkzNzMiLCJzdWIiOiJUZXN0QWRkVXNlckRiMyIsIm5hbWUiOiJjaGFuZ2UgZmlyc3QgbmFtZSBjaGFuZ2UgbGFzdCBuYW1lIiwidXNlcmlkIjoiMDE5YjNkZTItZTNkNS03N2Q4LTlhZmItMDJhZjlhMjA1ODI3IiwiZnJlZV9tZW1iZXIiOiJ0cnVlIiwibmJmIjoxNzY2NTA3MTY2LCJleHAiOjE3NjY1MDgwNjYsImlhdCI6MTc2NjUwNzE2NiwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzAzMyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcwMTEifQ.hYQlIdMFpK_3vha9RGGFlObzbrEjP5nnX5cKs2fMEtA
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIwYzgxYzNiNy0zZDUzLTQ3YjMtYWFiMi1hZWNhZTUyODliYWEiLCJzdWIiOiJUZXN0QWRkVXNlckRiMyIsIm5hbWUiOiJMYXJyeSBTbWl0aCIsInVzZXJpZCI6IjAxOWIzZGUyLWUzZDUtNzdkOC05YWZiLTAyYWY5YTIwNTgyNyIsImZyZWVfbWVtYmVyIjoidHJ1ZSIsIm5iZiI6MTc2Njc3MTQwMCwiZXhwIjoxNzY2NzcyMzAwLCJpYXQiOjE3NjY3NzE0MDAsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcwMzMiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MDExIn0.yEcm-gT85Xs98YtolZQNcczE5jvO34jBnapS-qsgoMY
 
 
 GET {{EasyWorkout.Api_HostAddress}}/api/workouts/me
@@ -36,6 +36,21 @@ Content-Type: application/json
 {
   "firstName": "Larry",
   "lastName": "Smith"
+}
+
+###
+
+POST {{EasyWorkout.Api_HostAddress}}/api/completed-workouts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "completedDate": "2012-04-23T18:25:43.511Z",
+  "completedExerciseSets": [
+
+  ],
+  "completedNotes": null,
+  "workoutId": "1bbfa6c4-2f03-40c0-b0d4-2abbb2de1a54"
 }
 
 ###

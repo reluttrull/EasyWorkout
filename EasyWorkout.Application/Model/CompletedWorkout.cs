@@ -11,7 +11,7 @@ namespace EasyWorkout.Application.Model
         [Required]
         public required DateTime CompletedDate { get; init; }
         [MaxLength(250)]
-        public string CompletedNotes { get; set; } = string.Empty;
+        public string? CompletedNotes { get; set; }
         public required List<CompletedExerciseSet> CompletedExerciseSets { get; init; } = [];
     }
 }

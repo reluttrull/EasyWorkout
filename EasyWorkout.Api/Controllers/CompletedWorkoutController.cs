@@ -60,10 +60,10 @@ namespace EasyWorkout.Api.Controllers
                 return BadRequest($"Completed workout with id {id} does not belong to user {userId}.");
             }
 
-            var completedWorkout = await _completedWorkoutService.GetByIdAsync(id, token);
-            if (completedWorkout is null) return NotFound($"Completed workout with id {id} not found.");
+            var detailedCompletedWorkout = await _completedWorkoutService.GetByIdDetailedAsync(id, token);
+            if (detailedCompletedWorkout is null) return NotFound($"Completed workout with id {id} not found.");
 
-            return Ok(completedWorkout.MapToResponse());
+            return Ok(detailedCompletedWorkout.MapToResponse());
         }
 
         [Authorize(AuthConstants.FreeMemberUserPolicyName)]
@@ -77,8 +77,8 @@ namespace EasyWorkout.Api.Controllers
                 return BadRequest("User not found.");
             }
 
-            var completedWorkoutsForUser = await _completedWorkoutService.GetAllForUserAsync(userId!.Value, token);
-            var completedWorkoutResponsesForUser = completedWorkoutsForUser.Select(w => w.MapToResponse());
+            var detailedCompletedWorkoutsForUser = await _completedWorkoutService.GetAllDetailedForUserAsync(userId!.Value, token);
+            var completedWorkoutResponsesForUser = detailedCompletedWorkoutsForUser.Select(w => w.MapToResponse());
 
             return Ok(completedWorkoutResponsesForUser);
         }

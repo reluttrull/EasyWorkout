@@ -162,8 +162,10 @@ namespace EasyWorkout.Api.Mapping
             };
         }
 
-        public static CompletedWorkoutResponse MapToResponse(this CompletedWorkout completedWorkout)
+        public static CompletedWorkoutResponse MapToResponse(this CompletedWorkoutDetailed completedWorkoutDetailed)
         {
+            var completedWorkout = completedWorkoutDetailed.CompletedWorkout;
+            var basedOnWorkout = completedWorkoutDetailed.BasedOnWorkout;
             var completedWorkoutId = completedWorkout.Id;
             return new CompletedWorkoutResponse()
             {
@@ -172,22 +174,32 @@ namespace EasyWorkout.Api.Mapping
                 WorkoutId = completedWorkout.WorkoutId,
                 CompletedDate = completedWorkout.CompletedDate,
                 CompletedNotes = completedWorkout.CompletedNotes,
-                CompletedExerciseSets = completedWorkout.CompletedExerciseSets.Select(cs => cs.MapToResponse(completedWorkoutId))
+                OriginalName = basedOnWorkout.Name,
+                OriginalNotes = basedOnWorkout.Notes,
+                CompletedExerciseSets = completedWorkoutDetailed.DetailedCompletedExerciseSets.Select(es => es.MapToResponse())
             };
         }
 
-        public static CompletedExerciseSetResponse MapToResponse(this CompletedExerciseSet completedSet, Guid completedWorkoutId)
+        public static CompletedExerciseSetResponse MapToResponse(this CompletedExerciseSetDetailed completedSetDetailed)
         {
+            var completedSet = completedSetDetailed.CompletedExerciseSet;
+            var basedOnSet = completedSetDetailed.BasedOnExerciseSet;
             return new CompletedExerciseSetResponse()
             {
                 Id = completedSet.Id,
+                ExerciseName = completedSetDetailed.ExerciseName,
                 ExerciseSetId = completedSet.ExerciseSetId,
-                CompletedWorkoutId = completedWorkoutId,
+                CompletedWorkoutId = completedSet.CompletedWorkoutId,
                 CompletedDate = completedSet.CompletedDate,
                 SetNumber = completedSet.SetNumber,
                 Reps = completedSet.Reps,
+                GoalReps = basedOnSet.Reps,
                 Weight = completedSet.Weight,
-                Duration = completedSet.Duration
+                GoalWeight = basedOnSet.Weight,
+                WeightUnit = basedOnSet.WeightUnit.ToString(),
+                Duration = completedSet.Duration,
+                GoalDuration = completedSet.Duration,
+                DurationUnit = basedOnSet.DurationUnit.ToString()
             };
         }
 

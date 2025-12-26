@@ -31,11 +31,30 @@ namespace EasyWorkout.Application.Services
             return result > 0;
         }
 
+        public async Task<IEnumerable<CompletedWorkoutDetailed?>> GetAllDetailedForUserAsync(Guid userId, CancellationToken token = default)
+        {
+            return await _workoutsContext.CompletedWorkouts
+                .Where(cw => cw.CompletedByUserId == userId)
+                .Include(cw => cw.CompletedExerciseSets)
+                .Select(cw => new CompletedWorkoutDetailed(
+                    cw, 
+                    _workoutsContext.Workouts.Single(w => w.Id == cw.WorkoutId),
+                    cw.CompletedExerciseSets
+                        .Select(cs => new CompletedExerciseSetDetailed(
+                            cs,
+                            _workoutsContext.ExerciseSets
+                                .Single(s => s.Id == cs.ExerciseSetId),
+                            _workoutsContext.Exercises
+                                .Single(e => e.ExerciseSets.Any(s => s.Id == cs.ExerciseSetId))
+                                .Name))))
+                .ToListAsync(token);
+        }
+
         public async Task<IEnumerable<CompletedWorkout>> GetAllForUserAsync(Guid userId, CancellationToken token = default)
         {
             return _workoutsContext.CompletedWorkouts
-                .Where(w => w.CompletedByUserId == userId)
-                .Include(w => w.CompletedExerciseSets)
+                .Where(cw => cw.CompletedByUserId == userId)
+                .Include(cw => cw.CompletedExerciseSets)
                 .AsEnumerable<CompletedWorkout>();
         }
 
@@ -49,6 +68,38 @@ namespace EasyWorkout.Application.Services
                 .LoadAsync(token);
 
             return completedWorkout;
+        }
+
+        public async Task<CompletedWorkoutDetailed?> GetByIdDetailedAsync(Guid id, CancellationToken token = default)
+        {
+            var completedWorkout = _workoutsContext.CompletedWorkouts.First(cw => cw.Id == id);
+            if (completedWorkout is null) return null;
+
+            CompletedWorkoutDetailed? completed = _workoutsContext.CompletedWorkouts
+                .Where(cw => cw.Id == id)
+                .Include(cw => cw.CompletedExerciseSets)
+                .Select(cw => new CompletedWorkoutDetailed(
+                    cw,
+                    _workoutsContext.Workouts
+                        .Single(w => w.Id == cw.WorkoutId),
+                    cw.CompletedExerciseSets
+                        .Select(cs => new CompletedExerciseSetDetailed(
+                            cs,
+                            _workoutsContext.ExerciseSets
+                                .Single(s => s.Id == cs.ExerciseSetId),
+                            _workoutsContext.Exercises
+                                .Single(e => e.ExerciseSets.Any(s => s.Id == cs.ExerciseSetId))
+                                .Name))))
+                .Single();
+
+            //await _workoutsContext.Entry(completedWorkout)
+            //    .Collection(cw => cw.CompletedExerciseSets)
+            //    .LoadAsync(token);
+
+            //var basedOnWorkout = _workoutsContext.Workouts
+            //    .Single(w => w.Id == completedWorkout.WorkoutId);
+
+            return completed;
         }
     }
 }

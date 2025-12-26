@@ -16,13 +16,16 @@ export class CompletedWorkoutsComponent {
   isCreateVisible = false;
 
   constructor(private completedWorkoutsService: CompletedWorkoutsService) {
-    this.completedWorkoutsService.getAll().subscribe(w => this.completedWorkouts.set(w));
+    this.completedWorkoutsService.getAll().subscribe(w => {
+      this.completedWorkouts.set(w);
+      console.log(w);
+    });
   }
 
   reload() {
     this.completedWorkoutsService.getAll().subscribe(w => {
       this.completedWorkouts.set(w);
-  });
+    });
   }
 
   showAddWorkout() {

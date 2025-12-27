@@ -1,7 +1,9 @@
 ﻿using EasyWorkout.Contracts.Requests;
 using EasyWorkout.Identity.Api.Data;
+using EasyWorkout.Identity.Api.Mapping;
 using EasyWorkout.Identity.Api.Model;
 using EasyWorkout.Identity.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -15,7 +17,6 @@ using System.Security.Claims;
 namespace EasyWorkout.Identity.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
     [EnableRateLimiting("fixed")]
     public class AuthController : ControllerBase
     {
@@ -23,20 +24,23 @@ namespace EasyWorkout.Identity.Api.Controllers
         private readonly ILogger _logger;
         private readonly AppDbContext _context;
         private readonly ITokenService _tokenService;
+        private readonly IUserService _userService;
 
         public AuthController(
             UserManager<User> userManager, 
             ILogger<AuthController> logger,
             AppDbContext context, 
-            ITokenService tokenService)
+            ITokenService tokenService,
+            IUserService userService)
         {
             _userManager = userManager;
             _logger = logger;
             _context = context;
             _tokenService = tokenService;
+            _userService = userService;
         }
 
-        [HttpPost("register")]
+        [HttpPost(Endpoints.Auth.Register)]
         public async Task<IActionResult> Register([FromBody] RegistrationRequest request) // todo: make RegistrationRequest
         {
             try
@@ -83,7 +87,7 @@ namespace EasyWorkout.Identity.Api.Controllers
             }
         }
 
-        [HttpPost("login")]
+        [HttpPost(Endpoints.Auth.Login)]
         public async Task<IActionResult> Login([FromBody] Contracts.Requests.LoginRequest request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == request.UserName);
@@ -108,7 +112,7 @@ namespace EasyWorkout.Identity.Api.Controllers
         }
 
 
-        [HttpPost("refresh")]
+        [HttpPost(Endpoints.Auth.Refresh)]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshRequest request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
@@ -135,7 +139,7 @@ namespace EasyWorkout.Identity.Api.Controllers
                 });
         }
 
-        [HttpDelete("revoke/{refreshToken}")]
+        [HttpDelete(Endpoints.Auth.Revoke)]
         public async Task<IActionResult> RevokeToken(string refreshToken)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
@@ -149,6 +153,70 @@ namespace EasyWorkout.Identity.Api.Controllers
             await _context.SaveChangesAsync();
             _logger.LogDebug("User successfully logged out with id {id} and username {username}.", user.Id, user.UserName);
             return Ok("Refresh token revoked.");
+        }
+
+        [HttpGet(Endpoints.Auth.Get)]
+        public async Task<IActionResult> Get(CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null)
+            {
+                _logger.LogWarning("Userid not found in context.");
+                return BadRequest("User not found.");
+            }
+
+            var user = await _userService.GetByIdAsync(userId!.Value, token);
+            if (user is null) return NotFound($"User with id {userId!.Value} not found.");
+
+            return Ok(user.MapToResponse());
+        }
+
+        [HttpPut(Endpoints.Auth.Update)]
+        public async Task<IActionResult> Update([FromBody] UpdateUserRequest request, CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null)
+            {
+                _logger.LogWarning("Userid not found in context.");
+                return BadRequest("User not found.");
+            }
+
+            var user = await _userService.UpdateAsync(userId!.Value, request, token);
+            if (user is null) return NotFound();
+            _logger.LogInformation("User with id {id} updated account info.", userId);
+            return Ok(user.MapToResponse());
+        }
+
+        [HttpPut(Endpoints.Auth.ChangeEmail)]
+        public async Task<IActionResult> ChangeEmail([FromBody] ChangeEmailRequest request, CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null)
+            {
+                _logger.LogWarning("Userid not found in context.");
+                return BadRequest("User not found.");
+            }
+
+            var user = await _userService.ChangeEmailAsync(userId!.Value, request, token);
+            if (user is null) return NotFound();
+            _logger.LogInformation("User with id {id} changed email to {email}.", userId, request.Email);
+            return Ok(user.MapToResponse());
+        }
+
+        [HttpPut(Endpoints.Auth.ChangePassword)]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request, CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null)
+            {
+                _logger.LogWarning("Userid not found in context.");
+                return BadRequest("User not found.");
+            }
+
+            var user = await _userService.ChangePasswordAsync(userId!.Value, request, token);
+            if (user is null) return NotFound();
+            _logger.LogInformation("User with id {id} changed password.", userId);
+            return Ok(user.MapToResponse());
         }
     }
 }

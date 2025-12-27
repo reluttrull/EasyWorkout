@@ -46,14 +46,5 @@
             public const string Update = $"{Base}/{{id}}";
             public const string Delete = $"{Base}/{{id}}";
         }
-
-        public static class Users
-        {
-            private const string Base = $"{ApiBase}/users";
-            public const string Get = $"{Base}/me";
-            public const string Update = $"{Base}/me";
-            public const string ChangeEmail = $"{Base}/email";
-            public const string ChangePassword = $"{Base}/password";
-        }
     }
 }

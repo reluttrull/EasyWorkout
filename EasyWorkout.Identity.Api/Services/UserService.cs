@@ -1,14 +1,10 @@
-﻿using EasyWorkout.Application.Data;
-using EasyWorkout.Contracts.Requests;
+﻿using EasyWorkout.Contracts.Requests;
 using EasyWorkout.Identity.Api.Data;
 using EasyWorkout.Identity.Api.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace EasyWorkout.Application.Services
+namespace EasyWorkout.Identity.Api.Services
 {
     public class UserService : IUserService
     {

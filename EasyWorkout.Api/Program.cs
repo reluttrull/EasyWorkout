@@ -106,7 +106,6 @@ try
     builder.Services.AddScoped<IWorkoutService, WorkoutService>();
     builder.Services.AddScoped<IExerciseService, ExerciseService>();
     builder.Services.AddScoped<ICompletedWorkoutService, CompletedWorkoutService>();
-    builder.Services.AddScoped<IUserService, UserService>();
 
     var app = builder.Build();
 
@@ -132,15 +131,6 @@ try
     app.UseAuthorization();
 
     app.MapControllers();
-
-    //var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
-    //using (var scope = scopeFactory.CreateScope())
-    //{
-    //    var usersDb = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    //    SeedUserData.Initialize(usersDb);
-    //    var workoutsDb = scope.ServiceProvider.GetRequiredService<WorkoutsContext>();
-    //    SeedData.Initialize(workoutsDb, [.. usersDb.Users]);
-    //}
 
     app.MapFallbackToFile("/index.html");
 

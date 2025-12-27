@@ -202,17 +202,5 @@ namespace EasyWorkout.Api.Mapping
                 DurationUnit = basedOnSet.DurationUnit.ToString()
             };
         }
-
-        public static UserResponse MapToResponse(this User user)
-        {
-            return new UserResponse()
-            {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                UserName = user.UserName,
-                JoinedDate = user.JoinedDate
-            };
-        }
     }
 }

@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-  private baseUrl = 'https://localhost:7011/api/users';
+  private baseUrl = 'https://localhost:7033/api/auth';
   private readonly _user = signal<UserResponse | null>(null);
   readonly user = this._user.asReadonly();
 

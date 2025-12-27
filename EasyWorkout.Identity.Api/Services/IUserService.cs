@@ -1,11 +1,10 @@
-﻿using EasyWorkout.Application.Model;
-using EasyWorkout.Contracts.Requests;
+﻿using EasyWorkout.Contracts.Requests;
 using EasyWorkout.Identity.Api.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace EasyWorkout.Application.Services
+namespace EasyWorkout.Identity.Api.Services
 {
     public interface IUserService
     {

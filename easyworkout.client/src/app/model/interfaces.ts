@@ -55,6 +55,10 @@ export interface FinishExerciseSetRequest {
   duration?: number | null;
 }
 
+export interface UpdateCompletedWorkoutRequest {
+  completedNotes?: string | null;
+}
+
 export interface WorkoutResponse {
   id: string;
   addedByUserId: string;

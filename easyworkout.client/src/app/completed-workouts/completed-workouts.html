@@ -1,4 +1,4 @@
 <h2>Completed Workouts</h2>
 @for (completedWorkout of completedWorkouts() | orderBy:'completedDate':'desc'; track completedWorkout.id) {
-    <app-completed-workout [completedWorkout]="completedWorkout"/>
+    <app-completed-workout [completedWorkout]="completedWorkout" (onCompletedWorkoutChanged)="reload()"/>
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { FinishWorkoutRequest, CompletedWorkoutResponse } from '../model/interfaces';
+import { FinishWorkoutRequest, UpdateCompletedWorkoutRequest, CompletedWorkoutResponse } from '../model/interfaces';
 
 
 @Injectable({ providedIn: 'root' })
@@ -20,5 +20,13 @@ export class CompletedWorkoutsService {
 
   create(request: FinishWorkoutRequest) {
     return this.http.post<{ id: string }>(this.baseUrl, request);
+  }
+  
+  update(id:string, request: UpdateCompletedWorkoutRequest) {
+    return this.http.put<CompletedWorkoutResponse>(`${this.baseUrl}/${id}`, request);
+  }
+  
+  delete(id: string) {
+    return this.http.delete<any>(`${this.baseUrl}/${id}`);
   }
 }

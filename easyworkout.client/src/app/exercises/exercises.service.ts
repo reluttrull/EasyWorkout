@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Exercise, CreateExerciseRequest, UpdateExerciseRequest, CreateSetRequest, ExerciseResponse } from '../model/interfaces';
@@ -7,8 +7,8 @@ import { Exercise, CreateExerciseRequest, UpdateExerciseRequest, CreateSetReques
 @Injectable({ providedIn: 'root' })
 export class ExercisesService {
   private baseUrl = 'https://localhost:7011/api/exercises';
-
-  constructor(private http: HttpClient, private router: Router) {}
+  http = inject(HttpClient);
+  router = inject(Router);
 
   getAll() {
     return this.http.get<Exercise[]>(`${this.baseUrl}/me`);

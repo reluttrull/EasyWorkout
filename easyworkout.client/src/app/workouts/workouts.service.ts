@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Workout, CreateWorkoutRequest, UpdateWorkoutRequest, WorkoutResponse } from '../model/interfaces';
@@ -7,8 +7,8 @@ import { Workout, CreateWorkoutRequest, UpdateWorkoutRequest, WorkoutResponse } 
 @Injectable({ providedIn: 'root' })
 export class WorkoutsService {
   private baseUrl = 'https://localhost:7011/api/workouts';
-
-  constructor(private http: HttpClient, private router: Router) {}
+  http = inject(HttpClient);
+  router = inject(Router);
 
   getAll() {
     return this.http.get<Workout[]>(`${this.baseUrl}/me`);

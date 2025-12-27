@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { ExercisesService } from '../../exercises/exercises.service';
 import { WeightUnit, DurationUnit } from '../../model/enums';
@@ -11,26 +11,24 @@ import { CreateSetRequest } from '../../model/interfaces';
   styleUrl: './create-set.css',
 })
 export class CreateSet {  
+  fb = inject(FormBuilder);
+  exercisesService = inject(ExercisesService);
   exerciseId = input.required<string>();
   onCreate = output();
   onReturn = output();
-  form!: FormGroup;
+  form:FormGroup = this.fb.nonNullable.group({
+    reps: [null],
+    weight: [null],
+    weightUnit: [null],
+    duration: [null],
+    durationUnit: [null],
+    notes: [null]
+  });
 
   public readonly WeightUnit = WeightUnit;
   public readonly DurationUnit = DurationUnit;
   public weightUnitOptions = Object.values(this.WeightUnit);
   public durationUnitOptions = Object.values(this.DurationUnit);
-
-  constructor(private fb: FormBuilder, private exercisesService: ExercisesService) {
-    this.form = this.fb.nonNullable.group({
-      reps: [null],
-      weight: [null],
-      weightUnit: [null],
-      duration: [null],
-      durationUnit: [null],
-      notes: [null]
-    });
-  }
   
   submit() {
     const setRequest: CreateSetRequest = {

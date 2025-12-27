@@ -1,4 +1,4 @@
-import { Component, output } from '@angular/core';
+import { Component, output, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { WorkoutsService } from '../../workouts/workouts.service';
@@ -11,15 +11,14 @@ import { CreateWorkoutRequest } from '../../model/interfaces';
   styleUrl: './create-workout.css',
 })
 export class CreateWorkout {
+  fb = inject(FormBuilder);
+  router = inject(Router);
+  workoutsService = inject(WorkoutsService);
   onReturn = output();
-  form!: FormGroup;
-  
-  constructor(private fb: FormBuilder, private router: Router, private workoutsService: WorkoutsService) {
-    this.form = this.fb.nonNullable.group({
-      name: [''],
-      notes: ['']
-    });
-  }
+  form:FormGroup = this.fb.nonNullable.group({
+    name: [''],
+    notes: ['']
+  });
 
   submit() {
     const workoutRequest: CreateWorkoutRequest = {

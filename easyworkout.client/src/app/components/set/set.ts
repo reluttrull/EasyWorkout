@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, inject } from '@angular/core';
 import { ExercisesService } from '../../exercises/exercises.service';
 import { Set } from '../../model/interfaces';
 
@@ -9,11 +9,10 @@ import { Set } from '../../model/interfaces';
   styleUrl: './set.css',
 })
 export class SetComponent {
+  exercisesService = inject(ExercisesService);
   set = input.required<Set>();
   exerciseId = input.required<string>();
   onSetChanged = output();
-  
-  constructor(private exercisesService: ExercisesService) { }
 
   
   delete(setId:string) {

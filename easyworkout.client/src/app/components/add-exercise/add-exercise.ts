@@ -1,4 +1,4 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, input, output, signal, inject } from '@angular/core';
 import { Exercise } from '../../model/interfaces';
 import { WorkoutsService } from '../../workouts/workouts.service';
 import { ExercisesService } from '../../exercises/exercises.service';
@@ -13,12 +13,13 @@ import { OrderByPipe } from '../../pipes/order-by-pipe';
   styleUrl: './add-exercise.css',
 })
 export class AddExercise {
+  workoutsService = inject(WorkoutsService);
   exercises = signal<Exercise[]>([]);
   workoutId = input.required<string>();
   onClose = output();
   isCreateVisible = false;
   
-  constructor(private workoutsService: WorkoutsService, private exercisesService: ExercisesService) {
+  constructor(private exercisesService: ExercisesService) {
     this.loadExercises();
   }
 

@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -15,20 +15,19 @@ import { OrderByPipe } from '../../pipes/order-by-pipe';
   styleUrl: './workout.css',
 })
 export class WorkoutComponent {
-  form!: FormGroup;
+  fb = inject(FormBuilder);
+  router = inject(Router);
+  workoutsService = inject(WorkoutsService);
+  form:FormGroup = this.fb.nonNullable.group({
+    name: [''],
+    notes: ['']
+  });
   onReturn = output();
   workout = input.required<WorkoutResponse>();
   onWorkoutChanged = output();
   workoutDetail = false;
   isEditMode = false;
   isAddMode = false;
-
-  constructor(private workoutsService: WorkoutsService, private fb:FormBuilder, private router:Router) {
-    this.form = this.fb.nonNullable.group({
-      name: [''],
-      notes: ['']
-    });
-  }
 
   toggleWorkoutDetail() {
     this.workoutDetail = !this.workoutDetail;

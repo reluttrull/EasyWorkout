@@ -13,7 +13,7 @@ namespace EasyWorkout.Tests
     public class WorkoutServiceTests
     {
         [Fact]
-        public async Task Test1()
+        public async Task TestGetByIdAsyncSuccess()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -34,8 +34,54 @@ namespace EasyWorkout.Tests
                 await context.SaveChangesAsync();
                 var workoutService = new WorkoutService(context);
 
-                Debug.WriteLine(context.Workouts.Count());
                 var result = await workoutService.GetByIdAsync(workout.Id);
+
+                Assert.NotNull(result);
+                Assert.Equal("Workout", result.Name);
+            }
+        }
+
+        [Fact]
+        public async Task TestGetByIdAsyncFailure()
+        {
+            var options = new DbContextOptionsBuilder<WorkoutsContext>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .Options;
+
+            await using (var context = new WorkoutsContext(options))
+            {
+                var workoutService = new WorkoutService(context);
+
+                var result = await workoutService.GetByIdAsync(Guid.NewGuid());
+
+                Assert.Null(result);
+            }
+        }
+
+        [Fact]
+        public async Task TestCreate()
+        {
+            var options = new DbContextOptionsBuilder<WorkoutsContext>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .Options;
+
+            await using (var context = new WorkoutsContext(options))
+            {
+                var workoutService = new WorkoutService(context);
+                var workoutId = Guid.NewGuid();
+                var workout = new Workout()
+                {
+                    Id = workoutId,
+                    AddedByUserId = Guid.NewGuid(),
+                    AddedDate = DateOnly.FromDateTime(DateTime.Now),
+                    Name = "Workout",
+                    Exercises = []
+                };
+
+                var success = await workoutService.CreateAsync(workout);
+                Assert.True(success);
+
+                var result = await workoutService.GetByIdAsync(workoutId);
 
                 Assert.NotNull(result);
                 Assert.Equal("Workout", result.Name);

@@ -126,6 +126,15 @@ export interface UpdateUserRequest {
   lastName: string;
 }
 
+export interface ChangeEmailRequest {
+  email: string;
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}
+
 export interface UserResponse {
   firstName: string;
   lastName: string;

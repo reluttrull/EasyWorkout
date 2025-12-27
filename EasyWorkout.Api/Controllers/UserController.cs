@@ -3,10 +3,12 @@ using EasyWorkout.Api.Mapping;
 using EasyWorkout.Application.Services;
 using EasyWorkout.Contracts.Requests;
 using EasyWorkout.Identity.Api;
+using EasyWorkout.Identity.Api.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using static EasyWorkout.Api.Endpoints;
 
 namespace EasyWorkout.Api.Controllers
 {
@@ -57,7 +59,7 @@ namespace EasyWorkout.Api.Controllers
             return Ok(user.MapToResponse());
         }
 
-        [Authorize(AuthConstants.FreeMemberUserClaimName)]
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
         [HttpPut(Endpoints.Users.ChangeEmail)]
         public async Task<IActionResult> ChangeEmail([FromBody] ChangeEmailRequest request, CancellationToken token)
         {
@@ -68,13 +70,13 @@ namespace EasyWorkout.Api.Controllers
                 return BadRequest("User not found.");
             }
 
-            var result = await _userService.ChangeEmailAsync(userId!.Value, request, token);
-            if (!result) return NotFound();
+            var user = await _userService.ChangeEmailAsync(userId!.Value, request, token);
+            if (user is null) return NotFound();
             _logger.LogInformation("User with id {id} changed email to {email}.", userId, request.Email);
-            return Ok();
+            return Ok(user.MapToResponse());
         }
 
-        [Authorize(AuthConstants.FreeMemberUserClaimName)]
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
         [HttpPut(Endpoints.Users.ChangePassword)]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request, CancellationToken token)
         {
@@ -85,10 +87,10 @@ namespace EasyWorkout.Api.Controllers
                 return BadRequest("User not found.");
             }
 
-            var result = await _userService.ChangePasswordAsync(userId!.Value, request, token);
-            if (result is false) return NotFound();
+            var user = await _userService.ChangePasswordAsync(userId!.Value, request, token);
+            if (user is null) return NotFound();
             _logger.LogInformation("User with id {id} changed password.", userId);
-            return Ok();
+            return Ok(user.MapToResponse());
         }
     }
 }

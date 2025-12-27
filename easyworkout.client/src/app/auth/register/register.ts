@@ -32,7 +32,6 @@ export class RegisterComponent {
   submit() {
     this.validationErrors.set([]);
     if (this.form.value.password != this.form.value.confirmPassword) {
-      // todo: show validation error
       this.validationErrors.update(errs => [...errs, 'Typed passwords do not match.']);
       return;
     }

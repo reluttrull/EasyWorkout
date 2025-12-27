@@ -21,27 +21,27 @@ namespace EasyWorkout.Application.Services
             _userManager = userManager;
         }
 
-        public async Task<bool> ChangeEmailAsync(Guid id, ChangeEmailRequest request, CancellationToken token = default)
+        public async Task<User?> ChangeEmailAsync(Guid id, ChangeEmailRequest request, CancellationToken token = default)
         {
             var userToChange = await GetByIdAsync(id, token);
-            if (userToChange is null) return false;
+            if (userToChange is null) return null;
 
             userToChange.Email = request.Email;
 
             await _usersContext.SaveChangesAsync(token);
 
-            return true;
+            return userToChange;
         }
 
-        public async Task<bool> ChangePasswordAsync(Guid id, ChangePasswordRequest request, CancellationToken token = default)
+        public async Task<User?> ChangePasswordAsync(Guid id, ChangePasswordRequest request, CancellationToken token = default)
         {
             var userToChange = await GetByIdAsync(id, token);
-            if (userToChange is null) return false;
+            if (userToChange is null) return null;
 
             var changePasswordResult = await _userManager.ChangePasswordAsync(userToChange, request.CurrentPassword, request.NewPassword);
-            if (!changePasswordResult.Succeeded) return false;
+            if (!changePasswordResult.Succeeded) return null;
 
-            return true;
+            return userToChange;
         }
 
         public async Task<User?> GetByIdAsync(Guid id, CancellationToken token = default)

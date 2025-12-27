@@ -1,5 +1,6 @@
 @if (!isEdit()) {
     <h2>Account information</h2>
+    <button (click)="toggleIsEdit()">Edit account info</button>
     <div><strong>First name:</strong> {{ user()?.firstName }}</div>
     <div><strong>Last name:</strong> {{ user()?.lastName }}</div>
     @if (user()?.email) {
@@ -9,9 +10,9 @@
         <div><strong>Username:</strong> {{ user()?.userName }}</div>
     }
     <div><strong>Member since:</strong> {{ user()?.joinedDate }}</div>
-    <button (click)="toggleIsEdit()">Edit account info</button>
 } @else {
     <h2>Edit account information:</h2>
+    <button (click)="toggleIsEdit()">Cancel</button>
     <form [formGroup]="form" (ngSubmit)="submit()">
         <div>
             <label labelfor="firstName">First name</label>
@@ -28,15 +29,14 @@
             }
         </div>
     </form>
-    <button (click)="toggleIsEdit()">Cancel</button>
 }
 @if (changeEmail()) {
-    <app-change-email />
+    <app-change-email (onCancel)="toggleChangeEmail()" />
 } @else {
     <button (click)="toggleChangeEmail()">Change email</button>
 }
 @if (changePassword()) {
-    <app-change-password />
+    <app-change-password (onCancel)="toggleChangePassword()" />
 } @else {
     <button (click)="toggleChangePassword()">Change password</button>
 }

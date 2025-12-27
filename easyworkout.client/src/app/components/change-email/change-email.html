@@ -1,1 +1,14 @@
-<p>change-email works!</p>
+<h2>Change email address:</h2>
+<form [formGroup]="form" (ngSubmit)="submit()">
+    <div>
+        <label labelfor="email">Email</label>
+        <input placeholder="Email" formControlName="email" />
+    </div>
+    <button type="submit">Save changes</button>
+    <div>
+        @for (error of validationErrors(); track $index) {
+            <div class="error">{{ error }}</div>
+        }
+    </div>
+</form>
+<button (click)="cancel()">Cancel</button>

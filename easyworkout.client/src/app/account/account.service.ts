@@ -1,6 +1,6 @@
 import { Injectable, signal, effect } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { UserResponse, UpdateUserRequest } from '../model/interfaces';
+import { UserResponse, UpdateUserRequest, ChangeEmailRequest, ChangePasswordRequest } from '../model/interfaces';
 import { TokenService } from '../core/token.service';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -36,7 +36,23 @@ export class AccountService {
     return this.http
       .put<UserResponse>(`${this.baseUrl}/me`, request)
       .pipe(
-        tap(user => this._user.set(user)) // side-effect belongs here
+        tap(user => this._user.set(user)) 
+      );
+  }
+  
+  changeEmail(request: ChangeEmailRequest): Observable<UserResponse> {
+    return this.http
+      .put<UserResponse>(`${this.baseUrl}/email`, request)
+      .pipe(
+        tap(user => this._user.set(user)) 
+      );
+  }
+  
+  changePassword(request: ChangePasswordRequest): Observable<UserResponse> {
+    return this.http
+      .put<UserResponse>(`${this.baseUrl}/password`, request)
+      .pipe(
+        tap(user => this._user.set(user)) 
       );
   }
 

@@ -1,4 +1,10 @@
 <h2>Account information</h2>
 <div><strong>First name:</strong> {{ user()?.firstName }}</div>
 <div><strong>Last name:</strong> {{ user()?.lastName }}</div>
+@if (user()?.email) {
+    <div><strong>Email address:</strong> {{ user()?.email }}</div>
+}
+@if (user()?.userName) {
+    <div><strong>Username:</strong> {{ user()?.userName }}</div>
+}
 <div><strong>Member since:</strong> {{ user()?.joinedDate }}</div>

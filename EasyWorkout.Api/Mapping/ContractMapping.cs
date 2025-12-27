@@ -209,6 +209,8 @@ namespace EasyWorkout.Api.Mapping
             {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
+                Email = user.Email,
+                UserName = user.UserName,
                 JoinedDate = user.JoinedDate
             };
         }

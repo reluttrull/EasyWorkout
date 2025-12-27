@@ -124,5 +124,7 @@ export interface CreateSetRequest {
 export interface UserResponse {
   firstName: string;
   lastName: string;
+  email?: string | null;
+  userName?: string | null;
   joinedDate: Date;
 }

@@ -1,10 +1,32 @@
-<h2>Account information</h2>
-<div><strong>First name:</strong> {{ user()?.firstName }}</div>
-<div><strong>Last name:</strong> {{ user()?.lastName }}</div>
-@if (user()?.email) {
-    <div><strong>Email address:</strong> {{ user()?.email }}</div>
+@if (!isEdit()) {
+    <h2>Account information</h2>
+    <div><strong>First name:</strong> {{ user()?.firstName }}</div>
+    <div><strong>Last name:</strong> {{ user()?.lastName }}</div>
+    @if (user()?.email) {
+        <div><strong>Email address:</strong> {{ user()?.email }}</div>
+    }
+    @if (user()?.userName) {
+        <div><strong>Username:</strong> {{ user()?.userName }}</div>
+    }
+    <div><strong>Member since:</strong> {{ user()?.joinedDate }}</div>
+    <button (click)="toggleIsEdit()">Edit account info</button>
+} @else {
+    <h2>Edit account information:</h2>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <div>
+            <label labelfor="firstName">First name</label>
+            <input placeholder="First Name" formControlName="firstName" />
+        </div>
+        <div>
+            <label labelfor="lastName">Last name</label>
+            <input placeholder="Last Name" formControlName="lastName" />
+        </div>
+        <button type="submit">Save changes</button>
+        <div>
+            @for (error of validationErrors(); track $index) {
+                <div class="error">{{ error }}</div>
+            }
+        </div>
+    </form>
+    <button (click)="toggleIsEdit()">Cancel</button>
 }
-@if (user()?.userName) {
-    <div><strong>Username:</strong> {{ user()?.userName }}</div>
-}
-<div><strong>Member since:</strong> {{ user()?.joinedDate }}</div>

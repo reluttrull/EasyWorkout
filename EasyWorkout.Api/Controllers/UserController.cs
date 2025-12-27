@@ -42,7 +42,7 @@ namespace EasyWorkout.Api.Controllers
 
         [Authorize(AuthConstants.FreeMemberUserPolicyName)]
         [HttpPut(Endpoints.Users.Update)]
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateUserRequest request, CancellationToken token)
+        public async Task<IActionResult> Update([FromBody] UpdateUserRequest request, CancellationToken token)
         {
             var userId = HttpContext.GetUserId();
             if (userId is null)
@@ -50,13 +50,8 @@ namespace EasyWorkout.Api.Controllers
                 _logger.LogWarning("Userid not found in context.");
                 return BadRequest("User not found.");
             }
-            if (userId != id)
-            {
-                _logger.LogWarning("User id context {userId} does not match requested user id {id}.", userId, id);
-                return BadRequest("User id does not match requested id.");
-            }
 
-            var user = await _userService.UpdateAsync(id, request, token);
+            var user = await _userService.UpdateAsync(userId!.Value, request, token);
             if (user is null) return NotFound();
             _logger.LogInformation("User with id {id} updated account info.", userId);
             return Ok(user.MapToResponse());

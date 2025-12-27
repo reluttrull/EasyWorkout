@@ -50,8 +50,8 @@
         public static class Users
         {
             private const string Base = $"{ApiBase}/users";
-            public const string Get = $"{Base}/{{id}}";
-            public const string Update = $"{Base}/{{id}}";
+            public const string Get = $"{Base}/me";
+            public const string Update = $"{Base}/me";
         }
     }
 }

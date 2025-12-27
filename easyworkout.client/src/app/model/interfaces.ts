@@ -121,6 +121,11 @@ export interface CreateSetRequest {
   notes?: string | null;
 }
 
+export interface UpdateUserRequest {
+  firstName: string;
+  lastName: string;
+}
+
 export interface UserResponse {
   firstName: string;
   lastName: string;

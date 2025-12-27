@@ -1,7 +1,9 @@
 import { Injectable, signal, effect } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { UserResponse } from '../model/interfaces';
+import { UserResponse, UpdateUserRequest } from '../model/interfaces';
 import { TokenService } from '../core/token.service';
+import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -28,6 +30,14 @@ export class AccountService {
         next: user => this._user.set(user),
         error: () => this._user.set(null)
       });
+  }
+  
+  update(request: UpdateUserRequest): Observable<UserResponse> {
+    return this.http
+      .put<UserResponse>(`${this.baseUrl}/me`, request)
+      .pipe(
+        tap(user => this._user.set(user)) // side-effect belongs here
+      );
   }
 
   clear() {

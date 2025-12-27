@@ -40,7 +40,7 @@ namespace EasyWorkout.Api.Controllers
             var workout = request.MapToWorkout(userId!.Value);
             await _workoutService.CreateAsync(workout, token);
 
-            _logger.LogDebug("User {userId} created new workout {workoutId}", userId, workout.Id);
+            _logger.LogInformation("User {userId} created new workout {workoutId}", userId, workout.Id);
             return CreatedAtAction(nameof(Get), new { id = workout.Id }, workout);
         }
 
@@ -103,7 +103,7 @@ namespace EasyWorkout.Api.Controllers
 
             var workout = await _workoutService.UpdateAsync(id, request, token);
             if (workout is null) return NotFound();
-            _logger.LogDebug("User {userId} updated workout {workoutId}", userId, workout.Id);
+            _logger.LogInformation("User {userId} updated workout {workoutId}", userId, workout.Id);
             return Ok(workout.MapToResponse());
         }
 
@@ -126,7 +126,7 @@ namespace EasyWorkout.Api.Controllers
 
             var success = await _workoutService.DeleteAsync(id, token);
             if (!success) return NotFound();
-            _logger.LogDebug("User {userId} deleted workout {workoutId}", userId, id);
+            _logger.LogInformation("User {userId} deleted workout {workoutId}", userId, id);
             return Ok();
         }
 
@@ -149,7 +149,7 @@ namespace EasyWorkout.Api.Controllers
 
             var success = await _workoutService.AddExerciseAsync(id, exerciseId, token);
             if (!success) return NotFound();
-            _logger.LogDebug("User {userId} added exercise {exerciseId} to workout {workoutId}", userId, exerciseId, id);
+            _logger.LogInformation("User {userId} added exercise {exerciseId} to workout {workoutId}", userId, exerciseId, id);
             return Ok();
         }
 
@@ -172,7 +172,7 @@ namespace EasyWorkout.Api.Controllers
 
             var success = await _workoutService.RemoveExerciseAsync(id, exerciseId, token);
             if (!success) return NotFound();
-            _logger.LogDebug("User {userId} removed exercise {exerciseId} from workout {workoutId}", userId, exerciseId, id);
+            _logger.LogInformation("User {userId} removed exercise {exerciseId} from workout {workoutId}", userId, exerciseId, id);
             return Ok();
         }
     }

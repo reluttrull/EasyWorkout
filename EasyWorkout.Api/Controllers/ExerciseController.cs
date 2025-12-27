@@ -38,7 +38,7 @@ namespace EasyWorkout.Api.Controllers
             var exercise = request.MapToExercise(userId!.Value);
             await _exerciseService.CreateAsync(exercise, token);
 
-            _logger.LogDebug("User {userId} created new exercise {exerciseId}", userId, exercise.Id);
+            _logger.LogInformation("User {userId} created new exercise {exerciseId}", userId, exercise.Id);
             return CreatedAtAction(nameof(Get), new { id = exercise.Id }, exercise);
         }
 
@@ -101,7 +101,7 @@ namespace EasyWorkout.Api.Controllers
 
             var exercise = await _exerciseService.UpdateAsync(id, request, token);
             if (exercise is null) return NotFound();
-            _logger.LogDebug("User {userId} updated exercise {exerciseId}", userId, exercise.Id);
+            _logger.LogInformation("User {userId} updated exercise {exerciseId}", userId, exercise.Id);
             return Ok(exercise.MapToResponse());
         }
 
@@ -124,7 +124,7 @@ namespace EasyWorkout.Api.Controllers
 
             var success = await _exerciseService.DeleteAsync(id, token);
             if (!success) return NotFound();
-            _logger.LogDebug("User {userId} deleted exercise {exerciseId}", userId, id);
+            _logger.LogInformation("User {userId} deleted exercise {exerciseId}", userId, id);
             return Ok();
         }
 
@@ -151,7 +151,7 @@ namespace EasyWorkout.Api.Controllers
 
             var success = await _exerciseService.CreateSetAsync(id, exerciseSet, token);
             if (!success) return NotFound();
-            _logger.LogDebug("User {userId} created set {setId} for exercise {exerciseId}", userId, exerciseSet.Id, id);
+            _logger.LogInformation("User {userId} created set {setId} for exercise {exerciseId}", userId, exerciseSet.Id, id);
             return Ok();
         }
 
@@ -174,7 +174,7 @@ namespace EasyWorkout.Api.Controllers
 
             var success = await _exerciseService.DeleteSetAsync(id, exerciseSetId, token);
             if (!success) return NotFound();
-            _logger.LogDebug("User {userId} deleted set {setId} from exercise {exerciseId}", userId, exerciseSetId, id);
+            _logger.LogInformation("User {userId} deleted set {setId} from exercise {exerciseId}", userId, exerciseSetId, id);
             return Ok();
         }
     }

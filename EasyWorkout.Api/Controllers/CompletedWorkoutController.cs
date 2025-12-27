@@ -38,7 +38,7 @@ namespace EasyWorkout.Api.Controllers
             var completedWorkout = request.MapToCompletedWorkout(userId!.Value);
             await _completedWorkoutService.CreateAsync(completedWorkout, token);
 
-            _logger.LogDebug("User {userId} finished workout {workoutId} with completed workout id {completedWorkoutId}.", 
+            _logger.LogInformation("User {userId} finished workout {workoutId} with completed workout id {completedWorkoutId}.", 
                 userId, completedWorkout.WorkoutId, completedWorkout.Id);
             return CreatedAtAction(nameof(Get), new { id = completedWorkout.Id }, completedWorkout);
         }

@@ -18,7 +18,7 @@ namespace EasyWorkout.Application.Services
 
         public async Task<bool> BelongsToUserAsync(Guid id, Guid userId, CancellationToken token = default)
         {
-            return _workoutsContext.CompletedWorkouts.Any(cw => cw.Id == id && cw.CompletedByUserId == userId);
+            return await _workoutsContext.CompletedWorkouts.AnyAsync(cw => cw.Id == id && cw.CompletedByUserId == userId);
         }
 
         public async Task<bool> CreateAsync(CompletedWorkout workout, CancellationToken token = default)
@@ -52,10 +52,10 @@ namespace EasyWorkout.Application.Services
 
         public async Task<IEnumerable<CompletedWorkout>> GetAllForUserAsync(Guid userId, CancellationToken token = default)
         {
-            return _workoutsContext.CompletedWorkouts
+            return await _workoutsContext.CompletedWorkouts
                 .Where(cw => cw.CompletedByUserId == userId)
                 .Include(cw => cw.CompletedExerciseSets)
-                .AsEnumerable<CompletedWorkout>();
+                .ToListAsync();
         }
 
         public async Task<CompletedWorkout?> GetByIdAsync(Guid id, CancellationToken token = default)
@@ -75,7 +75,7 @@ namespace EasyWorkout.Application.Services
             var completedWorkout = _workoutsContext.CompletedWorkouts.First(cw => cw.Id == id);
             if (completedWorkout is null) return null;
 
-            CompletedWorkoutDetailed? completed = _workoutsContext.CompletedWorkouts
+            return await _workoutsContext.CompletedWorkouts
                 .Where(cw => cw.Id == id)
                 .Include(cw => cw.CompletedExerciseSets)
                 .Select(cw => new CompletedWorkoutDetailed(
@@ -90,16 +90,7 @@ namespace EasyWorkout.Application.Services
                             _workoutsContext.Exercises
                                 .Single(e => e.ExerciseSets.Any(s => s.Id == cs.ExerciseSetId))
                                 .Name))))
-                .Single();
-
-            //await _workoutsContext.Entry(completedWorkout)
-            //    .Collection(cw => cw.CompletedExerciseSets)
-            //    .LoadAsync(token);
-
-            //var basedOnWorkout = _workoutsContext.Workouts
-            //    .Single(w => w.Id == completedWorkout.WorkoutId);
-
-            return completed;
+                .SingleOrDefaultAsync();
         }
     }
 }

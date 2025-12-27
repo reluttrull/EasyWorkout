@@ -65,16 +65,16 @@ namespace EasyWorkout.Application.Services
 
         public async Task<IEnumerable<Exercise>> GetAllForUserAsync(Guid userId, CancellationToken token = default)
         {
-            return _workoutsContext.Exercises
+            return await _workoutsContext.Exercises
                 .Where(e => e.AddedByUserId == userId)
                 .Include(e => e.ExerciseSets)
-                .AsEnumerable<Exercise>();
+                .ToListAsync();
         }
 
         public async Task<Exercise?> GetByIdAsync(Guid id, CancellationToken token = default)
         {
-            var exercise = _workoutsContext.Exercises
-                .FirstOrDefault(e => e.Id == id);
+            var exercise = await _workoutsContext.Exercises
+                .FirstOrDefaultAsync(e => e.Id == id);
 
             if (exercise is null) return null;
 
@@ -87,7 +87,7 @@ namespace EasyWorkout.Application.Services
 
         public async Task<Exercise?> UpdateAsync(Guid id, UpdateExerciseRequest request, CancellationToken token = default)
         {
-            var exerciseToChange = _workoutsContext.Exercises.First(e => e.Id == id);
+            var exerciseToChange = await _workoutsContext.Exercises.FirstOrDefaultAsync(e => e.Id == id);
             if (exerciseToChange is null) return null;
 
             exerciseToChange.Name = request.Name;
@@ -99,15 +99,15 @@ namespace EasyWorkout.Application.Services
         }
         public async Task<bool> BelongsToUserAsync(Guid id, Guid userId, CancellationToken token = default)
         {
-            return _workoutsContext.Exercises.Any(e => e.Id == id && e.AddedByUserId == userId);
+            return await _workoutsContext.Exercises.AnyAsync(e => e.Id == id && e.AddedByUserId == userId);
         }
 
         public async Task<int?> GetNextSetIndexAsync(Guid id, CancellationToken token = default)
         {
-            var exercise = await GetByIdAsync(id);
+            var exercise = await GetByIdAsync(id, token);
             if (exercise is null) return null;
 
-            var sortedSetNumbers = exercise.ExerciseSets.OrderByDescending(es => es.SetNumber).Select(es => es.SetNumber);
+            var sortedSetNumbers = exercise.ExerciseSets.Select(es => es.SetNumber).OrderByDescending(sn => sn);
             if (sortedSetNumbers.Count() == 0) return 0;
 
             return sortedSetNumbers.FirstOrDefault() + 1;

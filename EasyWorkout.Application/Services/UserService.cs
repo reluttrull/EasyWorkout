@@ -2,6 +2,7 @@
 using EasyWorkout.Contracts.Requests;
 using EasyWorkout.Identity.Api.Data;
 using EasyWorkout.Identity.Api.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,13 +20,12 @@ namespace EasyWorkout.Application.Services
 
         public async Task<User?> GetByIdAsync(Guid id, CancellationToken token = default)
         {
-            return _usersContext.Users
-                .FirstOrDefault(e => e.Id == id);
+            return await _usersContext.Users.SingleOrDefaultAsync<User>(e => e.Id == id);
         }
 
         public async Task<User?> UpdateAsync(Guid id, UpdateUserRequest request, CancellationToken token = default)
         {
-            var userToChange = _usersContext.Users.First(e => e.Id == id);
+            var userToChange = await GetByIdAsync(id, token);
             if (userToChange is null) return null;
 
             userToChange.FirstName = request.FirstName;

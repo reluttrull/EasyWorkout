@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { CompletedWorkoutsService } from './completed-workouts.service';
 import { CompletedWorkoutResponse } from '../model/interfaces';
 import { CompletedWorkoutComponent } from '../components/completed-workout/completed-workout';
-import { CreateWorkout } from '../components/create-workout/create-workout';
+import { OrderByPipe } from '../pipes/order-by-pipe';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, CompletedWorkoutComponent],
+  imports: [CommonModule, CompletedWorkoutComponent, OrderByPipe],
   templateUrl: './completed-workouts.html',
   styleUrl: './completed-workouts.css'
 })

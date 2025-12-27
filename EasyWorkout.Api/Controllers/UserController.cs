@@ -56,5 +56,39 @@ namespace EasyWorkout.Api.Controllers
             _logger.LogInformation("User with id {id} updated account info.", userId);
             return Ok(user.MapToResponse());
         }
+
+        [Authorize(AuthConstants.FreeMemberUserClaimName)]
+        [HttpPut(Endpoints.Users.ChangeEmail)]
+        public async Task<IActionResult> ChangeEmail([FromBody] ChangeEmailRequest request, CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null)
+            {
+                _logger.LogWarning("Userid not found in context.");
+                return BadRequest("User not found.");
+            }
+
+            var result = await _userService.ChangeEmailAsync(userId!.Value, request, token);
+            if (!result) return NotFound();
+            _logger.LogInformation("User with id {id} changed email to {email}.", userId, request.Email);
+            return Ok();
+        }
+
+        [Authorize(AuthConstants.FreeMemberUserClaimName)]
+        [HttpPut(Endpoints.Users.ChangePassword)]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request, CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null)
+            {
+                _logger.LogWarning("Userid not found in context.");
+                return BadRequest("User not found.");
+            }
+
+            var result = await _userService.ChangePasswordAsync(userId!.Value, request, token);
+            if (result is false) return NotFound();
+            _logger.LogInformation("User with id {id} changed password.", userId);
+            return Ok();
+        }
     }
 }

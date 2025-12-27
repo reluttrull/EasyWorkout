@@ -13,6 +13,7 @@ namespace EasyWorkout.Contracts.Requests
         [EmailAddress]
         public required string Email { get; set; }
         [Required]
+        [DataType(DataType.Password)]
         [MaxLength(40)]
         public required string Password { get; set; }
         [MaxLength(100)]

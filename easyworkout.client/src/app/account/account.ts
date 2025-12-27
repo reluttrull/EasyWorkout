@@ -3,10 +3,12 @@ import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AccountService } from './account.service';
 import { UserResponse, UpdateUserRequest } from '../model/interfaces';
+import { ChangePassword } from '../components/change-password/change-password';
+import { ChangeEmail } from '../components/change-email/change-email';
 
 @Component({
   selector: 'app-account',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ChangePassword, ChangeEmail],
   templateUrl: './account.html',
   styleUrl: './account.css',
 })
@@ -21,9 +23,19 @@ export class Account {
   validationErrors = signal<string[]>([]);
   user = this.accountService.user;
   isEdit = signal(false);
+  changeEmail = signal(false);
+  changePassword = signal(false);
 
   toggleIsEdit() {
     this.isEdit.set(!this.isEdit());
+  }
+
+  toggleChangeEmail() {
+    this.changeEmail.set(!this.changeEmail());
+  }
+  
+  toggleChangePassword() {
+    this.changePassword.set(!this.changePassword());
   }
   
   submit() {

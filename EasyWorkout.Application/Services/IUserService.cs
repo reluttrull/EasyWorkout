@@ -12,5 +12,9 @@ namespace EasyWorkout.Application.Services
         Task<User?> GetByIdAsync(Guid id, CancellationToken token = default);
 
         Task<User?> UpdateAsync(Guid id, UpdateUserRequest request, CancellationToken token = default);
+
+        Task<bool> ChangeEmailAsync(Guid id, ChangeEmailRequest request, CancellationToken token = default);
+
+        Task<bool> ChangePasswordAsync(Guid id, ChangePasswordRequest request, CancellationToken token = default);
     }
 }

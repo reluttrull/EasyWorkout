@@ -8,7 +8,12 @@ namespace EasyWorkout.Contracts.Requests
     public class ChangePasswordRequest
     {
         [Required]
+        [DataType(DataType.Password)]
         [MaxLength(40)]
-        public required string Password { get; set; }
+        public required string CurrentPassword { get; set; }
+        [Required]
+        [DataType(DataType.Password)]
+        [MaxLength(40)]
+        public required string NewPassword { get; set; }
     }
 }

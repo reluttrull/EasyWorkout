@@ -30,3 +30,13 @@
     </form>
     <button (click)="toggleIsEdit()">Cancel</button>
 }
+@if (changeEmail()) {
+    <app-change-email />
+} @else {
+    <button (click)="toggleChangeEmail()">Change email</button>
+}
+@if (changePassword()) {
+    <app-change-password />
+} @else {
+    <button (click)="toggleChangePassword()">Change password</button>
+}

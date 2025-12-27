@@ -2,13 +2,14 @@ using EasyWorkout.Application.Data;
 using EasyWorkout.Application.Services;
 using EasyWorkout.Identity.Api;
 using EasyWorkout.Identity.Api.Data;
+using EasyWorkout.Identity.Api.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 using System.Threading.RateLimiting;
-using Serilog;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -52,6 +53,9 @@ try
 
     builder.Services.AddDbContext<WorkoutsContext>(options =>
         options.UseNpgsql(workoutsConnectionString));
+
+    builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
+        .AddEntityFrameworkStores<AppDbContext>();
 
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>

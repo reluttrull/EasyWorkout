@@ -1,5 +1,6 @@
 ﻿using EasyWorkout.Application.Data;
 using EasyWorkout.Application.Model;
+using EasyWorkout.Contracts.Requests;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,15 @@ namespace EasyWorkout.Application.Services
                 return false;
 
             _workoutsContext.CompletedWorkouts.Add(workout);
+            var result = await _workoutsContext.SaveChangesAsync(token);
+            return result > 0;
+        }
+
+        public async Task<bool> DeleteAsync(Guid id, CancellationToken token = default)
+        {
+            var completedWorkoutToDelete = await _workoutsContext.CompletedWorkouts.SingleAsync(cw => cw.Id == id);
+
+            _workoutsContext.CompletedWorkouts.Remove(completedWorkoutToDelete);
             var result = await _workoutsContext.SaveChangesAsync(token);
             return result > 0;
         }
@@ -91,6 +101,18 @@ namespace EasyWorkout.Application.Services
                                 .Single(e => e.ExerciseSets.Any(s => s.Id == cs.ExerciseSetId))
                                 .Name))))
                 .SingleOrDefaultAsync();
+        }
+
+        public async Task<CompletedWorkoutDetailed?> UpdateAsync(Guid id, UpdateCompletedWorkoutRequest request, CancellationToken token = default)
+        {
+            var completedWorkoutToChange = await GetByIdDetailedAsync(id, token);
+            if (completedWorkoutToChange is null) return null;
+
+            completedWorkoutToChange.CompletedWorkout.CompletedNotes = request.CompletedNotes;
+
+            await _workoutsContext.SaveChangesAsync(token);
+
+            return completedWorkoutToChange;
         }
     }
 }

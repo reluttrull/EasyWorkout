@@ -13,4 +13,5 @@
   </Project>
   <Project Path="EasyWorkout.Contracts/EasyWorkout.Contracts.csproj" />
   <Project Path="EasyWorkout.Identity.Api/EasyWorkout.Identity.Api.csproj" Id="997b5b2a-2384-4f13-97d0-75ddb82beafb" />
+  <Project Path="EasyWorkout.Tests/EasyWorkout.Tests.csproj" Id="334d2d59-fb79-4b60-a6fa-cc0e795cff4c" />
 </Solution>

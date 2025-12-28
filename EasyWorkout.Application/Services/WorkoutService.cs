@@ -42,8 +42,9 @@ namespace EasyWorkout.Application.Services
         {
             return await _workoutsContext.Workouts
                 .Where(w => w.AddedByUserId == userId)
-                .Include(w => w.Exercises)
-                    .ThenInclude(e => e.ExerciseSets)
+                .Include(w => w.WorkoutExercises)
+                    .ThenInclude(we => we.Exercise)
+                        .ThenInclude(e => e.ExerciseSets)
                 .Select(w => new WorkoutDetailed(
                     w,
                     _workoutsContext.CompletedWorkouts
@@ -59,9 +60,10 @@ namespace EasyWorkout.Application.Services
             if (workout is null) return null;
 
             await _workoutsContext.Entry(workout)
-                .Collection(w => w.Exercises)
+                .Collection(w => w.WorkoutExercises)
                 .Query()
-                .Include(e => e.ExerciseSets)
+                .Include(we => we.Exercise)
+                    .ThenInclude(e => e.ExerciseSets)
                 .LoadAsync(token);
 
             return workout;
@@ -73,9 +75,10 @@ namespace EasyWorkout.Application.Services
             if (workout is null) return null;
 
             await _workoutsContext.Entry(workout)
-                .Collection(w => w.Exercises)
+                .Collection(w => w.WorkoutExercises)
                 .Query()
-                .Include(e => e.ExerciseSets)
+                .Include(we => we.Exercise)
+                    .ThenInclude(e => e.ExerciseSets)
                 .LoadAsync(token);
 
             var lastCompletedDate = await GetLastCompletedDateAsync(workout.Id, token);
@@ -83,41 +86,56 @@ namespace EasyWorkout.Application.Services
             return new WorkoutDetailed(workout, lastCompletedDate);
         }
 
-        public async Task<bool> AddExerciseAsync(Guid id, Guid exerciseId, CancellationToken token = default)
+        public async Task<bool> AddExerciseAsync(Guid workoutId, Guid exerciseId, CancellationToken token = default)
         {
-            var workout = await GetByIdAsync(id, token);
+            var workout = await _workoutsContext.Workouts
+                .Include(w => w.WorkoutExercises)
+                .SingleOrDefaultAsync(w => w.Id == workoutId, token);
+
             if (workout is null) return false;
-            if (workout.Exercises.Any(e => e.Id == exerciseId)) return false;
 
-            var exercise = await _workoutsContext.Exercises.SingleOrDefaultAsync(e => e.Id == exerciseId);
-            if (exercise is null) return false;
-            await _workoutsContext.Entry(exercise)
-                .Collection(e => e.Workouts)
-                .LoadAsync(token);
+            if (workout.WorkoutExercises.Any(we => we.ExerciseId == exerciseId))
+                return false; // link already exists
 
-            workout.Exercises.Add(exercise);
-            exercise.Workouts.Add(workout);
+            var exerciseToAdd = await _workoutsContext.Exercises.SingleOrDefaultAsync(e => e.Id == exerciseId, token);
 
-            var result = await _workoutsContext.SaveChangesAsync(token);
-            return result > 0;
+            if (exerciseToAdd is null) return false;
+
+            var nextExerciseNumber = workout.WorkoutExercises.Count == 0
+                ? 0
+                : workout.WorkoutExercises.Max(we => we.ExerciseNumber) + 1;
+
+            var workoutExerciseLink = new WorkoutExercise
+            {
+                Id = Guid.NewGuid(),
+                WorkoutId = workout.Id,
+                ExerciseId = exerciseToAdd.Id,
+                ExerciseNumber = nextExerciseNumber
+            };
+
+            workout.WorkoutExercises.Add(workoutExerciseLink);
+
+            _workoutsContext.WorkoutExercises.Add(workoutExerciseLink);
+
+            var success = await _workoutsContext.SaveChangesAsync(token) > 0;
+
+            return success;
         }
 
-        public async Task<bool> RemoveExerciseAsync(Guid id, Guid exerciseId, CancellationToken token = default)
+        public async Task<bool> RemoveExerciseAsync(Guid workoutId, Guid exerciseId, CancellationToken token = default)
         {
-            var workout = await GetByIdAsync(id, token);
-            if (workout is null) return false;
+            var workoutExercise = await _workoutsContext.WorkoutExercises
+                .FirstOrDefaultAsync(
+                    we => we.WorkoutId == workoutId && we.ExerciseId == exerciseId,
+                    token);
 
-            var exercise = await _workoutsContext.Exercises.SingleOrDefaultAsync(e => e.Id == exerciseId);
-            if (exercise is null) return false;
-            await _workoutsContext.Entry(exercise)
-                .Collection(e => e.Workouts)
-                .LoadAsync(token);
+            if (workoutExercise is null) return false;
 
-            workout.Exercises.Remove(exercise);
-            exercise.Workouts.Remove(workout);
+            _workoutsContext.WorkoutExercises.Remove(workoutExercise);
 
-            var result = await _workoutsContext.SaveChangesAsync(token);
-            return result > 0;
+            var success = await _workoutsContext.SaveChangesAsync(token) > 0;
+
+            return success;
         }
 
         public async Task<Workout?> UpdateAsync(Guid id, UpdateWorkoutRequest request, CancellationToken token = default)

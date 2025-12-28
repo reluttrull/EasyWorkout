@@ -88,24 +88,26 @@ namespace EasyWorkout.Application.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ExerciseWorkout",
+                name: "WorkoutExercises",
                 columns: table => new
                 {
-                    ExercisesId = table.Column<Guid>(type: "uuid", nullable: false),
-                    WorkoutsId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    WorkoutId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ExerciseId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ExerciseNumber = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ExerciseWorkout", x => new { x.ExercisesId, x.WorkoutsId });
+                    table.PrimaryKey("PK_WorkoutExercises", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ExerciseWorkout_Exercises_ExercisesId",
-                        column: x => x.ExercisesId,
+                        name: "FK_WorkoutExercises_Exercises_ExerciseId",
+                        column: x => x.ExerciseId,
                         principalTable: "Exercises",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ExerciseWorkout_Workouts_WorkoutsId",
-                        column: x => x.WorkoutsId,
+                        name: "FK_WorkoutExercises_Workouts_WorkoutId",
+                        column: x => x.WorkoutId,
                         principalTable: "Workouts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -193,9 +195,14 @@ namespace EasyWorkout.Application.Migrations
                 column: "ExerciseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExerciseWorkout_WorkoutsId",
-                table: "ExerciseWorkout",
-                column: "WorkoutsId");
+                name: "IX_WorkoutExercises_ExerciseId",
+                table: "WorkoutExercises",
+                column: "ExerciseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkoutExercises_WorkoutId",
+                table: "WorkoutExercises",
+                column: "WorkoutId");
         }
 
         /// <inheritdoc />
@@ -208,7 +215,7 @@ namespace EasyWorkout.Application.Migrations
                 name: "ExerciseSets");
 
             migrationBuilder.DropTable(
-                name: "ExerciseWorkout");
+                name: "WorkoutExercises");
 
             migrationBuilder.DropTable(
                 name: "CompletedExercises");

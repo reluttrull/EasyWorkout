@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyWorkout.Application.Migrations
 {
     [DbContext(typeof(WorkoutsContext))]
-    [Migration("20251228191212_InitialCreate")]
+    [Migration("20251228203959_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -227,19 +227,28 @@ namespace EasyWorkout.Application.Migrations
                     b.ToTable("Workouts");
                 });
 
-            modelBuilder.Entity("ExerciseWorkout", b =>
+            modelBuilder.Entity("EasyWorkout.Application.Model.WorkoutExercise", b =>
                 {
-                    b.Property<Guid>("ExercisesId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("WorkoutsId")
+                    b.Property<Guid>("ExerciseId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("ExercisesId", "WorkoutsId");
+                    b.Property<int>("ExerciseNumber")
+                        .HasColumnType("integer");
 
-                    b.HasIndex("WorkoutsId");
+                    b.Property<Guid>("WorkoutId")
+                        .HasColumnType("uuid");
 
-                    b.ToTable("ExerciseWorkout");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.HasIndex("WorkoutId");
+
+                    b.ToTable("WorkoutExercises");
                 });
 
             modelBuilder.Entity("EasyWorkout.Application.Model.CompletedExercise", b =>
@@ -284,19 +293,23 @@ namespace EasyWorkout.Application.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ExerciseWorkout", b =>
+            modelBuilder.Entity("EasyWorkout.Application.Model.WorkoutExercise", b =>
                 {
-                    b.HasOne("EasyWorkout.Application.Model.Exercise", null)
-                        .WithMany()
-                        .HasForeignKey("ExercisesId")
+                    b.HasOne("EasyWorkout.Application.Model.Exercise", "Exercise")
+                        .WithMany("WorkoutExercises")
+                        .HasForeignKey("ExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EasyWorkout.Application.Model.Workout", null)
-                        .WithMany()
-                        .HasForeignKey("WorkoutsId")
+                    b.HasOne("EasyWorkout.Application.Model.Workout", "Workout")
+                        .WithMany("WorkoutExercises")
+                        .HasForeignKey("WorkoutId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Exercise");
+
+                    b.Navigation("Workout");
                 });
 
             modelBuilder.Entity("EasyWorkout.Application.Model.CompletedExercise", b =>
@@ -312,6 +325,13 @@ namespace EasyWorkout.Application.Migrations
             modelBuilder.Entity("EasyWorkout.Application.Model.Exercise", b =>
                 {
                     b.Navigation("ExerciseSets");
+
+                    b.Navigation("WorkoutExercises");
+                });
+
+            modelBuilder.Entity("EasyWorkout.Application.Model.Workout", b =>
+                {
+                    b.Navigation("WorkoutExercises");
                 });
 #pragma warning restore 612, 618
         }

@@ -13,7 +13,7 @@ namespace EasyWorkout.Application.Model
         public required string Name { get; set; }
         [MaxLength(250)]
         public string? Notes { get; set; }
-        public List<Workout> Workouts { get; set; } = [];
+        public List<WorkoutExercise> WorkoutExercises { get; init; } = [];
         public List<ExerciseSet> ExerciseSets { get; init; } = [];
     }
 }

@@ -18,7 +18,7 @@ namespace EasyWorkout.Api.Mapping
                 AddedDate = DateOnly.FromDateTime(DateTime.UtcNow),
                 Name = request.Name,
                 Notes = request.Notes,
-                Exercises = []
+                WorkoutExercises = []
             };
         }
 
@@ -31,7 +31,7 @@ namespace EasyWorkout.Api.Mapping
                 AddedDate = workout.AddedDate,
                 Name = request.Name,
                 Notes = request.Notes,
-                Exercises = workout.Exercises
+                WorkoutExercises = workout.WorkoutExercises
             };
         }
 
@@ -44,7 +44,7 @@ namespace EasyWorkout.Api.Mapping
                 AddedDate = DateOnly.FromDateTime(DateTime.UtcNow),
                 Name = request.Name,
                 Notes = request.Notes,
-                Workouts = [],
+                WorkoutExercises = [],
                 ExerciseSets = []
             };
         }
@@ -58,7 +58,7 @@ namespace EasyWorkout.Api.Mapping
                 AddedDate = exercise.AddedDate,
                 Name = request.Name,
                 Notes = request.Notes,
-                Workouts = exercise.Workouts,
+                WorkoutExercises = exercise.WorkoutExercises,
                 ExerciseSets = exercise.ExerciseSets
             };
         }
@@ -128,7 +128,7 @@ namespace EasyWorkout.Api.Mapping
                 Name = workout.Name,
                 Notes = workout.Notes,
                 LastCompletedDate = lastCompletedDate,
-                Exercises = workout.Exercises.Select(e => e.MapToResponse())
+                Exercises = workout.WorkoutExercises.Select(e => e.Exercise.MapToResponse())
             };
         }
 
@@ -141,7 +141,7 @@ namespace EasyWorkout.Api.Mapping
                 AddedDate = workout.AddedDate,
                 Name = workout.Name,
                 Notes = workout.Notes,
-                Exercises = workout.Exercises.Select(e => e.MapToResponse())
+                Exercises = workout.WorkoutExercises.Select(e => e.Exercise.MapToResponse())
             };
         }
 

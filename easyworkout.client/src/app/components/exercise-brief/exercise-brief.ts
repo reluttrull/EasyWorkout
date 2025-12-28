@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { Exercise } from '../../model/interfaces';
+import { ExerciseResponse } from '../../model/interfaces';
 
 @Component({
   selector: 'app-exercise-brief',
@@ -8,5 +8,5 @@ import { Exercise } from '../../model/interfaces';
   styleUrl: './exercise-brief.css',
 })
 export class ExerciseBrief {
-  exercise = input.required<Exercise>();
+  exercise = input.required<ExerciseResponse>();
 }

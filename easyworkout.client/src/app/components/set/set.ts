@@ -1,6 +1,6 @@
 import { Component, input, output, inject } from '@angular/core';
 import { ExercisesService } from '../../exercises/exercises.service';
-import { Set } from '../../model/interfaces';
+import { ExerciseSetResponse } from '../../model/interfaces';
 
 @Component({
   selector: 'app-set',
@@ -10,7 +10,7 @@ import { Set } from '../../model/interfaces';
 })
 export class SetComponent {
   exercisesService = inject(ExercisesService);
-  set = input.required<Set>();
+  set = input.required<ExerciseSetResponse>();
   exerciseId = input.required<string>();
   onSetChanged = output();
 

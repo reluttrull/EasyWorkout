@@ -2,7 +2,7 @@ import { Component, input, output } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { WorkoutsService } from '../../workouts/workouts.service';
 import { ExercisesService } from '../../exercises/exercises.service';
-import { Exercise } from '../../model/interfaces';
+import { ExerciseResponse } from '../../model/interfaces';
 import { SetComponent } from '../set/set';
 import { CreateSet } from '../create-set/create-set';
 import { OrderByPipe } from '../../pipes/order-by-pipe';
@@ -15,7 +15,7 @@ import { OrderByPipe } from '../../pipes/order-by-pipe';
 })
 export class ExerciseComponent {
   form!: FormGroup;
-  exercise = input.required<Exercise>();
+  exercise = input.required<ExerciseResponse>();
   workoutId = input<string>();
   onExerciseChanged = output();
   exerciseDetail = false;

@@ -1,5 +1,5 @@
 import { Component, input, output, signal, inject } from '@angular/core';
-import { Exercise } from '../../model/interfaces';
+import { ExerciseResponse } from '../../model/interfaces';
 import { WorkoutsService } from '../../workouts/workouts.service';
 import { ExercisesService } from '../../exercises/exercises.service';
 import { ExerciseBrief } from '../exercise-brief/exercise-brief';
@@ -14,7 +14,7 @@ import { OrderByPipe } from '../../pipes/order-by-pipe';
 })
 export class AddExercise {
   workoutsService = inject(WorkoutsService);
-  exercises = signal<Exercise[]>([]);
+  exercises = signal<ExerciseResponse[]>([]);
   workoutId = input.required<string>();
   onClose = output();
   isCreateVisible = false;

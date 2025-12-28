@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Workout, CreateWorkoutRequest, UpdateWorkoutRequest, WorkoutResponse } from '../model/interfaces';
+import { CreateWorkoutRequest, UpdateWorkoutRequest, WorkoutResponse } from '../model/interfaces';
 
 
 @Injectable({ providedIn: 'root' })

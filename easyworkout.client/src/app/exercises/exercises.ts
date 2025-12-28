@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ExercisesService } from './exercises.service';
-import { Exercise } from '../model/interfaces';
+import { ExerciseResponse } from '../model/interfaces';
 import { ExerciseComponent } from '../components/exercise/exercise';
 import { CreateExercise } from '../components/create-exercise/create-exercise';
 import { OrderByPipe } from '../pipes/order-by-pipe';
@@ -13,7 +13,7 @@ import { OrderByPipe } from '../pipes/order-by-pipe';
   styleUrl: './exercises.css'
 })
 export class ExercisesComponent {
-  exercises = signal<Exercise[]>([]);
+  exercises = signal<ExerciseResponse[]>([]);
   isCreateVisible = false;
 
   constructor(private service: ExercisesService) {

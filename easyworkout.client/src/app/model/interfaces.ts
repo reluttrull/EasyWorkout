@@ -1,34 +1,5 @@
 import { WeightUnit, DurationUnit } from './enums';
 
-export interface Exercise {
-  id: string;
-  addedByUserId: string;
-  addedDate: Date;
-  name: string;
-  notes?: string | null;
-  exerciseSets: Set[];
-}
-
-export interface Set {
-  id: string;
-  exerciseId: string;
-  setNumber: number;
-  reps: number;
-  weight: number;
-  weightUnit: WeightUnit;
-  duration: number;
-  durationUnit: DurationUnit;
-}
-
-export interface Workout {
-  id: string;
-  addedByUserId: string;
-  addedDate: Date;
-  name: string;
-  notes?: string | null;
-  exercises: Exercise[];
-}
-
 export interface CreateWorkoutRequest {
   name: string;
   notes?: string | null;
@@ -133,7 +104,18 @@ export interface ExerciseResponse {
   exerciseNumber: number;
   name: string;
   notes?: string | null;
-  exerciseSets: Set[];
+  exerciseSets: ExerciseSetResponse[];
+}
+
+export interface ExerciseSetResponse {
+  id: string;
+  exerciseId: string;
+  setNumber: number;
+  reps?: number | null;
+  weight?: number | null;
+  weightUnit?: string | null;
+  duration?: number | null;
+  durationUnit?: string | null;
 }
 
 export interface CreateSetRequest {

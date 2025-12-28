@@ -85,6 +85,17 @@ namespace EasyWorkout.Application.Services
             return exercise;
         }
 
+        public async Task<ExerciseSet?> GetSetByIdAsync(Guid id, CancellationToken token = default)
+        {
+            var exerciseSet = await _workoutsContext.ExerciseSets
+                .FirstOrDefaultAsync(e => e.Id == id);
+
+            if (exerciseSet is null) return null;
+
+            return exerciseSet;
+        }
+
+
         public async Task<Exercise?> UpdateAsync(Guid id, UpdateExerciseRequest request, CancellationToken token = default)
         {
             var exerciseToChange = await _workoutsContext.Exercises.FirstOrDefaultAsync(e => e.Id == id);

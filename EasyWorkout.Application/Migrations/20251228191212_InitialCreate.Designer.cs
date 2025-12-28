@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyWorkout.Application.Migrations
 {
     [DbContext(typeof(WorkoutsContext))]
-    [Migration("20251226174759_20251226FixNulls")]
-    partial class _20251226FixNulls
+    [Migration("20251228191212_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,42 @@ namespace EasyWorkout.Application.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("EasyWorkout.Application.Model.CompletedExercise", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CompletedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CompletedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CompletedNotes")
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
+                    b.Property<Guid?>("CompletedWorkoutId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ExerciseId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("FallbackName")
+                        .IsRequired()
+                        .HasMaxLength(75)
+                        .HasColumnType("character varying(75)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompletedWorkoutId");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.ToTable("CompletedExercises");
+                });
+
             modelBuilder.Entity("EasyWorkout.Application.Model.CompletedExerciseSet", b =>
                 {
                     b.Property<Guid>("Id")
@@ -34,14 +70,26 @@ namespace EasyWorkout.Application.Migrations
                     b.Property<DateTime>("CompletedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("CompletedWorkoutId")
+                    b.Property<Guid?>("CompletedExerciseId")
                         .HasColumnType("uuid");
 
                     b.Property<double?>("Duration")
                         .HasColumnType("double precision");
 
+                    b.Property<string>("DurationUnit")
+                        .HasColumnType("text");
+
                     b.Property<Guid>("ExerciseSetId")
                         .HasColumnType("uuid");
+
+                    b.Property<double?>("GoalDuration")
+                        .HasColumnType("double precision");
+
+                    b.Property<int?>("GoalReps")
+                        .HasColumnType("integer");
+
+                    b.Property<double?>("GoalWeight")
+                        .HasColumnType("double precision");
 
                     b.Property<int?>("Reps")
                         .HasColumnType("integer");
@@ -52,11 +100,12 @@ namespace EasyWorkout.Application.Migrations
                     b.Property<double?>("Weight")
                         .HasColumnType("double precision");
 
+                    b.Property<string>("WeightUnit")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CompletedWorkoutId");
-
-                    b.HasIndex("ExerciseSetId");
+                    b.HasIndex("CompletedExerciseId");
 
                     b.ToTable("CompletedExerciseSets");
                 });
@@ -74,14 +123,20 @@ namespace EasyWorkout.Application.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CompletedNotes")
-                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
+
+                    b.Property<string>("FallbackName")
+                        .IsRequired()
+                        .HasMaxLength(75)
+                        .HasColumnType("character varying(75)");
 
                     b.Property<Guid>("WorkoutId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("WorkoutId");
 
                     b.ToTable("CompletedWorkouts");
                 });
@@ -187,21 +242,37 @@ namespace EasyWorkout.Application.Migrations
                     b.ToTable("ExerciseWorkout");
                 });
 
-            modelBuilder.Entity("EasyWorkout.Application.Model.CompletedExerciseSet", b =>
+            modelBuilder.Entity("EasyWorkout.Application.Model.CompletedExercise", b =>
                 {
                     b.HasOne("EasyWorkout.Application.Model.CompletedWorkout", null)
-                        .WithMany("CompletedExerciseSets")
-                        .HasForeignKey("CompletedWorkoutId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("CompletedExercises")
+                        .HasForeignKey("CompletedWorkoutId");
 
-                    b.HasOne("EasyWorkout.Application.Model.ExerciseSet", "ExerciseSet")
+                    b.HasOne("EasyWorkout.Application.Model.Exercise", "Exercise")
                         .WithMany()
-                        .HasForeignKey("ExerciseSetId")
+                        .HasForeignKey("ExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ExerciseSet");
+                    b.Navigation("Exercise");
+                });
+
+            modelBuilder.Entity("EasyWorkout.Application.Model.CompletedExerciseSet", b =>
+                {
+                    b.HasOne("EasyWorkout.Application.Model.CompletedExercise", null)
+                        .WithMany("CompletedExerciseSets")
+                        .HasForeignKey("CompletedExerciseId");
+                });
+
+            modelBuilder.Entity("EasyWorkout.Application.Model.CompletedWorkout", b =>
+                {
+                    b.HasOne("EasyWorkout.Application.Model.Workout", "Workout")
+                        .WithMany()
+                        .HasForeignKey("WorkoutId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Workout");
                 });
 
             modelBuilder.Entity("EasyWorkout.Application.Model.ExerciseSet", b =>
@@ -228,9 +299,14 @@ namespace EasyWorkout.Application.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EasyWorkout.Application.Model.CompletedWorkout", b =>
+            modelBuilder.Entity("EasyWorkout.Application.Model.CompletedExercise", b =>
                 {
                     b.Navigation("CompletedExerciseSets");
+                });
+
+            modelBuilder.Entity("EasyWorkout.Application.Model.CompletedWorkout", b =>
+                {
+                    b.Navigation("CompletedExercises");
                 });
 
             modelBuilder.Entity("EasyWorkout.Application.Model.Exercise", b =>

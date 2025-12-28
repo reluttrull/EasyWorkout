@@ -1,6 +1,7 @@
 ﻿using EasyWorkout.Application.Data;
 using EasyWorkout.Application.Model;
 using EasyWorkout.Contracts.Requests;
+using EasyWorkout.Identity.Api.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -34,37 +35,24 @@ namespace EasyWorkout.Application.Services
 
         public async Task<bool> DeleteAsync(Guid id, CancellationToken token = default)
         {
-            var completedWorkoutToDelete = await _workoutsContext.CompletedWorkouts.SingleAsync(cw => cw.Id == id);
+            var completedWorkoutToDelete = await _workoutsContext.CompletedWorkouts
+                .Include(cw => cw.CompletedExercises)
+                    .ThenInclude(ce => ce.CompletedExerciseSets)
+                .SingleAsync(cw => cw.Id == id, token);
 
+            _workoutsContext.CompletedExerciseSets.RemoveRange(completedWorkoutToDelete.CompletedExercises.SelectMany(ce => ce.CompletedExerciseSets));
+            _workoutsContext.CompletedExercises.RemoveRange(completedWorkoutToDelete.CompletedExercises);
             _workoutsContext.CompletedWorkouts.Remove(completedWorkoutToDelete);
             var result = await _workoutsContext.SaveChangesAsync(token);
             return result > 0;
-        }
-
-        public async Task<IEnumerable<CompletedWorkoutDetailed?>> GetAllDetailedForUserAsync(Guid userId, CancellationToken token = default)
-        {
-            return await _workoutsContext.CompletedWorkouts
-                .Where(cw => cw.CompletedByUserId == userId)
-                .Include(cw => cw.CompletedExerciseSets)
-                .Select(cw => new CompletedWorkoutDetailed(
-                    cw, 
-                    _workoutsContext.Workouts.Single(w => w.Id == cw.WorkoutId),
-                    cw.CompletedExerciseSets
-                        .Select(cs => new CompletedExerciseSetDetailed(
-                            cs,
-                            _workoutsContext.ExerciseSets
-                                .Single(s => s.Id == cs.ExerciseSetId),
-                            _workoutsContext.Exercises
-                                .Single(e => e.ExerciseSets.Any(s => s.Id == cs.ExerciseSetId))
-                                .Name))))
-                .ToListAsync(token);
         }
 
         public async Task<IEnumerable<CompletedWorkout>> GetAllForUserAsync(Guid userId, CancellationToken token = default)
         {
             return await _workoutsContext.CompletedWorkouts
                 .Where(cw => cw.CompletedByUserId == userId)
-                .Include(cw => cw.CompletedExerciseSets)
+                .Include(cw => cw.CompletedExercises)
+                    .ThenInclude(ce => ce.CompletedExerciseSets)
                 .ToListAsync();
         }
 
@@ -74,41 +62,20 @@ namespace EasyWorkout.Application.Services
             if (completedWorkout is null) return null;
 
             await _workoutsContext.Entry(completedWorkout)
-                .Collection(cw => cw.CompletedExerciseSets)
+                .Collection(cw => cw.CompletedExercises)
+                .Query()
+                .Include(ce => ce.CompletedExerciseSets)
                 .LoadAsync(token);
 
             return completedWorkout;
         }
 
-        public async Task<CompletedWorkoutDetailed?> GetByIdDetailedAsync(Guid id, CancellationToken token = default)
+        public async Task<CompletedWorkout?> UpdateAsync(Guid id, UpdateCompletedWorkoutRequest request, CancellationToken token = default)
         {
-            var completedWorkout = _workoutsContext.CompletedWorkouts.First(cw => cw.Id == id);
-            if (completedWorkout is null) return null;
-
-            return await _workoutsContext.CompletedWorkouts
-                .Where(cw => cw.Id == id)
-                .Include(cw => cw.CompletedExerciseSets)
-                .Select(cw => new CompletedWorkoutDetailed(
-                    cw,
-                    _workoutsContext.Workouts
-                        .Single(w => w.Id == cw.WorkoutId),
-                    cw.CompletedExerciseSets
-                        .Select(cs => new CompletedExerciseSetDetailed(
-                            cs,
-                            _workoutsContext.ExerciseSets
-                                .Single(s => s.Id == cs.ExerciseSetId),
-                            _workoutsContext.Exercises
-                                .Single(e => e.ExerciseSets.Any(s => s.Id == cs.ExerciseSetId))
-                                .Name))))
-                .SingleOrDefaultAsync();
-        }
-
-        public async Task<CompletedWorkoutDetailed?> UpdateAsync(Guid id, UpdateCompletedWorkoutRequest request, CancellationToken token = default)
-        {
-            var completedWorkoutToChange = await GetByIdDetailedAsync(id, token);
+            var completedWorkoutToChange = await GetByIdAsync(id, token);
             if (completedWorkoutToChange is null) return null;
 
-            completedWorkoutToChange.CompletedWorkout.CompletedNotes = request.CompletedNotes;
+            completedWorkoutToChange.CompletedNotes = request.CompletedNotes;
 
             await _workoutsContext.SaveChangesAsync(token);
 

@@ -12,6 +12,8 @@ namespace EasyWorkout.Application.Services
 
         Task<Exercise?> GetByIdAsync(Guid id, CancellationToken token = default);
 
+        Task<ExerciseSet?> GetSetByIdAsync(Guid id, CancellationToken token = default);
+
         Task<IEnumerable<Exercise>> GetAllForUserAsync(Guid userId, CancellationToken token = default);
 
         Task<Exercise?> UpdateAsync(Guid id, UpdateExerciseRequest request, CancellationToken token = default);

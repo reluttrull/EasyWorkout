@@ -12,13 +12,9 @@ namespace EasyWorkout.Application.Services
 
         Task<CompletedWorkout?> GetByIdAsync(Guid id, CancellationToken token = default);
 
-        Task<CompletedWorkoutDetailed?> GetByIdDetailedAsync(Guid id, CancellationToken token = default);
-
         Task<IEnumerable<CompletedWorkout>> GetAllForUserAsync(Guid userId, CancellationToken token = default);
 
-        Task<IEnumerable<CompletedWorkoutDetailed?>> GetAllDetailedForUserAsync(Guid userId, CancellationToken token = default);
-
-        Task<CompletedWorkoutDetailed?> UpdateAsync(Guid id, UpdateCompletedWorkoutRequest request, CancellationToken token = default);
+        Task<CompletedWorkout?> UpdateAsync(Guid id, UpdateCompletedWorkoutRequest request, CancellationToken token = default);
 
         Task<bool> DeleteAsync(Guid id, CancellationToken token = default);
 

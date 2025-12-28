@@ -10,6 +10,6 @@ namespace EasyWorkout.Contracts.Requests
         public Guid WorkoutId { get; set; }
         public required DateTime CompletedDate { get; set; }
         public string? CompletedNotes { get; set; } = string.Empty;
-        public required List<FinishExerciseSetRequest> CompletedExerciseSets { get; set; }
+        public required List<FinishExerciseRequest> CompletedExercises { get; set; }
     }
 }

@@ -3,7 +3,12 @@ import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { WorkoutsService } from '../workouts/workouts.service';
 import { CompletedWorkoutsService } from '../completed-workouts/completed-workouts.service';
-import { WorkoutResponse, FinishWorkoutRequest, FinishExerciseSetRequest } from '../model/interfaces';
+import {
+  WorkoutResponse,
+  FinishWorkoutRequest,
+  FinishExerciseRequest,
+  FinishExerciseSetRequest
+} from '../model/interfaces';
 import { OrderByPipe } from '../pipes/order-by-pipe';
 
 @Component({
@@ -87,6 +92,7 @@ export class DoWorkout implements OnInit {
       this.exercisesArray.push(
         this.fb.group({
           exerciseId: [exercise.id],
+          completedDate: [new Date().toJSON()],
           sets: setsArray
         })
       );
@@ -97,32 +103,39 @@ export class DoWorkout implements OnInit {
 
   submit() {
 
-    let request: FinishWorkoutRequest = {
+    const request: FinishWorkoutRequest = {
       workoutId: this.id!,
       completedDate: new Date(),
       completedNotes: null,
-      completedExerciseSets: []
+      completedExercises: []
     };
 
-    for (const exercise of this.form.value.exercises??[]) {
-      exercise.sets.forEach((set:FinishExerciseSetRequest) => {
-        request.completedExerciseSets.push({
-          exerciseSetId: set.exerciseSetId,
-          completedDate: set.completedDate,
-          setNumber: set.setNumber,
+    for (const exercise of this.form.value.exercises ?? []) {
+
+      const completedExercise: FinishExerciseRequest = {
+        exerciseId: exercise.exerciseId!,
+        completedDate: exercise.completedDate!,
+        exerciseNumber: 0,
+        completedExerciseSets: []
+      };
+
+      for (const set of exercise.sets ?? []) {
+        completedExercise.completedExerciseSets.push({
+          exerciseSetId: set.exerciseSetId!,
+          completedDate: set.completedDate!,
+          setNumber: set.setNumber!,
           reps: set.reps,
           weight: set.weight,
           duration: set.duration
-        })
-      });
+        });
+      }
+
+      request.completedExercises.push(completedExercise);
     }
-    
+
     this.completedWorkoutsService.create(request).subscribe({
-      next: (result) => {
-        this.router.navigate(['/completed-workouts']);
-      },
+      next: () => this.router.navigate(['/completed-workouts']),
       error: err => console.error(err)
     });
   }
-
 }

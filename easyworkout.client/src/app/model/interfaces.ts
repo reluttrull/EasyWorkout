@@ -43,6 +43,13 @@ export interface FinishWorkoutRequest {
   workoutId: string;
   completedDate: Date;
   completedNotes?: string | null;
+  completedExercises: FinishExerciseRequest[];
+}
+
+export interface FinishExerciseRequest {
+  exerciseId: string;
+  completedDate: Date;
+  exerciseNumber: number;
   completedExerciseSets: FinishExerciseSetRequest[];
 }
 
@@ -77,6 +84,17 @@ export interface CompletedWorkoutResponse {
   originalNotes?: string | null;
   completedDate: Date;
   completedNotes?: string | null;
+  completedExercises: CompletedExerciseResponse[]
+}
+
+export interface CompletedExerciseResponse {
+  id: string;
+  exerciseId: string;
+  completedByUserId: string;
+  name?: string | null;
+  originalNotes?: string | null;
+  completedNotes?: string | null;
+  completedDate: Date;
   completedExerciseSets: CompletedExerciseSetResponse[]
 }
 

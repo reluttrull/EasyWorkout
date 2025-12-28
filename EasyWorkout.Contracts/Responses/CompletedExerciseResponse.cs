@@ -5,15 +5,15 @@ using System.Text;
 
 namespace EasyWorkout.Contracts.Responses
 {
-    public class CompletedWorkoutResponse
+    public class CompletedExerciseResponse
     {
         public required Guid Id { get; init; }
+        public required Guid ExerciseId { get; init; }
         public required Guid CompletedByUserId { get; init; }
-        public Guid WorkoutId { get; init; }
-        public string? OriginalName { get; init; }
+        public string? Name { get; init; }
         public string? OriginalNotes { get; init; }
+        public string? CompletedNotes { get; init; }
         public required DateTime CompletedDate { get; init; }
-        public string? CompletedNotes { get; set; }
-        public required IEnumerable<CompletedExerciseResponse> CompletedExercises { get; init; } = [];
+        public required IEnumerable<CompletedExerciseSetResponse> CompletedExerciseSets { get; init; } = [];
     }
 }

@@ -7,18 +7,28 @@
     @if (completedWorkout().originalNotes) { 
         <div><em>Original Notes: </em> {{ completedWorkout().originalNotes }}</div>
     }
-    @for (set of completedWorkout().completedExerciseSets | orderBy:'setNumber':'asc' | orderBy:'exerciseName':'asc'; track set.id) {
-        <h4>{{ set.exerciseName }} - Set #{{ set.setNumber }}</h4>
-        @if (set.goalReps) {
-            <div>{{ set.reps }} / {{ set.goalReps }} reps</div>
-        }
-        @if (set.goalWeight) {
-            <div>{{ set.weight }} / {{ set.goalWeight }} {{ set.weightUnit }}</div>
-        }
-        @if (set.goalDuration) {
-            <div>{{ set.duration }} / {{ set.goalDuration }} {{ set.durationUnit }}</div>
+    @for (exercise of completedWorkout().completedExercises; track exercise.id) {
+        <h4>{{ exercise.name }}</h4>
+
+        @for (set of exercise.completedExerciseSets | orderBy:'setNumber':'asc'; track set.id) {
+            <div>
+                <strong>Set #{{ set.setNumber }}</strong>
+
+                @if (set.reps || set.goalReps) {
+                    <div>{{ set.reps }} / {{ set.goalReps }} reps</div>
+                }
+
+                @if (set.goalWeight || set.goalWeight) {
+                    <div>{{ set.weight }} / {{ set.goalWeight }} {{ set.weightUnit }}</div>
+                }
+
+                @if (set.duration || set.goalDuration) {
+                    <div>{{ set.duration }} / {{ set.goalDuration }} {{ set.durationUnit }}</div>
+                }
+            </div>
         }
     }
+
     <button (click)="edit()">Edit completed workout</button>
     <button (click)="delete()">Delete workout</button>
     @if (isEditMode) {

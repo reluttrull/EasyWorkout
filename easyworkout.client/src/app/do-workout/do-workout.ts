@@ -61,13 +61,7 @@ export class DoWorkout implements OnInit {
   initForm() {
     this.exercisesArray.clear();
 
-    const orderedExercises = this.orderByPipe.transform(
-      this.workoutGoal().exercises,
-      'addedDate',
-      'asc'
-    );
-
-    for (const exercise of orderedExercises) {
+    for (const exercise of this.workoutGoal().exercises) {
       const setsArray = this.fb.array<FormGroup>([]);
 
       exercise.exerciseSets = this.orderByPipe.transform(
@@ -93,12 +87,13 @@ export class DoWorkout implements OnInit {
         this.fb.group({
           exerciseId: [exercise.id],
           completedDate: [new Date().toJSON()],
+          exerciseNumber: [exercise.exerciseNumber],
           sets: setsArray
         })
       );
     }
 
-    this.orderedExercises = orderedExercises;
+    this.orderedExercises = this.workoutGoal().exercises;
   }
 
   submit() {
@@ -115,7 +110,7 @@ export class DoWorkout implements OnInit {
       const completedExercise: FinishExerciseRequest = {
         exerciseId: exercise.exerciseId!,
         completedDate: exercise.completedDate!,
-        exerciseNumber: 0,
+        exerciseNumber: exercise.exerciseNumber!,
         completedExerciseSets: []
       };
 

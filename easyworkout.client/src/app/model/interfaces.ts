@@ -95,6 +95,7 @@ export interface CompletedExerciseResponse {
   originalNotes?: string | null;
   completedNotes?: string | null;
   completedDate: Date;
+
   completedExerciseSets: CompletedExerciseSetResponse[]
 }
 
@@ -129,6 +130,7 @@ export interface ExerciseResponse {
   id: string;
   addedByUserId: string;
   addedDate: Date;
+  exerciseNumber: number;
   name: string;
   notes?: string | null;
   exerciseSets: Set[];

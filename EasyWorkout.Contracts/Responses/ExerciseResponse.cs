@@ -9,6 +9,7 @@ namespace EasyWorkout.Contracts.Responses
         public required Guid Id { get; init; }
         public required Guid AddedByUserId { get; init; }
         public required DateOnly AddedDate { get; init; }
+        public required int ExerciseNumber { get; set; }
         public required string Name { get; set; }
         public string? Notes { get; set; }
         public IEnumerable<ExerciseSetResponse> ExerciseSets { get; init; } = [];

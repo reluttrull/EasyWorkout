@@ -11,7 +11,7 @@ export class WorkoutsService {
   router = inject(Router);
 
   getAll() {
-    return this.http.get<Workout[]>(`${this.baseUrl}/me`);
+    return this.http.get<WorkoutResponse[]>(`${this.baseUrl}/me`);
   }
 
   get(id:string) {

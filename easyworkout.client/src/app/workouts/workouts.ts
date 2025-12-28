@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WorkoutsService } from './workouts.service';
-import { Workout } from '../model/interfaces';
+import { WorkoutResponse } from '../model/interfaces';
 import { WorkoutComponent } from '../components/workout/workout';
 import { CreateWorkout } from '../components/create-workout/create-workout';
 
@@ -12,7 +12,7 @@ import { CreateWorkout } from '../components/create-workout/create-workout';
   styleUrl: './workouts.css'
 })
 export class WorkoutsComponent {
-  workouts = signal<Workout[]>([]);
+  workouts = signal<WorkoutResponse[]>([]);
   isCreateVisible = false;
 
   constructor(private service: WorkoutsService) {

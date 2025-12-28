@@ -128,7 +128,9 @@ namespace EasyWorkout.Api.Mapping
                 Name = workout.Name,
                 Notes = workout.Notes,
                 LastCompletedDate = lastCompletedDate,
-                Exercises = workout.WorkoutExercises.Select(e => e.Exercise.MapToResponse())
+                Exercises = workout.WorkoutExercises
+                    .OrderBy(we => we.ExerciseNumber)
+                    .Select(we => we.Exercise.MapToResponse(we.ExerciseNumber))
             };
         }
 
@@ -141,7 +143,23 @@ namespace EasyWorkout.Api.Mapping
                 AddedDate = workout.AddedDate,
                 Name = workout.Name,
                 Notes = workout.Notes,
-                Exercises = workout.WorkoutExercises.Select(e => e.Exercise.MapToResponse())
+                Exercises = workout.WorkoutExercises
+                    .OrderBy(we => we.ExerciseNumber)
+                    .Select(we => we.Exercise.MapToResponse(we.ExerciseNumber))
+            };
+        }
+
+        public static ExerciseResponse MapToResponse(this Exercise exercise, int exerciseNumber)
+        {
+            return new ExerciseResponse()
+            {
+                Id = exercise.Id,
+                AddedByUserId = exercise.AddedByUserId,
+                AddedDate = exercise.AddedDate,
+                ExerciseNumber = exerciseNumber,
+                Name = exercise.Name,
+                Notes = exercise.Notes,
+                ExerciseSets = exercise.ExerciseSets.Select(es => es.MapToResponse())
             };
         }
 
@@ -152,6 +170,7 @@ namespace EasyWorkout.Api.Mapping
                 Id = exercise.Id,
                 AddedByUserId = exercise.AddedByUserId,
                 AddedDate = exercise.AddedDate,
+                ExerciseNumber = -1, // when not attached to workout
                 Name = exercise.Name,
                 Notes = exercise.Notes,
                 ExerciseSets = exercise.ExerciseSets.Select(es => es.MapToResponse())

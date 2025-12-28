@@ -1,10 +1,14 @@
 <h2>My Exercises</h2>
 <ul>
-@for (exercise of exercises() | orderBy:'addedDate':'asc'; track $index) {
-    <li>
-        <app-exercise [exercise]="exercise" (onExerciseChanged)="reload()" />
-    </li>
-}
+    @if (isLoaded()) {
+        @for (exercise of exercises() | orderBy:'addedDate':'asc'; track $index) {
+            <li>
+                <app-exercise [exercise]="exercise" (onExerciseChanged)="reload()" />
+            </li>
+        }
+    } @else {
+        <mat-spinner></mat-spinner>
+    }
 </ul>
 @if (isCreateVisible) {
     <app-create-exercise (onReturn)="handleCancelCreate()" />

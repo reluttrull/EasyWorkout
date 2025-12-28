@@ -1,4 +1,8 @@
 <h2>Completed Workouts</h2>
-@for (completedWorkout of completedWorkouts() | orderBy:'completedDate':'desc'; track completedWorkout.id) {
-    <app-completed-workout [completedWorkout]="completedWorkout" (onCompletedWorkoutChanged)="reload()"/>
+@if (isLoaded()) {
+    @for (completedWorkout of completedWorkouts() | orderBy:'completedDate':'desc'; track completedWorkout.id) {
+        <app-completed-workout [completedWorkout]="completedWorkout" (onCompletedWorkoutChanged)="reload()"/>
+    }
+} @else {
+    <mat-spinner></mat-spinner>
 }

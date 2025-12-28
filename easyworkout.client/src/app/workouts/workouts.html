@@ -1,11 +1,15 @@
 <div>
     <h2>My Workouts</h2>
     <ul>
-    @for (workout of workouts(); track $index) {
-        <li>
-            <app-workout [workout]="workout" (onWorkoutChanged)="reload()" />
-        </li>
-    }
+        @if (isLoaded()) {
+            @for (workout of workouts(); track $index) {
+                <li>
+                    <app-workout [workout]="workout" (onWorkoutChanged)="reload()" />
+                </li>
+            }
+        } @else {
+            <mat-spinner></mat-spinner>
+        }
     </ul>
     @if (isCreateVisible) {
         <app-create-workout (onReturn)="handleCancelCreate()" />

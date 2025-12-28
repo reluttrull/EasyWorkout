@@ -74,7 +74,7 @@ export class WorkoutComponent {
   }
 
   delete() {
-    if(confirm("Are you sure you want to delete workout " + this.workout().name + "?")) {
+    if(confirm(`Are you sure you want to delete workout ${this.workout().name}?  It will also be deleted from every workout log it's attached to.`)) {
       console.log('id', this.workout().id);
       this.workoutsService.delete(this.workout().id)
         .subscribe({

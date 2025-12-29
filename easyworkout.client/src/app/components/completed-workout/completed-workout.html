@@ -12,7 +12,7 @@
 
         @for (set of exercise.completedExerciseSets | orderBy:'setNumber':'asc'; track set.id) {
             <div>
-                <strong>Set #{{ set.setNumber }}</strong>
+                <strong>Set #{{ set.setNumber + 1 }}</strong>
 
                 @if (set.reps || set.goalReps) {
                     <div>{{ set.reps }} / {{ set.goalReps }} reps</div>

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyWorkout.Application.Migrations
 {
     [DbContext(typeof(WorkoutsContext))]
-    [Migration("20251228203959_InitialCreate")]
+    [Migration("20251229202654_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -44,7 +44,7 @@ namespace EasyWorkout.Application.Migrations
                     b.Property<Guid?>("CompletedWorkoutId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ExerciseId")
+                    b.Property<Guid?>("ExerciseId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("FallbackName")
@@ -79,7 +79,7 @@ namespace EasyWorkout.Application.Migrations
                     b.Property<string>("DurationUnit")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("ExerciseSetId")
+                    b.Property<Guid?>("ExerciseSetId")
                         .HasColumnType("uuid");
 
                     b.Property<double?>("GoalDuration")
@@ -131,7 +131,7 @@ namespace EasyWorkout.Application.Migrations
                         .HasMaxLength(75)
                         .HasColumnType("character varying(75)");
 
-                    b.Property<Guid>("WorkoutId")
+                    b.Property<Guid?>("WorkoutId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -260,8 +260,7 @@ namespace EasyWorkout.Application.Migrations
                     b.HasOne("EasyWorkout.Application.Model.Exercise", "Exercise")
                         .WithMany()
                         .HasForeignKey("ExerciseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Exercise");
                 });
@@ -278,8 +277,7 @@ namespace EasyWorkout.Application.Migrations
                     b.HasOne("EasyWorkout.Application.Model.Workout", "Workout")
                         .WithMany()
                         .HasForeignKey("WorkoutId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Workout");
                 });

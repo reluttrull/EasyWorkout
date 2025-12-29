@@ -8,7 +8,7 @@ namespace EasyWorkout.Application.Model
     {
         [Key]
         public required Guid Id { get; init; }
-        public required Guid ExerciseSetId { get; init; }
+        public required Guid? ExerciseSetId { get; init; } // ok if original gets deleted
         public required DateTime CompletedDate { get; init; }
         [Required]
         [Range(1, 100, ErrorMessage = "Value for {0} must be between {1} and {2}.")]

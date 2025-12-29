@@ -45,23 +45,32 @@ namespace EasyWorkout.Api.Controllers
 
             var completedWorkout = request.MapToCompletedWorkout(userId!.Value);
             // copy values from original workout
-            var basedOnWorkout = await _workoutService.GetByIdAsync(completedWorkout.WorkoutId);
-            if (basedOnWorkout is null) return NotFound();
-            completedWorkout.FallbackName = basedOnWorkout.Name;
+            if (completedWorkout.WorkoutId is not null)
+            {
+                var basedOnWorkout = await _workoutService.GetByIdAsync(completedWorkout.WorkoutId!.Value);
+                if (basedOnWorkout is null) return NotFound();
+                completedWorkout.FallbackName = basedOnWorkout.Name;
+            }
             foreach (CompletedExercise completedExercise in completedWorkout.CompletedExercises)
             {
-                var basedOnExercise = await _exerciseService.GetByIdAsync(completedExercise.ExerciseId);
-                if (basedOnExercise is null) return NotFound();
-                completedExercise.FallbackName = basedOnExercise.Name;
+                if (completedExercise.ExerciseId is not null)
+                {
+                    var basedOnExercise = await _exerciseService.GetByIdAsync(completedExercise.ExerciseId!.Value);
+                    if (basedOnExercise is null) return NotFound();
+                    completedExercise.FallbackName = basedOnExercise.Name;
+                }
                 foreach (CompletedExerciseSet completedExerciseSet in completedExercise.CompletedExerciseSets)
                 {
-                    var basedOnSet = await _exerciseService.GetSetByIdAsync(completedExerciseSet.ExerciseSetId);
-                    if (basedOnSet is null) return NotFound();
-                    completedExerciseSet.DurationUnit = basedOnSet.DurationUnit;
-                    completedExerciseSet.WeightUnit = basedOnSet.WeightUnit;
-                    completedExerciseSet.GoalDuration = basedOnSet.Duration;
-                    completedExerciseSet.GoalWeight = basedOnSet.Weight;
-                    completedExerciseSet.GoalReps = basedOnSet.Reps;
+                    if (completedExerciseSet.ExerciseSetId is not null)
+                    {
+                        var basedOnSet = await _exerciseService.GetSetByIdAsync(completedExerciseSet.ExerciseSetId!.Value);
+                        if (basedOnSet is null) return NotFound();
+                        completedExerciseSet.DurationUnit = basedOnSet.DurationUnit;
+                        completedExerciseSet.WeightUnit = basedOnSet.WeightUnit;
+                        completedExerciseSet.GoalDuration = basedOnSet.Duration;
+                        completedExerciseSet.GoalWeight = basedOnSet.Weight;
+                        completedExerciseSet.GoalReps = basedOnSet.Reps;
+                    }
                 }
             }
             await _completedWorkoutService.CreateAsync(completedWorkout, token);

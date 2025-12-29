@@ -8,7 +8,7 @@ namespace EasyWorkout.Contracts.Responses
     public class CompletedExerciseResponse
     {
         public required Guid Id { get; init; }
-        public required Guid ExerciseId { get; init; }
+        public required Guid? ExerciseId { get; init; }
         public required Guid CompletedByUserId { get; init; }
         public string? Name { get; init; }
         public string? OriginalNotes { get; init; }

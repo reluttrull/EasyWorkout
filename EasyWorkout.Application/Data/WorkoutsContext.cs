@@ -9,7 +9,7 @@ namespace EasyWorkout.Application.Data
 {
     public class WorkoutsContext : DbContext
     {
-        public WorkoutsContext(DbContextOptions<WorkoutsContext> options) : base(options) 
+        public WorkoutsContext(DbContextOptions<WorkoutsContext> options) : base(options)
         {
         }
 
@@ -26,6 +26,20 @@ namespace EasyWorkout.Application.Data
         {
             // save enums as strings
             configurationBuilder.Properties<Enum>().HaveConversion<string>();
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<CompletedWorkout>()
+                .HasOne(cw => cw.Workout)
+                .WithMany()
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<CompletedExercise>()
+                .HasOne(ce => ce.Exercise)
+                .WithMany()
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace EasyWorkout.Application.Model
         [Key]
         public required Guid Id { get; init; }
         public required Guid CompletedByUserId { get; init; }
-        public Guid WorkoutId { get; init; }
+        public Guid? WorkoutId { get; init; } // ok if original gets deleted
         [Required]
         [MaxLength(75)]
         public string FallbackName { get; set; } = string.Empty;

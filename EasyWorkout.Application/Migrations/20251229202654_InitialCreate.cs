@@ -71,7 +71,7 @@ namespace EasyWorkout.Application.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     CompletedByUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    WorkoutId = table.Column<Guid>(type: "uuid", nullable: false),
+                    WorkoutId = table.Column<Guid>(type: "uuid", nullable: true),
                     FallbackName = table.Column<string>(type: "character varying(75)", maxLength: 75, nullable: false),
                     CompletedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CompletedNotes = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true)
@@ -84,7 +84,7 @@ namespace EasyWorkout.Application.Migrations
                         column: x => x.WorkoutId,
                         principalTable: "Workouts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -118,7 +118,7 @@ namespace EasyWorkout.Application.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ExerciseId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ExerciseId = table.Column<Guid>(type: "uuid", nullable: true),
                     CompletedByUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CompletedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     FallbackName = table.Column<string>(type: "character varying(75)", maxLength: 75, nullable: false),
@@ -138,7 +138,7 @@ namespace EasyWorkout.Application.Migrations
                         column: x => x.ExerciseId,
                         principalTable: "Exercises",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -146,7 +146,7 @@ namespace EasyWorkout.Application.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ExerciseSetId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ExerciseSetId = table.Column<Guid>(type: "uuid", nullable: true),
                     CompletedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     SetNumber = table.Column<int>(type: "integer", nullable: false),
                     Reps = table.Column<int>(type: "integer", nullable: true),

@@ -9,7 +9,7 @@ namespace EasyWorkout.Application.Model
     {
         [Key]
         public required Guid Id { get; init; }
-        public Guid ExerciseId { get; init; }
+        public Guid? ExerciseId { get; init; } // ok if original gets deleted
         public required Guid CompletedByUserId { get; init; }
         public required DateTime CompletedDate { get; init; }
         [Required]

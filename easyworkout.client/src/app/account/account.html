@@ -1,7 +1,6 @@
 @if (!isEdit()) {
     <h2>Account information</h2>
-    <button matFab extended (click)="toggleIsEdit()" alt="edit account info">
-        <mat-icon>edit</mat-icon>
+    <button matButton="tonal" (click)="toggleIsEdit()" alt="edit account info">
         Edit account info
     </button>
     <div><strong>First name:</strong> {{ user()?.firstName }}</div>

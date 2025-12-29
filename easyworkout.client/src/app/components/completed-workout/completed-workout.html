@@ -1,5 +1,5 @@
 <div class="box">
-    <h3>{{ completedWorkout().originalName }}</h3>
+    <h3>Workout: {{ completedWorkout().originalName }}</h3>
     <div>Workout completed on {{ completedWorkout().completedDate | date:"MMM dd, yyyy 'at' hh:mm a" }}</div>
     @if (completedWorkout().completedNotes) { 
         <div><em>Notes: </em> {{ completedWorkout().completedNotes }}</div>
@@ -8,11 +8,12 @@
         <div><em>Original Notes: </em> {{ completedWorkout().originalNotes }}</div>
     }
     @for (exercise of completedWorkout().completedExercises; track exercise.id) {
-        <h4>{{ exercise.name }}</h4>
+        <div class="box">
+        <h4>Exercise: {{ exercise.name }}</h4>
 
         @for (set of exercise.completedExerciseSets | orderBy:'setNumber':'asc'; track set.id) {
-            <div>
-                <strong>Set #{{ set.setNumber + 1 }}</strong>
+            <div class="borderless-box">
+                <h5>Set #{{ set.setNumber + 1 }}</h5>
 
                 @if (set.reps || set.goalReps) {
                     <div>{{ set.reps }} / {{ set.goalReps }} reps</div>
@@ -27,6 +28,7 @@
                 }
             </div>
         }
+        </div>
     }
     <button matIconButton (click)="edit()" alt="edit completed workout">
         <mat-icon>edit</mat-icon>

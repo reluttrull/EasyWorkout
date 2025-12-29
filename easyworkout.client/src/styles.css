@@ -6,6 +6,35 @@ ul {
     list-style-type: none;
 }
 
+body {
+  font-family: "Arvo", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: bold;
+  font-style: normal;
+}
+
+h1 {
+    font-size: 2.8em;
+}
+h2 {
+    font-size: 2.2em;
+}
+h3 {
+    font-size: 1.8em;
+}
+h4 {
+    font-size: 1.5em;
+}
+h5 {
+    font-size: 1.2em;
+}
+
 .error {
     color: red;
     font-weight: bold;

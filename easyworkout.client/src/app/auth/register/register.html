@@ -1,30 +1,34 @@
 <h2>Register</h2>
 
 <form [formGroup]="form" (ngSubmit)="submit()">
-    <div>
-        <label labelfor="userName">Username</label>
-        <input placeholder="Username" formControlName="userName" />
-    </div>
-    <div>
-        <label labelfor="email">Email</label>
-        <input placeholder="Email" formControlName="email" type="email" />
-    </div>
-    <div>
-        <label labelfor="firstName">First name</label>
-        <input placeholder="First Name" formControlName="firstName" />
-    </div>
-    <div>
-        <label labelfor="lastName">Last name</label>
-        <input placeholder="Last Name" formControlName="lastName" />
-    </div>
-    <div>
-        <label labelfor="password">Password</label>
-        <input placeholder="Password" type="password" formControlName="password" />
-    </div>
-    <div>
-        <label labelfor="confirmPassword">Confirm password</label>
-        <input placeholder="Confirm Password" type="password" formControlName="confirmPassword" />
-    </div>
+    <mat-form-field>
+        <mat-label labelfor="userName">Username</mat-label>
+        <input matInput placeholder="Username" formControlName="userName" />
+    </mat-form-field>
+    <br />
+    <mat-form-field>
+        <mat-label labelfor="email">Email</mat-label>
+        <input matInput placeholder="Email" formControlName="email" type="email" />
+    </mat-form-field>
+    <br />
+    <mat-form-field>
+        <mat-label labelfor="firstName">First name</mat-label>
+        <input matInput placeholder="First Name" formControlName="firstName" />
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label labelfor="lastName">Last name</mat-label>
+        <input matInput placeholder="Last Name" formControlName="lastName" />
+    </mat-form-field>
+    <br />
+    <mat-form-field>
+        <mat-label labelfor="password">Password</mat-label>
+        <input matInput placeholder="Password" type="password" formControlName="password" />
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label labelfor="confirmPassword">Confirm password</mat-label>
+        <input matInput placeholder="Confirm Password" type="password" formControlName="confirmPassword" />
+    </mat-form-field>
+    <br />
     <button matFab extended type="submit" alt="register">
         <mat-icon>perm_identity</mat-icon>
         Register

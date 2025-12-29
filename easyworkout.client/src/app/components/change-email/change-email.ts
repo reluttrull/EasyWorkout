@@ -3,12 +3,14 @@ import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 import { AccountService } from '../../account/account.service';
 import { ChangeEmailRequest, UserResponse } from '../../model/interfaces';
 
 @Component({
   selector: 'app-change-email',
-  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule],
+  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule],
   templateUrl: './change-email.html',
   styleUrl: './change-email.css',
 })

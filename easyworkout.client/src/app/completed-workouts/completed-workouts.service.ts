@@ -17,6 +17,10 @@ export class CompletedWorkoutsService {
   getAll() {
     return this.http.get<CompletedWorkoutResponse[]>(`${this.baseUrl}/me`);
   }
+  
+  getLastCompletedDate() {
+    return this.http.get<Date|null>(`${this.baseUrl}/me/latest`);
+  }
 
   create(request: FinishWorkoutRequest) {
     return this.http.post<{ id: string }>(this.baseUrl, request);

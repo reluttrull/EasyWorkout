@@ -38,9 +38,10 @@
         <h2>Edit Workout:</h2>
         <form [formGroup]="form" (ngSubmit)="update()">
             <mat-form-field>
-            <mat-label>Notes</mat-label>
-            <input matInput placeholder="Notes" formControlName="completedNotes" />
+                <mat-label>Notes</mat-label>
+                <textarea matInput class="text-area" placeholder="Notes" formControlName="completedNotes"></textarea>
             </mat-form-field>
+            <br />
             <button matFab extended type="submit" alt="save changes to completed workout">
                 <mat-icon>save</mat-icon>
                 Save changes

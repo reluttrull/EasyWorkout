@@ -3,7 +3,10 @@
         <a href="/" class="logo"><h1>Easy Workout</h1></a>
         <div class="horizontal-flex">
             @if (isLoggedIn()) {
-                <div>{{ user() | greeting }}</div>
+                <div>{{ user()?.userName }}</div>
+                <div><a matButton="text" href="workouts" alt="workouts">Workouts</a></div>
+                <div><a matButton="text" href="exercises" alt="exercises">Exercises</a></div>
+                <div><a matButton="text" href="completed-workouts" alt="completed workouts">Completed Workouts</a></div>
                 <div><a matButton="text" href="account" alt="account info">Account info</a></div>
                 <button matIconButton  (click)="logout()" alt="logout">
                     <mat-icon>logout</mat-icon>

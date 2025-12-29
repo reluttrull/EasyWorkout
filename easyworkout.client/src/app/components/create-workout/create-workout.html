@@ -4,10 +4,12 @@
         <mat-label>Name</mat-label>
         <input matInput placeholder="Name" formControlName="name" />
     </mat-form-field>
+    <br />
     <mat-form-field>
         <mat-label>Notes</mat-label>
-        <input matInput placeholder="Notes" formControlName="notes" />
+        <textarea matInput class="text-area" placeholder="Notes" formControlName="notes"></textarea>
     </mat-form-field>
+    <br />
     <button matFab extended type="submit" alt="save new workout">
         <mat-icon>save</mat-icon>
         Save workout

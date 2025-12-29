@@ -6,13 +6,11 @@
         
         @if (exerciseDetail) {
             <div>
-                <ul>
                 @for (set of exercise().exerciseSets | orderBy:'setNumber':'asc'; track set.id) {
-                    <li>
+                    <div>
                         <app-set [set]="set" [exerciseId]="exercise().id" (onSetChanged)="reload()" />
-                    </li>
+                    </div>
                 }
-                </ul>
                 <button matIconButton (click)="toggleExerciseDetail()" alt="hide set detail">
                     <mat-icon>expand_less</mat-icon>
                 </button>
@@ -56,10 +54,12 @@
                 <mat-label>Name</mat-label>
                 <input matInput placeholder="Name" formControlName="name" />
             </mat-form-field>
+            <br />
             <mat-form-field>
                 <mat-label>Notes</mat-label>
-                <input matInput placeholder="Notes" formControlName="notes" />
+                <textarea matInput class="text-area" placeholder="Notes" formControlName="notes"></textarea>
             </mat-form-field>
+            <br />
             <button matFab extended type="submit" alt="save exercise changes">
                 <mat-icon>save</mat-icon>
                 Save changes

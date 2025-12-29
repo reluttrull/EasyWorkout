@@ -7,13 +7,11 @@
             <div><em>Last completed:</em> {{ workout().lastCompletedDate | date:"MMM dd, yyyy 'at' hh:mm a" }}</div>
         }
         @if (workoutDetail) {
-            <ul>
             @for (exercise of workout().exercises | orderBy:'addedDate':'asc'; track exercise.id) {
-                <li>
+                <div>
                     <app-exercise [exercise]="exercise" [workoutId]="workout().id" (onExerciseChanged)="reloadWorkout()" /> 
-                </li>
+                </div>
             }
-            </ul>
             @if (isAddMode) {
                 <app-add-exercise (onClose)="closeAddExercise()" [workoutId]="workout().id" />
             } @else {
@@ -56,10 +54,12 @@
                 <mat-label>Name</mat-label>
                 <input matInput placeholder="Name" formControlName="name" />
             </mat-form-field>
+            <br />
             <mat-form-field>
                 <mat-label>Notes</mat-label>
-                <input matInput placeholder="Notes" formControlName="notes" />
+                <textarea matInput class="text-area" placeholder="Notes" formControlName="notes"></textarea>
             </mat-form-field>
+            <br />
             <button matFab extended type="submit" alt="save changes to workout">
                 <mat-icon>save</mat-icon>
                 Save changes

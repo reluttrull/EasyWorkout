@@ -31,6 +31,11 @@ ul {
     padding-bottom: 10px;
 }
 
+.text-area {
+    min-width: 500px;
+    min-height: 200px;
+}
+
 button {
     margin: 5px;
 }

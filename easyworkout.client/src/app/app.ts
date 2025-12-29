@@ -4,13 +4,11 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import { AuthService } from './auth/auth.service';
 import { AccountService } from './account/account.service';
-import { GreetingPipe } from './pipes/greeting-pipe';
-import { UserResponse } from './model/interfaces';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatIconModule, MatButtonModule, GreetingPipe],
+  imports: [RouterOutlet, MatIconModule, MatButtonModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

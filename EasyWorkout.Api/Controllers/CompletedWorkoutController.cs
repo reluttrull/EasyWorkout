@@ -121,6 +121,21 @@ namespace EasyWorkout.Api.Controllers
         }
 
         [Authorize(AuthConstants.FreeMemberUserPolicyName)]
+        [HttpGet(Endpoints.CompletedWorkouts.GetLastCompletedDate)]
+        public async Task<IActionResult> GetLastCompletedDate(CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null)
+            {
+                _logger.LogWarning("Userid not found in context.");
+                return BadRequest("User not found.");
+            }
+
+            var lastCompletedDate = await _completedWorkoutService.GetLastCompletedDate(userId!.Value, token);
+            return Ok(lastCompletedDate);
+        }
+
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
         [HttpPut(Endpoints.CompletedWorkouts.Update)]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateCompletedWorkoutRequest request, CancellationToken token)
         {

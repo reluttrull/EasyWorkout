@@ -16,18 +16,20 @@
 } @else {
     <h2>Edit account information:</h2>
     <form [formGroup]="form" (ngSubmit)="submit()">
+        <mat-form-field>
+            <mat-label labelfor="firstName">First name</mat-label>
+            <input matInput placeholder="First Name" formControlName="firstName" />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label labelfor="lastName">Last name</mat-label>
+            <input matInput placeholder="Last Name" formControlName="lastName" />
+        </mat-form-field>
         <div>
-            <label labelfor="firstName">First name</label>
-            <input placeholder="First Name" formControlName="firstName" />
-        </div>
-        <div>
-            <label labelfor="lastName">Last name</label>
-            <input placeholder="Last Name" formControlName="lastName" />
-        </div>
         <button matFab extended type="submit" alt="save changes to account">
             <mat-icon>save</mat-icon>
             Save changes
         </button>
+        </div>
         <div>
             @for (error of validationErrors(); track $index) {
                 <div class="error">{{ error }}</div>

@@ -3,6 +3,8 @@ import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 import { AccountService } from './account.service';
 import { UserResponse, UpdateUserRequest } from '../model/interfaces';
 import { ChangePassword } from '../components/change-password/change-password';
@@ -10,7 +12,8 @@ import { ChangeEmail } from '../components/change-email/change-email';
 
 @Component({
   selector: 'app-account',
-  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule, ChangePassword, ChangeEmail],
+  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, 
+    ChangePassword, ChangeEmail],
   templateUrl: './account.html',
   styleUrl: './account.css',
 })

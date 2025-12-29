@@ -29,15 +29,24 @@
         }
     }
 
-    <button (click)="edit()">Edit completed workout</button>
-    <button (click)="delete()">Delete workout</button>
+    <button matFab extended (click)="edit()" alt="edit completed workout">
+        <mat-icon>edit</mat-icon>
+        Edit completed workout
+    </button>
+    <button matFab extended (click)="delete()" alt="delete completed workout">
+        <mat-icon>delete</mat-icon>
+        Delete completed workout
+    </button>
     @if (isEditMode) {
         <h2>Edit Workout:</h2>
         <form [formGroup]="form" (ngSubmit)="update()">
             <label>Notes</label>
             <input placeholder="Notes" formControlName="completedNotes" />
-            <button type="submit">Save</button>
+            <button matFab extended type="submit" alt="save changes to completed workout">
+                <mat-icon>save</mat-icon>
+                Save changes
+            </button>
         </form>
-        <button (click)="cancelEdit()">Cancel</button>
+        <button matButton="elevated" (click)="cancelEdit()" alt="cancel">Cancel</button>
     }
 </div>

@@ -1,11 +1,13 @@
 <div id="root">
     <div class="two-column-flex-container">
         <a href="/" class="logo"><h1>Easy Workout</h1></a>
-        <div>
+        <div class="horizontal-flex">
             @if (isLoggedIn()) {
                 <div>{{ user() | greeting }}</div>
-                <div><a href="account">Account</a></div>
-                <button (click)="logout()">Logout</button>
+                <div><a matButton="text" href="account" alt="account info">Account info</a></div>
+                <button matIconButton  (click)="logout()" alt="logout">
+                    <mat-icon>logout</mat-icon>
+                </button>
             }
         </div>
     </div>

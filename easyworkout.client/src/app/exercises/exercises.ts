@@ -1,6 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
 import { ExercisesService } from './exercises.service';
 import { ExerciseResponse } from '../model/interfaces';
 import { ExerciseComponent } from '../components/exercise/exercise';
@@ -9,7 +11,7 @@ import { OrderByPipe } from '../pipes/order-by-pipe';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, MatProgressSpinnerModule, ExerciseComponent, CreateExercise, OrderByPipe],
+  imports: [CommonModule, MatProgressSpinnerModule, MatIconModule, MatButtonModule, ExerciseComponent, CreateExercise, OrderByPipe],
   templateUrl: './exercises.html',
   styleUrl: './exercises.css'
 })

@@ -16,22 +16,33 @@
                 <app-add-exercise (onClose)="closeAddExercise()" [workoutId]="workout().id" />
             } @else {
                 <div>
-                    <button (click)="openAddExercise()">Add exercise</button>
+                    <button matFab (click)="toggleWorkoutDetail()" alt="hide exercise detail">
+                        <mat-icon>expand_less</mat-icon>
+                    </button>
+                    <button matFab extended (click)="openAddExercise()" alt="add exercise">
+                        <mat-icon>add</mat-icon>
+                        Add exercise
+                    </button>
                 </div>
             }
         } @else {
             <div><strong>Number of exercises:</strong> {{ workout().exercises.length }}</div>
+            <button matFab (click)="toggleWorkoutDetail()" alt="show exercise detail">
+                <mat-icon>expand_more</mat-icon>
+            </button>
         }
-        <div>
-            @if (!workoutDetail) {
-                <button (click)="toggleWorkoutDetail()">Show exercise detail</button>
-            } @else {
-                <button (click)="toggleWorkoutDetail()">Hide exercise detail</button>
-            }
-        </div>
-        <button (click)="startWorkout()">Start workout!</button>
-        <button (click)="edit()">Edit workout</button>
-        <button (click)="delete()">Delete workout</button>
+        <button matFab extended (click)="startWorkout()" alt="start workout">
+            <mat-icon>fitness_center</mat-icon>
+            Start workout
+        </button>
+        <button matFab extended (click)="edit()" alt="edit workout">
+            <mat-icon>edit</mat-icon>
+            Edit Workout
+        </button>
+        <button matFab extended (click)="delete()" alt="delete workout">
+            <mat-icon>delete</mat-icon>
+            Delete workout
+        </button>
     } @else {
         <h2>Edit Workout:</h2>
         <form [formGroup]="form" (ngSubmit)="update()">
@@ -39,8 +50,11 @@
             <input placeholder="Name" formControlName="name" />
             <label>Notes</label>
             <input placeholder="Notes" formControlName="notes" />
-            <button type="submit">Save</button>
+            <button matFab extended type="submit" alt="save changes to workout">
+                <mat-icon>save</mat-icon>
+                Save changes
+            </button>
         </form>
-        <button (click)="cancelEdit()">Cancel</button>
+        <button matButton="elevated" (click)="cancelEdit()" alt="cancel">Cancel</button>
     }
 </div>

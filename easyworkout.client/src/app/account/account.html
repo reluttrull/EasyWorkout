@@ -1,6 +1,9 @@
 @if (!isEdit()) {
     <h2>Account information</h2>
-    <button (click)="toggleIsEdit()">Edit account info</button>
+    <button matFab extended (click)="toggleIsEdit()" alt="edit account info">
+        <mat-icon>edit</mat-icon>
+        Edit account info
+    </button>
     <div><strong>First name:</strong> {{ user()?.firstName }}</div>
     <div><strong>Last name:</strong> {{ user()?.lastName }}</div>
     @if (user()?.email) {
@@ -12,7 +15,6 @@
     <div><strong>Member since:</strong> {{ user()?.joinedDate }}</div>
 } @else {
     <h2>Edit account information:</h2>
-    <button (click)="toggleIsEdit()">Cancel</button>
     <form [formGroup]="form" (ngSubmit)="submit()">
         <div>
             <label labelfor="firstName">First name</label>
@@ -22,21 +24,29 @@
             <label labelfor="lastName">Last name</label>
             <input placeholder="Last Name" formControlName="lastName" />
         </div>
-        <button type="submit">Save changes</button>
+        <button matFab extended type="submit" alt="save changes to account">
+            <mat-icon>save</mat-icon>
+            Save changes
+        </button>
         <div>
             @for (error of validationErrors(); track $index) {
                 <div class="error">{{ error }}</div>
             }
         </div>
     </form>
+    <button matButton="elevated" (click)="toggleIsEdit()" alt="cancel">Cancel</button>
 }
-@if (changeEmail()) {
-    <app-change-email (onCancel)="toggleChangeEmail()" />
-} @else {
-    <button (click)="toggleChangeEmail()">Change email</button>
-}
-@if (changePassword()) {
-    <app-change-password (onCancel)="toggleChangePassword()" />
-} @else {
-    <button (click)="toggleChangePassword()">Change password</button>
-}
+<div>
+    @if (changeEmail()) {
+        <app-change-email (onCancel)="toggleChangeEmail()" />
+    } @else {
+        <button matButton="tonal" (click)="toggleChangeEmail()" alt="change email">Change email</button>
+    }
+</div>
+<div>
+    @if (changePassword()) {
+        <app-change-password (onCancel)="toggleChangePassword()" />
+    } @else {
+        <button matButton="tonal" (click)="toggleChangePassword()" alt="change password">Change password</button>
+    }
+</div>

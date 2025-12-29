@@ -1,11 +1,16 @@
-@for (exercise of exercises() | orderBy:'addedDate':'asc'; track exercise.id) {
-    <div (click)="add(exercise.id)">
-        <app-exercise-brief [exercise]="exercise" />
-    </div>
-}
-@if (isCreateVisible) {
-    <app-create-exercise (onCreate)="add($event)" (onReturn)="closeCreate()" />
-} @else {
-    <button (click)="toggleIsCreateVisible()">Create new exercise</button>
-}
-<button (click)="close()">Cancel</button>
+<div>
+    @for (exercise of exercises() | orderBy:'addedDate':'asc'; track exercise.id) {
+        <div (click)="add(exercise.id)">
+            <app-exercise-brief [exercise]="exercise" />
+        </div>
+    }
+    @if (isCreateVisible) {
+        <app-create-exercise (onCreate)="add($event)" (onReturn)="closeCreate()" />
+    } @else {
+        <button matFab extended (click)="toggleIsCreateVisible()" alt="create new exercise">
+            <mat-icon>add</mat-icon>
+            Create new exercise
+        </button>
+        <button matButton="elevated" (click)="close()" alt="cancel">Cancel</button>
+    }
+</div>

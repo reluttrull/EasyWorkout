@@ -1,5 +1,7 @@
 import { Component, input, output } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
 import { WorkoutsService } from '../../workouts/workouts.service';
 import { ExercisesService } from '../../exercises/exercises.service';
 import { ExerciseResponse } from '../../model/interfaces';
@@ -9,7 +11,7 @@ import { OrderByPipe } from '../../pipes/order-by-pipe';
 
 @Component({
   selector: 'app-exercise',
-  imports: [ReactiveFormsModule, SetComponent, CreateSet, OrderByPipe],
+  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule, SetComponent, CreateSet, OrderByPipe],
   templateUrl: './exercise.html',
   styleUrl: './exercise.css',
 })

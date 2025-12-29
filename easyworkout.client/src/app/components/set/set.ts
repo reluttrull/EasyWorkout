@@ -1,10 +1,12 @@
 import { Component, input, output, inject } from '@angular/core';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
 import { ExercisesService } from '../../exercises/exercises.service';
 import { ExerciseSetResponse } from '../../model/interfaces';
 
 @Component({
   selector: 'app-set',
-  imports: [],
+  imports: [MatIconModule, MatButtonModule],
   templateUrl: './set.html',
   styleUrl: './set.css',
 })

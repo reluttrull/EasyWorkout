@@ -1,9 +1,14 @@
-<h2>Create an Exercise:</h2>
-<form [formGroup]="form" (ngSubmit)="submit()">
-    <label>Name</label>
-    <input placeholder="Name" formControlName="name" />
-    <label>Notes</label>
-    <input placeholder="Notes" formControlName="notes" />
-    <button type="submit">Create</button>
-</form>
-<button (click)="return()">Cancel</button>
+<div>
+    <h2>Create an Exercise:</h2>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <label>Name</label>
+        <input placeholder="Name" formControlName="name" />
+        <label>Notes</label>
+        <input placeholder="Notes" formControlName="notes" />
+        <button matFab extended type="submit" alt="save new exercise">
+            <mat-icon>save</mat-icon>
+            Save exercise
+        </button>
+    </form>
+    <button matButton="elevated" (click)="return()" alt="cancel create exercise">Cancel</button>
+</div>

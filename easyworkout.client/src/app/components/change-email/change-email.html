@@ -4,11 +4,14 @@
         <label labelfor="email">Email</label>
         <input placeholder="Email" formControlName="email" />
     </div>
-    <button type="submit">Save changes</button>
+    <button matFab extended type="submit" alt="save changes">
+        <mat-icon>save</mat-icon>
+        Save changes
+    </button>
     <div>
         @for (error of validationErrors(); track $index) {
             <div class="error">{{ error }}</div>
         }
     </div>
 </form>
-<button (click)="cancel()">Cancel</button>
+<button matButton="elevated" (click)="cancel()" alt="cancel">Cancel</button>

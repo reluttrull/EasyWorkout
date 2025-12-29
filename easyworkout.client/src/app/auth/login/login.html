@@ -3,7 +3,12 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
     <input placeholder="Username" formControlName="userName" />
     <input placeholder="Password" type="password" formControlName="password" />
-    <button type="submit">Login</button>
+    <div>
+        <button matFab extended type="submit" alt="login">
+            <mat-icon>login</mat-icon>    
+            Login
+        </button>
+    </div>
 </form>
 <div>
     @for (error of validationErrors(); track $index) {

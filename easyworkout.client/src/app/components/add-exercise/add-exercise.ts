@@ -1,4 +1,6 @@
 import { Component, input, output, signal, inject } from '@angular/core';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
 import { ExerciseResponse } from '../../model/interfaces';
 import { WorkoutsService } from '../../workouts/workouts.service';
 import { ExercisesService } from '../../exercises/exercises.service';
@@ -8,7 +10,7 @@ import { OrderByPipe } from '../../pipes/order-by-pipe';
 
 @Component({
   selector: 'app-add-exercise',
-  imports: [ExerciseBrief, CreateExercise, OrderByPipe],
+  imports: [MatIconModule, MatButtonModule, ExerciseBrief, CreateExercise, OrderByPipe],
   templateUrl: './add-exercise.html',
   styleUrl: './add-exercise.css',
 })

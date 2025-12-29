@@ -1,35 +1,50 @@
-<div class="box">
+<div class="box exercise">
     @if (!isEditMode) {
         <h3><strong>Exercise:</strong> {{ exercise().name }}</h3>
         <div><strong>Notes:</strong> {{ exercise().notes }}</div>
         <div><strong>Date created:</strong> {{ exercise().addedDate }}</div>
         
         @if (exerciseDetail) {
-            <ul>
-            @for (set of exercise().exerciseSets | orderBy:'setNumber':'asc'; track set.id) {
-                <li>
-                    <app-set [set]="set" [exerciseId]="exercise().id" (onSetChanged)="reload()" />
-                </li>
-            }
-            </ul>
-            @if (isCreateSetVisible) {
-                <app-create-set [exerciseId]="exercise().id" (onCreate)="reload()" (onReturn)="returnCreateSet()" />
-            } @else {
-                <button (click)="clickCreateSet()">Create set</button>
-            }
+            <div>
+                <ul>
+                @for (set of exercise().exerciseSets | orderBy:'setNumber':'asc'; track set.id) {
+                    <li>
+                        <app-set [set]="set" [exerciseId]="exercise().id" (onSetChanged)="reload()" />
+                    </li>
+                }
+                </ul>
+                <button matFab (click)="toggleExerciseDetail()" alt="hide set detail">
+                    <mat-icon>expand_less</mat-icon>
+                </button>
+                @if (isCreateSetVisible) {
+                    <app-create-set [exerciseId]="exercise().id" (onCreate)="reload()" (onReturn)="returnCreateSet()" />
+                } @else {
+                    <button matFab extended (click)="clickCreateSet()" alt="create set">
+                        <mat-icon>add</mat-icon>
+                        Add set
+                    </button>
+                }
+            </div>
         } @else {
             <div><strong>Number of sets:</strong> {{ exercise().exerciseSets.length }}</div>
+            <button matFab (click)="toggleExerciseDetail()" alt="show set detail">
+                <mat-icon>expand_more</mat-icon>
+            </button>
         }
-        @if (!exerciseDetail) {
-            <button (click)="toggleExerciseDetail()">Show set detail</button>
-        } @else {
-            <button (click)="toggleExerciseDetail()">Hide set detail</button>
-        }
-        <button (click)="edit()">Edit exercise</button>
+        <button matFab extended (click)="edit()" alt="edit exercise">
+            <mat-icon>edit</mat-icon>
+            Edit exercise
+        </button>
         @if (workoutId()) {
-            <button (click)="remove(exercise().id)">Remove exercise</button>
+            <button matFab extended (click)="remove(exercise().id)" alt="remove exercise from workout">
+                <mat-icon>remove</mat-icon>
+                Remove exercise
+            </button>
         }
-        <button (click)="delete(exercise().id)">Delete exercise</button>
+        <button matFab extended (click)="delete(exercise().id)" alt="delete exercise">
+            <mat-icon>delete</mat-icon>
+            Delete exercise
+        </button>
     } @else {
         <h2>Edit Exercise:</h2>
         <form [formGroup]="form" (ngSubmit)="update()">
@@ -37,8 +52,11 @@
             <input placeholder="Name" formControlName="name" />
             <label>Notes</label>
             <input placeholder="Notes" formControlName="notes" />
-            <button type="submit">Save</button>
+            <button matFab extended type="submit" alt="save exercise changes">
+                <mat-icon>save</mat-icon>
+                Save changes
+            </button>
         </form>
-        <button (click)="cancelEdit()">Cancel</button>
+        <button matButton="elevated" (click)="cancelEdit()" alt="cancel edit exercise">Cancel</button>
     }
 </div>

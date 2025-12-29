@@ -1,6 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
 import { AccountService } from './account.service';
 import { UserResponse, UpdateUserRequest } from '../model/interfaces';
 import { ChangePassword } from '../components/change-password/change-password';
@@ -8,7 +10,7 @@ import { ChangeEmail } from '../components/change-email/change-email';
 
 @Component({
   selector: 'app-account',
-  imports: [ReactiveFormsModule, ChangePassword, ChangeEmail],
+  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule, ChangePassword, ChangeEmail],
   templateUrl: './account.html',
   styleUrl: './account.css',
 })

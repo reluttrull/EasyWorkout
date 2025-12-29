@@ -1,12 +1,14 @@
 import { Component, input, output, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
 import { ExercisesService } from '../../exercises/exercises.service';
 import { WeightUnit, DurationUnit } from '../../model/enums';
 import { CreateSetRequest } from '../../model/interfaces';
 
 @Component({
   selector: 'app-create-set',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule],
   templateUrl: './create-set.html',
   styleUrl: './create-set.css',
 })

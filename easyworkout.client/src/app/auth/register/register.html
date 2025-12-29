@@ -25,7 +25,10 @@
         <label labelfor="confirmPassword">Confirm password</label>
         <input placeholder="Confirm Password" type="password" formControlName="confirmPassword" />
     </div>
-    <button type="submit">Register</button>
+    <button matFab extended type="submit" alt="register">
+        <mat-icon>perm_identity</mat-icon>
+        Register
+    </button>
     <div>
         @for (error of validationErrors(); track $index) {
             <div class="error">{{ error }}</div>

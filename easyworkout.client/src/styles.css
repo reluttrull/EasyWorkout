@@ -13,6 +13,11 @@ ul {
     padding: 5px;
 }
 
+.borderless-box {
+    margin: 5px;
+    padding: 5px;
+}
+
 .two-column-flex-container {
     display: flex;
     justify-content: space-between;
@@ -20,4 +25,16 @@ ul {
     gap: 10px;
     width: 100%;
     padding-bottom: 10px;
+}
+
+button {
+    margin: 5px;
+}
+
+button > * {
+    font-size: 14px;
+}
+
+label {
+    padding: 5px;
 }

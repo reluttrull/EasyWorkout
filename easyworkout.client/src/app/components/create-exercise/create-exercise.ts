@@ -1,12 +1,14 @@
 import { Component, output } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
 import { ExercisesService } from '../../exercises/exercises.service';
 import { CreateExerciseRequest } from '../../model/interfaces';
 
 @Component({
   selector: 'app-create-exercise',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule],
   templateUrl: './create-exercise.html',
   styleUrl: './create-exercise.css',
 })

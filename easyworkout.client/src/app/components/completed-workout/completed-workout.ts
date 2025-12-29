@@ -1,13 +1,15 @@
 import { Component, input, output, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
 import { OrderByPipe } from '../../pipes/order-by-pipe';
 import { CompletedWorkoutsService } from '../../completed-workouts/completed-workouts.service';
 import { CompletedWorkoutResponse } from '../../model/interfaces';
 
 @Component({
   selector: 'app-completed-workout',
-  imports: [ReactiveFormsModule, DatePipe, OrderByPipe],
+  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule, DatePipe, OrderByPipe],
   providers: [DatePipe],
   templateUrl: './completed-workout.html',
   styleUrl: './completed-workout.css',

@@ -1,12 +1,14 @@
 import { Component, inject, output, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
 import { AccountService } from '../../account/account.service';
 import { ChangePasswordRequest, UserResponse } from '../../model/interfaces';
 
 @Component({
   selector: 'app-change-password',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule],
   templateUrl: './change-password.html',
   styleUrl: './change-password.css',
 })

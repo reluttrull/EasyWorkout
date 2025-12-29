@@ -1,6 +1,6 @@
-<div>
+<div class="borderless-box">
     @for (exercise of exercises() | orderBy:'addedDate':'asc'; track exercise.id) {
-        <div (click)="add(exercise.id)">
+        <div class="box" (click)="add(exercise.id)">
             <app-exercise-brief [exercise]="exercise" />
         </div>
     }

@@ -50,10 +50,14 @@
     } @else {
         <h2>Edit Workout:</h2>
         <form [formGroup]="form" (ngSubmit)="update()">
-            <label>Name</label>
-            <input placeholder="Name" formControlName="name" />
-            <label>Notes</label>
-            <input placeholder="Notes" formControlName="notes" />
+            <mat-form-field>
+                <mat-label>Name</mat-label>
+                <input matInput placeholder="Name" formControlName="name" />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Notes</mat-label>
+                <input matInput placeholder="Notes" formControlName="notes" />
+            </mat-form-field>
             <button matFab extended type="submit" alt="save changes to workout">
                 <mat-icon>save</mat-icon>
                 Save changes

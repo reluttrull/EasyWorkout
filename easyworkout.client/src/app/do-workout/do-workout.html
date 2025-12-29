@@ -12,17 +12,26 @@
             <span>Set {{ set.setNumber }}:</span>
 
             @if (set.reps) {
-              <input type="number" title="reps" formControlName="reps" /> /
+              <mat-form-field>
+                <mat-label labelfor="reps">Reps</mat-label>
+                <input matInput type="number" title="reps" formControlName="reps" />
+              </mat-form-field> /
               <span>{{ set.reps }} reps</span>
             }
 
             @if (set.weight) {
-              - <input type="number" title="weight" formControlName="weight" /> /
+              <mat-form-field>
+                <mat-label labelfor="weight">Weight</mat-label>
+                <input matInput type="number" title="weight" formControlName="weight" />
+              </mat-form-field> /
               <span>{{ set.weight }} {{ set.weightUnit }}</span>
             }
 
             @if (set.duration) {
-              - <input type="number" title="duration" formControlName="duration" /> /
+              <mat-form-field>
+                <mat-label labelfor="duration">Duration</mat-label>
+                <input matInput type="number" title="duration" formControlName="duration" />
+              </mat-form-field> /
               <span>{{ set.duration }} {{ set.durationUnit }}</span>
             }
           </div>
@@ -31,5 +40,5 @@
     </div>
   }
 
-  <button (click)="submit()">Finish and save</button>
+  <button matButton="filled" (click)="submit()" alt="finish and save">Finish and save</button>
 </form>

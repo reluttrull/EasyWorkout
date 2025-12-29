@@ -3,6 +3,8 @@ import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 import { WorkoutsService } from '../../workouts/workouts.service';
 import { ExercisesService } from '../../exercises/exercises.service';
 import { ExerciseResponse } from '../../model/interfaces';
@@ -12,7 +14,8 @@ import { OrderByPipe } from '../../pipes/order-by-pipe';
 
 @Component({
   selector: 'app-exercise',
-  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule, MatMenuModule, SetComponent, CreateSet, OrderByPipe],
+  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule,
+    MatFormFieldModule, MatInputModule, MatMenuModule, SetComponent, CreateSet, OrderByPipe],
   templateUrl: './exercise.html',
   styleUrl: './exercise.css',
 })

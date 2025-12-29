@@ -1,6 +1,9 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 import { WorkoutsService } from '../workouts/workouts.service';
 import { CompletedWorkoutsService } from '../completed-workouts/completed-workouts.service';
 import {
@@ -14,7 +17,7 @@ import { OrderByPipe } from '../pipes/order-by-pipe';
 @Component({
   selector: 'app-do-workout',
   providers: [OrderByPipe],
-  imports: [ReactiveFormsModule],
+  imports: [MatButtonModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
   templateUrl: './do-workout.html',
   styleUrl: './do-workout.css',
 })

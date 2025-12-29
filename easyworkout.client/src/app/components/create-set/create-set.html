@@ -1,30 +1,40 @@
 <h2>Add a set:</h2>
 <form [formGroup]="form" (ngSubmit)="submit()">
     <div>
-        <label>Reps</label>
-        <input placeholder="Reps" formControlName="reps" type="number" />
+        <mat-form-field>
+            <mat-label>Reps</mat-label>
+            <input matInput placeholder="Reps" formControlName="reps" type="number" />
+        </mat-form-field>
     </div>
     <div>
-        <label>Weight</label>
-        <input placeholder="Weight" formControlName="weight" type="number" />
-        <label>Weight units:</label>
-        <select title="Weight Units" placeholder="Weight Units" formControlName="weightUnit">
-            <option value="">--Please choose an option--</option>
-            @for (weightUnit of weightUnitOptions; track $index) {
-                <option [value]="weightUnit">{{weightUnit}}</option>
-            }
-        </select>
+        <mat-form-field>
+            <mat-label>Weight</mat-label>
+            <input matInput placeholder="Weight" formControlName="weight" type="number" />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Weight units:</mat-label>
+            <mat-select matInput title="Weight Units" placeholder="Weight Units" formControlName="weightUnit">
+                <mat-option value="">--Please choose an option--</mat-option>
+                @for (weightUnit of weightUnitOptions; track $index) {
+                    <mat-option [value]="weightUnit">{{weightUnit}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
     </div>
     <div>
-        <label>Duration</label>
-        <input placeholder="Duration" formControlName="duration" type="number" />
-        <label>Duration units:</label>
-        <select title="Duration Units" placeholder="Duration Units" formControlName="durationUnit">
-            <option value="">--Please choose an option--</option>
-            @for (durationUnit of durationUnitOptions; track $index) {
-                <option [value]="durationUnit">{{durationUnit}}</option>
-            }
-        </select>
+        <mat-form-field>
+            <mat-label>Duration</mat-label>
+            <input matInput placeholder="Duration" formControlName="duration" type="number" />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Duration units:</mat-label>
+            <mat-select title="Duration Units" placeholder="Duration Units" formControlName="durationUnit">
+                <mat-option value="">--Please choose an option--</mat-option>
+                @for (durationUnit of durationUnitOptions; track $index) {
+                    <mat-option [value]="durationUnit">{{durationUnit}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
     </div>
     <button matFab extended type="submit" alt="save new set">
         <mat-icon>save</mat-icon>

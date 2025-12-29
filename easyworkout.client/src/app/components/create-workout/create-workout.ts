@@ -3,12 +3,14 @@ import { Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 import { WorkoutsService } from '../../workouts/workouts.service';
 import { CreateWorkoutRequest } from '../../model/interfaces';
 
 @Component({
   selector: 'app-create-workout',
-  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule],
+  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule],
   templateUrl: './create-workout.html',
   styleUrl: './create-workout.css',
 })

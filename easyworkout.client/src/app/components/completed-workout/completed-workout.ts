@@ -3,13 +3,16 @@ import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 import { OrderByPipe } from '../../pipes/order-by-pipe';
 import { CompletedWorkoutsService } from '../../completed-workouts/completed-workouts.service';
 import { CompletedWorkoutResponse } from '../../model/interfaces';
 
 @Component({
   selector: 'app-completed-workout',
-  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule, DatePipe, OrderByPipe],
+  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule,
+    MatFormFieldModule, MatInputModule, DatePipe, OrderByPipe],
   providers: [DatePipe],
   templateUrl: './completed-workout.html',
   styleUrl: './completed-workout.css',

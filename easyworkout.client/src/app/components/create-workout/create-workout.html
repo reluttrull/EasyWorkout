@@ -4,6 +4,11 @@
     <input placeholder="Name" formControlName="name" />
     <label>Notes</label>
     <input placeholder="Notes" formControlName="notes" />
-    <button type="submit">Create</button>
+    <div>
+        <button matFab extended type="submit" alt="save new workout">
+            <mat-icon>save</mat-icon>
+            Save workout
+        </button>
+    </div>
 </form>
-<button (click)="return()">Cancel</button>
+<button matButton="elevated" (click)="return()" alt="cancel">Cancel</button>

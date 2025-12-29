@@ -13,38 +13,42 @@
                     </li>
                 }
                 </ul>
-                <button matFab (click)="toggleExerciseDetail()" alt="hide set detail">
+                <button matIconButton (click)="toggleExerciseDetail()" alt="hide set detail">
                     <mat-icon>expand_less</mat-icon>
                 </button>
                 @if (isCreateSetVisible) {
                     <app-create-set [exerciseId]="exercise().id" (onCreate)="reload()" (onReturn)="returnCreateSet()" />
                 } @else {
-                    <button matFab extended (click)="clickCreateSet()" alt="create set">
-                        <mat-icon>add</mat-icon>
+                    <button matButton="elevated" extended (click)="clickCreateSet()" alt="create set">
                         Add set
                     </button>
                 }
             </div>
         } @else {
             <div><strong>Number of sets:</strong> {{ exercise().exerciseSets.length }}</div>
-            <button matFab (click)="toggleExerciseDetail()" alt="show set detail">
+            <button matIconButton (click)="toggleExerciseDetail()" alt="show set detail">
                 <mat-icon>expand_more</mat-icon>
             </button>
         }
-        <button matFab extended (click)="edit()" alt="edit exercise">
-            <mat-icon>edit</mat-icon>
-            Edit exercise
+        <button matIconButton [matMenuTriggerFor]="menu" aria-label="menu for exercise-related buttons">
+            <mat-icon>more_vert</mat-icon>
         </button>
-        @if (workoutId()) {
-            <button matFab extended (click)="remove(exercise().id)" alt="remove exercise from workout">
-                <mat-icon>remove</mat-icon>
-                Remove exercise
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="edit()" alt="edit exercise">
+                <mat-icon>edit</mat-icon>
+                <span>Edit exercise</span>
             </button>
-        }
-        <button matFab extended (click)="delete(exercise().id)" alt="delete exercise">
-            <mat-icon>delete</mat-icon>
-            Delete exercise
-        </button>
+            @if (workoutId()) {
+                <button mat-menu-item (click)="remove(exercise().id)" alt="remove exercise from workout">
+                    <mat-icon>remove</mat-icon>
+                    <span>Remove exercise</span>
+                </button>
+            }
+            <button mat-menu-item (click)="delete(exercise().id)" alt="delete exercise">
+                <mat-icon>delete</mat-icon>
+                <span>Delete exercise</span>
+            </button>
+        </mat-menu>
     } @else {
         <h2>Edit Exercise:</h2>
         <form [formGroup]="form" (ngSubmit)="update()">

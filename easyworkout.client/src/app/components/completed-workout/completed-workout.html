@@ -28,14 +28,11 @@
             </div>
         }
     }
-
-    <button matFab extended (click)="edit()" alt="edit completed workout">
+    <button matIconButton (click)="edit()" alt="edit completed workout">
         <mat-icon>edit</mat-icon>
-        Edit completed workout
     </button>
-    <button matFab extended (click)="delete()" alt="delete completed workout">
+    <button matIconButton (click)="delete()" alt="delete completed workout">
         <mat-icon>delete</mat-icon>
-        Delete completed workout
     </button>
     @if (isEditMode) {
         <h2>Edit Workout:</h2>

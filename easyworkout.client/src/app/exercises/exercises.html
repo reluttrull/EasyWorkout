@@ -13,8 +13,7 @@
 @if (isCreateVisible) {
     <app-create-exercise (onReturn)="handleCancelCreate()" />
 } @else {
-    <button matFab extended (click)="showAddExercise()" alt="add exercise">
-        <mat-icon>add</mat-icon>
-        Exercise
+    <button matButton="elevated" (click)="showAddExercise()" alt="add exercise">
+        Create new exercise
     </button>
 }

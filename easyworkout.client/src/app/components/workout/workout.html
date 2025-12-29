@@ -16,33 +16,37 @@
                 <app-add-exercise (onClose)="closeAddExercise()" [workoutId]="workout().id" />
             } @else {
                 <div>
-                    <button matFab (click)="toggleWorkoutDetail()" alt="hide exercise detail">
+                    <button matIconButton (click)="toggleWorkoutDetail()" alt="hide exercise detail">
                         <mat-icon>expand_less</mat-icon>
                     </button>
-                    <button matFab extended (click)="openAddExercise()" alt="add exercise">
-                        <mat-icon>add</mat-icon>
+                    <button matButton="elevated" (click)="openAddExercise()" alt="add exercise">
                         Add exercise
                     </button>
                 </div>
             }
         } @else {
             <div><strong>Number of exercises:</strong> {{ workout().exercises.length }}</div>
-            <button matFab (click)="toggleWorkoutDetail()" alt="show exercise detail">
+            <button matIconButton (click)="toggleWorkoutDetail()" alt="show exercise detail">
                 <mat-icon>expand_more</mat-icon>
             </button>
         }
-        <button matFab extended (click)="startWorkout()" alt="start workout">
-            <mat-icon>fitness_center</mat-icon>
-            Start workout
+        <button matIconButton [matMenuTriggerFor]="menu" aria-label="menu for workout-related buttons">
+            <mat-icon>more_vert</mat-icon>
         </button>
-        <button matFab extended (click)="edit()" alt="edit workout">
-            <mat-icon>edit</mat-icon>
-            Edit Workout
-        </button>
-        <button matFab extended (click)="delete()" alt="delete workout">
-            <mat-icon>delete</mat-icon>
-            Delete workout
-        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="startWorkout()" alt="start workout">
+                <mat-icon>fitness_center</mat-icon>
+                <span>Start workout</span>
+            </button>
+            <button mat-menu-item (click)="edit()" alt="edit workout">
+                <mat-icon>edit</mat-icon>
+                <span>Edit Workout</span>
+            </button>
+            <button mat-menu-item (click)="delete()" alt="delete workout">
+                <mat-icon>delete</mat-icon>
+                <span>Delete workout</span>
+            </button>
+        </mat-menu>
     } @else {
         <h2>Edit Workout:</h2>
         <form [formGroup]="form" (ngSubmit)="update()">

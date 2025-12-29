@@ -2,8 +2,9 @@ import { Component, input, output, inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import {MatIconModule} from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
 import { WorkoutResponse } from '../../model/interfaces';
 import { ExerciseComponent } from '../exercise/exercise';
 import { AddExercise } from '../add-exercise/add-exercise';
@@ -12,7 +13,7 @@ import { OrderByPipe } from '../../pipes/order-by-pipe';
 
 @Component({
   selector: 'app-workout',
-  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule, ExerciseComponent, AddExercise, DatePipe, OrderByPipe],
+  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule, MatMenuModule, ExerciseComponent, AddExercise, DatePipe, OrderByPipe],
   templateUrl: './workout.html',
   styleUrl: './workout.css',
 })

@@ -7,9 +7,9 @@ namespace EasyWorkout.Contracts.Requests
 {
     public class UpdateUserRequest
     {
-        [MaxLength(100)]
+        [MaxLength(100, ErrorMessage = "{0} must be {1} characters or fewer.")]
         public string FirstName { get; set; } = string.Empty;
-        [MaxLength(100)]
+        [MaxLength(100, ErrorMessage = "{0} must be {1} characters or fewer.")]
         public string LastName { get; set; } = string.Empty;
     }
 }

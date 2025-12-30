@@ -15,6 +15,9 @@ namespace EasyWorkout.Application.Model
         [Required]
         [MaxLength(75)]
         public string FallbackName { get; set; } = string.Empty;
+        [Required]
+        [Range(0, 100, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
+        public required int ExerciseNumber { get; set; }
         public string Name => Exercise?.Name ?? FallbackName; // existing exercise name, or fallback name if deleted
         [MaxLength(250)]
         public string? CompletedNotes { get; set; }

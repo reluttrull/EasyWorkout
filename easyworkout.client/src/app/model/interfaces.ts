@@ -124,7 +124,6 @@ export interface CreateSetRequest {
   weightUnit?: WeightUnit | null;
   duration?: number | null;
   durationUnit?: DurationUnit | null;
-  notes?: string | null;
 }
 
 export interface UpdateUserRequest {

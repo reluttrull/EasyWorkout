@@ -70,11 +70,13 @@ namespace EasyWorkout.Application.Services
             return completedWorkout;
         }
 
-        public async Task<DateTime?> GetLastCompletedDate(Guid userId, CancellationToken token = default)
+        public async Task<DateTime?> GetLastCompletedDateOrDefault(Guid userId, CancellationToken token = default)
         {
             return await _workoutsContext.CompletedWorkouts
                 .Where(cw => cw.CompletedByUserId == userId)
-                .MaxAsync(cw => cw.CompletedDate);
+                .OrderByDescending(cw => cw.CompletedDate)
+                .Select(cw => cw.CompletedDate)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<CompletedWorkout?> UpdateAsync(Guid id, UpdateCompletedWorkoutRequest request, CancellationToken token = default)

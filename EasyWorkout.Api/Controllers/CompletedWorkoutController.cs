@@ -131,7 +131,7 @@ namespace EasyWorkout.Api.Controllers
                 return BadRequest("User not found.");
             }
 
-            var lastCompletedDate = await _completedWorkoutService.GetLastCompletedDate(userId!.Value, token);
+            var lastCompletedDate = await _completedWorkoutService.GetLastCompletedDateOrDefault(userId!.Value, token);
             return Ok(lastCompletedDate);
         }
 

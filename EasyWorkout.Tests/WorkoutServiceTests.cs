@@ -25,7 +25,7 @@ namespace EasyWorkout.Tests
                 AddedByUserId = Guid.NewGuid(),
                 AddedDate = DateOnly.FromDateTime(DateTime.Now),
                 Name = "Workout",
-                Exercises = []
+                WorkoutExercises = []
             };
 
             await using (var context = new WorkoutsContext(options))
@@ -75,7 +75,7 @@ namespace EasyWorkout.Tests
                     AddedByUserId = Guid.NewGuid(),
                     AddedDate = DateOnly.FromDateTime(DateTime.Now),
                     Name = "Workout",
-                    Exercises = []
+                    WorkoutExercises = []
                 };
 
                 var success = await workoutService.CreateAsync(workout);

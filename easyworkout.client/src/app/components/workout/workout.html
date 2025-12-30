@@ -64,6 +64,11 @@
                 <mat-icon>save</mat-icon>
                 Save changes
             </button>
+            <div>
+                @for (error of validationErrors(); track $index) {
+                    <div class="error">{{ error }}</div>
+                }
+            </div>
         </form>
         <button matButton="elevated" (click)="cancelEdit()" alt="cancel">Cancel</button>
     }

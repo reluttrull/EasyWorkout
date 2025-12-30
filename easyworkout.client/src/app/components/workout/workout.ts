@@ -1,4 +1,4 @@
-import { Component, input, output, inject } from '@angular/core';
+import { Component, input, output, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -28,6 +28,7 @@ export class WorkoutComponent {
     name: [''],
     notes: ['']
   });
+  validationErrors = signal<string[]>([]);
   onReturn = output();
   workout = input.required<WorkoutResponse>();
   onWorkoutChanged = output();
@@ -69,13 +70,24 @@ export class WorkoutComponent {
   }
 
   update() {
+    this.validationErrors.set([]);
+
     this.workoutsService.update(this.workout().id, this.form.value)
       .subscribe({
         next: () => {
           this.onWorkoutChanged.emit();
           this.isEditMode = false;
         },
-        error: err => console.error(err)
+        error: (err:any) => {
+          if (err.status == 400 && err.error?.errors) {
+            for (const key of Object.keys(err.error.errors)) {
+              this.validationErrors.update(errs => [...errs, ...err.error.errors[key]]);
+            }
+          } else {
+            this.validationErrors.update(errs => [...errs, 'An unexpected error occurred.']);
+          };
+          return;
+        }
       });
   }
 

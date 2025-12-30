@@ -1,4 +1,4 @@
-import { Component, input, output, inject } from '@angular/core';
+import { Component, input, output, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
@@ -24,6 +24,7 @@ export class CompletedWorkoutComponent {
   form:FormGroup = this.fb.nonNullable.group({
     completedNotes: ['']
   });
+  validationErrors = signal<string[]>([]);
   isEditMode = false;
   completedWorkout = input.required<CompletedWorkoutResponse>();
   onCompletedWorkoutChanged = output();
@@ -41,13 +42,24 @@ export class CompletedWorkoutComponent {
   }
   
   update() {
+    this.validationErrors.set([]);
+
     this.completedWorkoutsService.update(this.completedWorkout().id, this.form.value)
       .subscribe({
         next: () => {
           this.onCompletedWorkoutChanged.emit();
           this.isEditMode = false;
         },
-        error: err => console.error(err)
+        error: (err:any) => {
+          if (err.status == 400 && err.error?.errors) {
+            for (const key of Object.keys(err.error.errors)) {
+              this.validationErrors.update(errs => [...errs, ...err.error.errors[key]]);
+            }
+          } else {
+            this.validationErrors.update(errs => [...errs, 'An unexpected error occurred.']);
+          };
+          return;
+        }
       });
   }
 

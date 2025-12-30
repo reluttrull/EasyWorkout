@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
@@ -21,6 +21,7 @@ import { OrderByPipe } from '../../pipes/order-by-pipe';
 })
 export class ExerciseComponent {
   form!: FormGroup;
+  validationErrors = signal<string[]>([]);
   exercise = input.required<ExerciseResponse>();
   workoutId = input<string>();
   onExerciseChanged = output();
@@ -67,13 +68,24 @@ export class ExerciseComponent {
   }
 
   update() {
+    this.validationErrors.set([]);
+
     this.exercisesService.update(this.exercise().id, this.form.value)
       .subscribe({
         next: () => {
           this.onExerciseChanged.emit();
           this.isEditMode = false;
         },
-        error: err => console.error(err)
+        error: (err:any) => {
+          if (err.status == 400 && err.error?.errors) {
+            for (const key of Object.keys(err.error.errors)) {
+              this.validationErrors.update(errs => [...errs, ...err.error.errors[key]]);
+            }
+          } else {
+            this.validationErrors.update(errs => [...errs, 'An unexpected error occurred.']);
+          };
+          return;
+        }
       });
   }
   

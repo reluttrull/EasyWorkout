@@ -1,4 +1,4 @@
-import { Component, output, inject } from '@angular/core';
+import { Component, output, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
@@ -23,8 +23,11 @@ export class CreateWorkout {
     name: [''],
     notes: ['']
   });
+  validationErrors = signal<string[]>([]);
 
   submit() {
+    this.validationErrors.set([]);
+
     const workoutRequest: CreateWorkoutRequest = {
       name: this.form.value.name,
       notes: this.form.value.notes
@@ -34,7 +37,16 @@ export class CreateWorkout {
       next: () => {
         this.onReturn.emit();
       },
-      error: err => console.error(err)
+      error: (err:any) => {
+        if (err.status == 400 && err.error?.errors) {
+          for (const key of Object.keys(err.error.errors)) {
+            this.validationErrors.update(errs => [...errs, ...err.error.errors[key]]);
+          }
+        } else {
+          this.validationErrors.update(errs => [...errs, 'An unexpected error occurred.']);
+        };
+        return;
+      }
     });
   }
 

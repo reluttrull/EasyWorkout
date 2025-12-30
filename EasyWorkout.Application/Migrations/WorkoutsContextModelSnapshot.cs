@@ -44,6 +44,9 @@ namespace EasyWorkout.Application.Migrations
                     b.Property<Guid?>("ExerciseId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("ExerciseNumber")
+                        .HasColumnType("integer");
+
                     b.Property<string>("FallbackName")
                         .IsRequired()
                         .HasMaxLength(75)

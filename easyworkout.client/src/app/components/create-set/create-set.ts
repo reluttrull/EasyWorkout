@@ -1,4 +1,4 @@
-import { Component, input, output, inject } from '@angular/core';
+import { Component, input, output, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
@@ -27,9 +27,9 @@ export class CreateSet {
     weight: [null],
     weightUnit: [null],
     duration: [null],
-    durationUnit: [null],
-    notes: [null]
+    durationUnit: [null]
   });
+  validationErrors = signal<string[]>([]);
 
   public readonly WeightUnit = WeightUnit;
   public readonly DurationUnit = DurationUnit;
@@ -37,13 +37,14 @@ export class CreateSet {
   public durationUnitOptions = Object.values(this.DurationUnit);
   
   submit() {
+    this.validationErrors.set([]);
+    
     const setRequest: CreateSetRequest = {
       reps: this.form.value.reps,
       weight: this.form.value.weight,
       weightUnit: this.form.value.weightUnit,
       duration: this.form.value.duration,
-      durationUnit: this.form.value.durationUnit,
-      notes: this.form.value.notes
+      durationUnit: this.form.value.durationUnit
     };
 
     this.exercisesService.createSet(this.exerciseId(), setRequest).subscribe({
@@ -51,7 +52,16 @@ export class CreateSet {
         this.onCreate.emit();
         this.onReturn.emit();
       },
-      error: err => console.error(err)
+      error: (err:any) => {
+        if (err.status == 400 && err.error?.errors) {
+          for (const key of Object.keys(err.error.errors)) {
+            this.validationErrors.update(errs => [...errs, ...err.error.errors[key]]);
+          }
+        } else {
+          this.validationErrors.update(errs => [...errs, 'An unexpected error occurred.']);
+        };
+        return;
+      }
     });
   }
 

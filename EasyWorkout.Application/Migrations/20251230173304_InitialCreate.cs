@@ -122,6 +122,7 @@ namespace EasyWorkout.Application.Migrations
                     CompletedByUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CompletedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     FallbackName = table.Column<string>(type: "character varying(75)", maxLength: 75, nullable: false),
+                    ExerciseNumber = table.Column<int>(type: "integer", nullable: false),
                     CompletedNotes = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
                     CompletedWorkoutId = table.Column<Guid>(type: "uuid", nullable: true)
                 },

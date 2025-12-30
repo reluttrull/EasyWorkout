@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyWorkout.Application.Migrations
 {
     [DbContext(typeof(WorkoutsContext))]
-    [Migration("20251229202654_InitialCreate")]
+    [Migration("20251230173304_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -46,6 +46,9 @@ namespace EasyWorkout.Application.Migrations
 
                     b.Property<Guid?>("ExerciseId")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("ExerciseNumber")
+                        .HasColumnType("integer");
 
                     b.Property<string>("FallbackName")
                         .IsRequired()

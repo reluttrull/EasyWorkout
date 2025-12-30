@@ -11,7 +11,7 @@ namespace EasyWorkout.Application.Model
         public required Guid? ExerciseSetId { get; init; } // ok if original gets deleted
         public required DateTime CompletedDate { get; init; }
         [Required]
-        [Range(1, 100, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
+        [Range(0, 100, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public required int SetNumber { get; set; }
         [Range(1, 100, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public int? Reps { get; set; }

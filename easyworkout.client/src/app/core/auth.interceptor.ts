@@ -1,86 +1,54 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, filter, take, switchMap } from 'rxjs/operators';
+import { catchError, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { TokenService } from './token.service';
-
-let isRefreshing = false;
-const refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const tokenService = inject(TokenService);
   const authService = inject(AuthService);
 
+  // never intercept refresh itself
   if (req.url.includes('/auth/refresh')) {
     return next(req);
   }
 
-  const token = tokenService.getAccessToken();
-  if (token) {
-    req = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-  }
+  // attach access token if present
+  const accessToken = tokenService.getAccessToken();
+  const authReq = accessToken
+    ? req.clone({
+        setHeaders: { Authorization: `Bearer ${accessToken}` }
+      })
+    : req;
 
-return next(req).pipe(
-  catchError((error: HttpErrorResponse) => {
-    if (error.status === 401) {
-      const refreshToken = tokenService.getRefreshToken();
-
-      if (!refreshToken) {
+  return next(authReq).pipe(
+    catchError((error: HttpErrorResponse) => {
+      // if not an auth problem, pass it through untouched
+      if (error.status != 401) {
         return throwError(() => error);
       }
 
-      return handle401Error(req, next, authService, tokenService, error);
-    }
+      // if no refresh token, hard fail
+      if (!tokenService.getRefreshToken()) {
+        authService.logout();
+        return throwError(() => error);
+      }
 
-    return throwError(() => error);
-  })
-);
-
-
-  function handle401Error(
-    request: any,
-    next: any,
-    authService: AuthService,
-    tokenService: TokenService,
-    originalError: HttpErrorResponse
-  ): Observable<any> {
-
-    if (!isRefreshing) {
-      isRefreshing = true;
-      refreshTokenSubject.next(null);
-
+      // attempt refresh once, then retry original request
       return authService.refreshToken().pipe(
         switchMap(res => {
-          isRefreshing = false;
-          refreshTokenSubject.next(res.accessToken);
-
-          return next(request.clone({
+          const retryReq = authReq.clone({
             setHeaders: {
               Authorization: `Bearer ${res.accessToken}`
             }
-          }));
+          });
+          return next(retryReq);
         }),
-        catchError(() => {
-          isRefreshing = false;
+        catchError(refreshErr => {
           authService.logout();
-          return throwError(() => originalError);
+          return throwError(() => refreshErr);
         })
       );
-    }
-
-    return refreshTokenSubject.pipe(
-      filter(token => token != null),
-      take(1),
-      switchMap(token =>
-        next(request.clone({
-          setHeaders: { Authorization: `Bearer ${token}` }
-        }))
-      )
-    );
-  }
-}
+    })
+  );
+};

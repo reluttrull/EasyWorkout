@@ -15,6 +15,11 @@
             <mat-icon>save</mat-icon>
             Save exercise
         </button>
+        <div>
+            @for (error of validationErrors(); track $index) {
+                <div class="error">{{ error }}</div>
+            }
+        </div>
     </form>
     <button matButton="elevated" (click)="return()" alt="cancel create exercise">Cancel</button>
 </div>

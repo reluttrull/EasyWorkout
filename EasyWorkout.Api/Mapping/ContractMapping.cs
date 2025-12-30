@@ -98,6 +98,7 @@ namespace EasyWorkout.Api.Mapping
             {
                 Id = Guid.NewGuid(),
                 ExerciseId = request.ExerciseId,
+                ExerciseNumber = request.ExerciseNumber,
                 CompletedByUserId = userId,
                 CompletedDate = request.CompletedDate,
                 CompletedExerciseSets = [.. request.CompletedExerciseSets.Select(ces => ces.MapToCompletedExerciseSet())]

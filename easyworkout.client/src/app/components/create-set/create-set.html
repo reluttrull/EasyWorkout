@@ -1,17 +1,17 @@
 <h2>Add a set:</h2>
 <form [formGroup]="form" (ngSubmit)="submit()">
     <div>
-        <mat-form-field>
+        <mat-form-field class="small-form-field">
             <mat-label>Reps</mat-label>
             <input matInput placeholder="Reps" formControlName="reps" type="number" />
         </mat-form-field>
     </div>
     <div>
-        <mat-form-field>
+        <mat-form-field class="small-form-field">
             <mat-label>Weight</mat-label>
             <input matInput placeholder="Weight" formControlName="weight" type="number" />
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field class="medium-form-field">
             <mat-label>Weight units:</mat-label>
             <mat-select matInput title="Weight Units" placeholder="Weight Units" formControlName="weightUnit">
                 <mat-option value="">--Please choose an option--</mat-option>
@@ -22,11 +22,11 @@
         </mat-form-field>
     </div>
     <div>
-        <mat-form-field>
+        <mat-form-field class="small-form-field">
             <mat-label>Duration</mat-label>
             <input matInput placeholder="Duration" formControlName="duration" type="number" />
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field class="medium-form-field">
             <mat-label>Duration units:</mat-label>
             <mat-select title="Duration Units" placeholder="Duration Units" formControlName="durationUnit">
                 <mat-option value="">--Please choose an option--</mat-option>

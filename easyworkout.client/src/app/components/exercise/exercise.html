@@ -1,6 +1,25 @@
 <div class="box exercise">
     @if (!isEditMode) {
-        <h3><strong>Exercise:</strong> {{ exercise().name }}</h3>
+        <h3><strong>Exercise:</strong> {{ exercise().name }}
+        <button matIconButton [matMenuTriggerFor]="menu" aria-label="menu for exercise-related buttons">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="edit()" alt="edit exercise">
+                <mat-icon>edit</mat-icon>
+                <span>Edit exercise</span>
+            </button>
+            @if (workoutId()) {
+                <button mat-menu-item (click)="remove(exercise().id)" alt="remove exercise from workout">
+                    <mat-icon>remove</mat-icon>
+                    <span>Remove exercise</span>
+                </button>
+            }
+            <button mat-menu-item (click)="delete(exercise().id)" alt="delete exercise">
+                <mat-icon>delete</mat-icon>
+                <span>Delete exercise</span>
+            </button>
+        </mat-menu></h3>
         <div><strong>Notes:</strong> {{ exercise().notes }}</div>
         <div><strong>Date created:</strong> {{ exercise().addedDate }}</div>
         
@@ -28,25 +47,6 @@
                 <mat-icon>expand_more</mat-icon>
             </button>
         }
-        <button matIconButton [matMenuTriggerFor]="menu" aria-label="menu for exercise-related buttons">
-            <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="edit()" alt="edit exercise">
-                <mat-icon>edit</mat-icon>
-                <span>Edit exercise</span>
-            </button>
-            @if (workoutId()) {
-                <button mat-menu-item (click)="remove(exercise().id)" alt="remove exercise from workout">
-                    <mat-icon>remove</mat-icon>
-                    <span>Remove exercise</span>
-                </button>
-            }
-            <button mat-menu-item (click)="delete(exercise().id)" alt="delete exercise">
-                <mat-icon>delete</mat-icon>
-                <span>Delete exercise</span>
-            </button>
-        </mat-menu>
     } @else {
         <h2>Edit Exercise:</h2>
         <form [formGroup]="form" (ngSubmit)="update()">

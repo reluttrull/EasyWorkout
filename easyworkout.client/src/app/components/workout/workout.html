@@ -1,6 +1,23 @@
 <div class="box">
     @if (!isEditMode) {
-        <h2><strong>Workout:</strong> {{ workout().name }}</h2>
+        <h2><strong>Workout:</strong> {{ workout().name }}
+        <button matIconButton [matMenuTriggerFor]="menu" aria-label="menu for workout-related buttons">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="startWorkout()" alt="start workout">
+                <mat-icon>fitness_center</mat-icon>
+                <span>Start workout</span>
+            </button>
+            <button mat-menu-item (click)="edit()" alt="edit workout">
+                <mat-icon>edit</mat-icon>
+                <span>Edit Workout</span>
+            </button>
+            <button mat-menu-item (click)="delete()" alt="delete workout">
+                <mat-icon>delete</mat-icon>
+                <span>Delete workout</span>
+            </button>
+        </mat-menu></h2>
         <div><strong>Notes:</strong> {{ workout().notes }}</div>
         <div><strong>Date created:</strong> {{ workout().addedDate | date:"MMM dd, yyyy" }}</div>
         @if (workout().lastCompletedDate) {
@@ -30,23 +47,6 @@
                 <mat-icon>expand_more</mat-icon>
             </button>
         }
-        <button matIconButton [matMenuTriggerFor]="menu" aria-label="menu for workout-related buttons">
-            <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="startWorkout()" alt="start workout">
-                <mat-icon>fitness_center</mat-icon>
-                <span>Start workout</span>
-            </button>
-            <button mat-menu-item (click)="edit()" alt="edit workout">
-                <mat-icon>edit</mat-icon>
-                <span>Edit Workout</span>
-            </button>
-            <button mat-menu-item (click)="delete()" alt="delete workout">
-                <mat-icon>delete</mat-icon>
-                <span>Delete workout</span>
-            </button>
-        </mat-menu>
     } @else {
         <h2>Edit Workout:</h2>
         <form [formGroup]="form" (ngSubmit)="update()">

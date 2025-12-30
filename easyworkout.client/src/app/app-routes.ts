@@ -6,6 +6,7 @@ import { Home } from './components/home/home';
 import { LoginComponent } from './auth/login/login';
 import { RegisterComponent } from './auth/register/register';
 import { PrivacyPolicy } from './privacy-policy/privacy-policy';
+import { TermsOfService } from './terms-of-service/terms-of-service';
 import { authGuard } from './auth/auth.guard';
 
 export const routes: Routes = [
@@ -45,6 +46,10 @@ export const routes: Routes = [
   {
     path: 'privacy',
     component: PrivacyPolicy
+  },
+  {
+    path: 'terms',
+    component: TermsOfService
   },
   { path: '', redirectTo: 'workouts', pathMatch: 'full' }
 ];

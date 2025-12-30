@@ -19,7 +19,8 @@ namespace EasyWorkout.Application.Migrations
                     AddedByUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     AddedDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Name = table.Column<string>(type: "character varying(75)", maxLength: 75, nullable: false),
-                    Notes = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true)
+                    Notes = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
+                    LastEditedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -34,7 +35,8 @@ namespace EasyWorkout.Application.Migrations
                     AddedByUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     AddedDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Name = table.Column<string>(type: "character varying(75)", maxLength: 75, nullable: false),
-                    Notes = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true)
+                    Notes = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
+                    LastEditedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -74,7 +76,8 @@ namespace EasyWorkout.Application.Migrations
                     WorkoutId = table.Column<Guid>(type: "uuid", nullable: true),
                     FallbackName = table.Column<string>(type: "character varying(75)", maxLength: 75, nullable: false),
                     CompletedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CompletedNotes = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true)
+                    CompletedNotes = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
+                    LastEditedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {

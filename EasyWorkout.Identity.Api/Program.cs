@@ -15,15 +15,20 @@ string root = Directory.GetCurrentDirectory();
 string solutionEnvironmentPath = Path.Combine(root, $"../.env.{builder.Environment.EnvironmentName}");
 string solutionDefaultPath = Path.Combine(root, "../.env");
 
-if (File.Exists(solutionEnvironmentPath))
+if (File.Exists(solutionDefaultPath))
 {
-    Env.Load(solutionEnvironmentPath);
-}
-else
-{
-    // Fallback to the default .env if the specific one isn't found
     Env.Load(solutionDefaultPath);
 }
+
+//if (File.Exists(solutionEnvironmentPath))
+//{
+//    Env.Load(solutionEnvironmentPath);
+//}
+//else
+//{
+//    // Fallback to the default .env if the specific one isn't found
+//    Env.Load(solutionDefaultPath);
+//}
 
 builder.WebHost.UseKestrel(options =>
 {

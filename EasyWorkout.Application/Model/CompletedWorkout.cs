@@ -17,6 +17,7 @@ namespace EasyWorkout.Application.Model
         [MaxLength(250)]
         public string? CompletedNotes { get; set; }
         public string OriginalNotes => Workout?.Notes ?? string.Empty;
+        public required DateTime LastEditedDate { get; set; }
         public virtual Workout? Workout { get; set; }
         public required List<CompletedExercise> CompletedExercises { get; init; } = [];
     }

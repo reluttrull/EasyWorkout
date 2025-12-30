@@ -1,6 +1,7 @@
 <div class="box">
     <h3>Workout: {{ completedWorkout().originalName }}</h3>
     <div>Workout completed on {{ completedWorkout().completedDate | date:"MMM dd, yyyy 'at' hh:mm a" }}</div>
+    <div><em>Last edited:</em> {{ completedWorkout().lastEditedDate | date:"MMM dd, yyyy 'at' hh:mm a" }}</div>
     @if (completedWorkout().completedNotes) { 
         <div><em>Notes: </em> {{ completedWorkout().completedNotes }}</div>
     }

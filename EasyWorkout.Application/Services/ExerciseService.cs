@@ -45,6 +45,7 @@ namespace EasyWorkout.Application.Services
 
             _workoutsContext.ExerciseSets.Add(set);
             exercise.ExerciseSets.Add(set);
+            exercise.LastEditedDate = DateTime.UtcNow;
             var result = await _workoutsContext.SaveChangesAsync(token);
             return result > 0;
         }
@@ -59,6 +60,7 @@ namespace EasyWorkout.Application.Services
 
             _workoutsContext.ExerciseSets.Remove(set);
             exercise.ExerciseSets.Remove(set);
+            exercise.LastEditedDate = DateTime.UtcNow;
             var result = await _workoutsContext.SaveChangesAsync(token);
             return result > 0;
         }
@@ -103,6 +105,7 @@ namespace EasyWorkout.Application.Services
 
             exerciseToChange.Name = request.Name;
             exerciseToChange.Notes = request.Notes;
+            exerciseToChange.LastEditedDate = DateTime.UtcNow;
 
             await _workoutsContext.SaveChangesAsync(token);
 

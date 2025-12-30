@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import {MatIconModule} from '@angular/material/icon';
@@ -13,7 +14,7 @@ import { ChangeEmail } from '../components/change-email/change-email';
 @Component({
   selector: 'app-account',
   imports: [ReactiveFormsModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, 
-    ChangePassword, ChangeEmail],
+    ChangePassword, ChangeEmail, DatePipe],
   templateUrl: './account.html',
   styleUrl: './account.css',
 })

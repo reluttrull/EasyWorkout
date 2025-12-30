@@ -23,6 +23,7 @@ namespace EasyWorkout.Identity.Api.Services
             if (userToChange is null) return null;
 
             userToChange.Email = request.Email;
+            userToChange.LastEditedDate = DateTime.UtcNow;
 
             await _usersContext.SaveChangesAsync(token);
 
@@ -36,6 +37,13 @@ namespace EasyWorkout.Identity.Api.Services
 
             var changePasswordResult = await _userManager.ChangePasswordAsync(userToChange, request.CurrentPassword, request.NewPassword);
             if (!changePasswordResult.Succeeded) return null;
+
+            userToChange = await GetByIdAsync(id, token); // get fresh so we don't overwrite password hash
+            if (userToChange is null) return null;
+
+            userToChange.LastEditedDate = DateTime.UtcNow;
+
+            await _usersContext.SaveChangesAsync(token);
 
             return userToChange;
         }
@@ -52,6 +60,7 @@ namespace EasyWorkout.Identity.Api.Services
 
             userToChange.FirstName = request.FirstName;
             userToChange.LastName = request.LastName;
+            userToChange.LastEditedDate = DateTime.UtcNow;
 
             await _usersContext.SaveChangesAsync(token);
 

@@ -12,6 +12,7 @@ namespace EasyWorkout.Contracts.Responses
         public required int ExerciseNumber { get; set; }
         public required string Name { get; set; }
         public string? Notes { get; set; }
+        public DateTime LastEditedDate { get; init; }
         public IEnumerable<ExerciseSetResponse> ExerciseSets { get; init; } = [];
     }
 }

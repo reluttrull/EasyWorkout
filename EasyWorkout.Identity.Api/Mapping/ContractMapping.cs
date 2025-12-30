@@ -14,7 +14,8 @@ namespace EasyWorkout.Identity.Api.Mapping
                 LastName = user.LastName,
                 Email = user.Email,
                 UserName = user.UserName,
-                JoinedDate = user.JoinedDate
+                JoinedDate = user.JoinedDate,
+                LastEditedDate = user.LastEditedDate
             };
         }
     }

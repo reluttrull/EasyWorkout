@@ -85,6 +85,7 @@ namespace EasyWorkout.Application.Services
             if (completedWorkoutToChange is null) return null;
 
             completedWorkoutToChange.CompletedNotes = request.CompletedNotes;
+            completedWorkoutToChange.LastEditedDate = DateTime.UtcNow;
 
             await _workoutsContext.SaveChangesAsync(token);
 

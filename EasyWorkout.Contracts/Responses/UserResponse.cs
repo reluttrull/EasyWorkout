@@ -12,5 +12,6 @@ namespace EasyWorkout.Contracts.Responses
         public string? Email { get; set; }
         public string? UserName { get; set; }
         public DateOnly JoinedDate { get; init; }
+        public DateTime LastEditedDate { get; init; }
     }
 }

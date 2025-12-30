@@ -25,6 +25,7 @@ namespace EasyWorkout.Tests
                 AddedByUserId = Guid.NewGuid(),
                 AddedDate = DateOnly.FromDateTime(DateTime.Now),
                 Name = "Workout",
+                LastEditedDate = DateTime.UtcNow,
                 WorkoutExercises = []
             };
 
@@ -75,6 +76,7 @@ namespace EasyWorkout.Tests
                     AddedByUserId = Guid.NewGuid(),
                     AddedDate = DateOnly.FromDateTime(DateTime.Now),
                     Name = "Workout",
+                    LastEditedDate = DateTime.UtcNow,
                     WorkoutExercises = []
                 };
 

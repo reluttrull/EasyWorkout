@@ -28,6 +28,7 @@ export class DoWorkout implements OnInit {
     id: '',
     addedByUserId: '',
     addedDate: new Date(0),
+    lastEditedDate: new Date(0),
     name: '',
     notes: '',
     exercises: []

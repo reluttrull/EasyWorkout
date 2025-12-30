@@ -114,6 +114,7 @@ namespace EasyWorkout.Application.Services
             };
 
             workout.WorkoutExercises.Add(workoutExerciseLink);
+            workout.LastEditedDate = DateTime.UtcNow;
 
             _workoutsContext.WorkoutExercises.Add(workoutExerciseLink);
 
@@ -133,6 +134,9 @@ namespace EasyWorkout.Application.Services
 
             _workoutsContext.WorkoutExercises.Remove(workoutExercise);
 
+            var workoutToUpdate = await GetByIdAsync(workoutId);
+            workoutToUpdate?.LastEditedDate = DateTime.UtcNow;
+
             var success = await _workoutsContext.SaveChangesAsync(token) > 0;
 
             return success;
@@ -145,6 +149,7 @@ namespace EasyWorkout.Application.Services
 
             workoutToChange.Name = request.Name;
             workoutToChange.Notes = request.Notes;
+            workoutToChange.LastEditedDate = DateTime.UtcNow;
 
             await _workoutsContext.SaveChangesAsync(token);
 

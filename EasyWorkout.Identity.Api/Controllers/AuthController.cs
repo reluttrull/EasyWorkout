@@ -41,14 +41,12 @@ namespace EasyWorkout.Identity.Api.Controllers
         }
 
         [HttpPost(Endpoints.Auth.Register)]
-        public async Task<IActionResult> Register([FromBody] RegistrationRequest request) // todo: make RegistrationRequest
+        public async Task<IActionResult> Register([FromBody] RegistrationRequest request)
         {
             try
             {
                 var existingUser = await _context.Users.FirstOrDefaultAsync(x => x.UserName == request.UserName);
                 if (existingUser is not null) return BadRequest("User already exists.");
-
-                // handle claims?
 
                 User user = new()
                 {
@@ -57,7 +55,8 @@ namespace EasyWorkout.Identity.Api.Controllers
                     FirstName = request.FirstName,
                     LastName = request.LastName,
                     SecurityStamp = Guid.NewGuid().ToString(),
-                    JoinedDate = DateOnly.FromDateTime(DateTime.UtcNow)
+                    JoinedDate = DateOnly.FromDateTime(DateTime.UtcNow),
+                    LastEditedDate = DateTime.UtcNow
                 };
 
                 var createUserResult = await _userManager.CreateAsync(user, request.Password);
@@ -69,7 +68,6 @@ namespace EasyWorkout.Identity.Api.Controllers
                     return BadRequest($"Failed to create user.  Errors: {errorsText}");
                 }
 
-                // save user claims?
                 var addClaimUserResult = await _userManager.AddClaimAsync(user, new Claim(AuthConstants.FreeMemberUserClaimName, "true"));
 
                 if (!addClaimUserResult.Succeeded)

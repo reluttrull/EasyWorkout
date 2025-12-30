@@ -44,6 +44,7 @@ export interface WorkoutResponse {
   name: string;
   notes?: string | null;
   lastCompletedDate?: Date | null;
+  lastEditedDate: Date;
   exercises: ExerciseResponse[];
 }
 
@@ -55,6 +56,7 @@ export interface CompletedWorkoutResponse {
   originalNotes?: string | null;
   completedDate: Date;
   completedNotes?: string | null;
+  lastEditedDate: Date;
   completedExercises: CompletedExerciseResponse[]
 }
 
@@ -104,6 +106,7 @@ export interface ExerciseResponse {
   exerciseNumber: number;
   name: string;
   notes?: string | null;
+  lastEditedDate: Date;
   exerciseSets: ExerciseSetResponse[];
 }
 
@@ -146,4 +149,5 @@ export interface UserResponse {
   email?: string | null;
   userName?: string | null;
   joinedDate: Date;
+  lastEditedDate: Date;
 }

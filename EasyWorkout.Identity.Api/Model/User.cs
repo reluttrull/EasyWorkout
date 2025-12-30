@@ -12,5 +12,6 @@ namespace EasyWorkout.Identity.Api.Model
         public DateOnly JoinedDate { get; init; }
         public string RefreshToken { get; set; } = string.Empty;
         public DateTime RefreshTokenExpiry { get; set; }
+        public required DateTime LastEditedDate { get; set; }
     }
 }

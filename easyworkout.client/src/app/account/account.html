@@ -1,17 +1,20 @@
 @if (!isEdit()) {
     <h2>Account information</h2>
-    <button matButton="tonal" (click)="toggleIsEdit()" alt="edit account info">
-        Edit account info
-    </button>
-    <div><strong>First name:</strong> {{ user()?.firstName }}</div>
-    <div><strong>Last name:</strong> {{ user()?.lastName }}</div>
-    @if (user()?.email) {
-        <div><strong>Email address:</strong> {{ user()?.email }}</div>
+    @if (user()) {
+        <button matButton="tonal" (click)="toggleIsEdit()" alt="edit account info">
+            Edit account info
+        </button>
+        <div><strong>First name:</strong> {{ user()?.firstName }}</div>
+        <div><strong>Last name:</strong> {{ user()?.lastName }}</div>
+        @if (user()?.email) {
+            <div><strong>Email address:</strong> {{ user()?.email }}</div>
+        }
+        @if (user()?.userName) {
+            <div><strong>Username:</strong> {{ user()?.userName }}</div>
+        }
+        <div><strong>Member since:</strong> {{ user()?.joinedDate }}</div>
+        <div><em>Last edited:</em> {{ user()?.lastEditedDate | date:"MMM dd, yyyy 'at' hh:mm a" }}</div>
     }
-    @if (user()?.userName) {
-        <div><strong>Username:</strong> {{ user()?.userName }}</div>
-    }
-    <div><strong>Member since:</strong> {{ user()?.joinedDate }}</div>
 } @else {
     <h2>Edit account information:</h2>
     <form [formGroup]="form" (ngSubmit)="submit()">

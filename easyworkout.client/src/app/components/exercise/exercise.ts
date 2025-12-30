@@ -1,4 +1,5 @@
 import { Component, input, output, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
@@ -15,7 +16,7 @@ import { OrderByPipe } from '../../pipes/order-by-pipe';
 @Component({
   selector: 'app-exercise',
   imports: [ReactiveFormsModule, MatIconModule, MatButtonModule,
-    MatFormFieldModule, MatInputModule, MatMenuModule, SetComponent, CreateSet, OrderByPipe],
+    MatFormFieldModule, MatInputModule, MatMenuModule, SetComponent, CreateSet, OrderByPipe, DatePipe],
   templateUrl: './exercise.html',
   styleUrl: './exercise.css',
 })

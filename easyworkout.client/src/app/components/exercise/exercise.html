@@ -21,7 +21,8 @@
             </button>
         </mat-menu></h3>
         <div><strong>Notes:</strong> {{ exercise().notes }}</div>
-        <div><strong>Date created:</strong> {{ exercise().addedDate }}</div>
+        <div><strong>Date created:</strong> {{ exercise().addedDate | date:"MMM dd, yyyy" }}</div>
+        <div><em>Last edited:</em> {{ exercise().lastEditedDate | date:"MMM dd, yyyy 'at' hh:mm a" }}</div>
         
         @if (exerciseDetail) {
             <div>

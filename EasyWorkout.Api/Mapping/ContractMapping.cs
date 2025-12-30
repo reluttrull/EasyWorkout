@@ -18,6 +18,7 @@ namespace EasyWorkout.Api.Mapping
                 AddedDate = DateOnly.FromDateTime(DateTime.UtcNow),
                 Name = request.Name,
                 Notes = request.Notes,
+                LastEditedDate = DateTime.UtcNow,
                 WorkoutExercises = []
             };
         }
@@ -31,6 +32,7 @@ namespace EasyWorkout.Api.Mapping
                 AddedDate = workout.AddedDate,
                 Name = request.Name,
                 Notes = request.Notes,
+                LastEditedDate = DateTime.UtcNow,
                 WorkoutExercises = workout.WorkoutExercises
             };
         }
@@ -44,6 +46,7 @@ namespace EasyWorkout.Api.Mapping
                 AddedDate = DateOnly.FromDateTime(DateTime.UtcNow),
                 Name = request.Name,
                 Notes = request.Notes,
+                LastEditedDate = DateTime.UtcNow,
                 WorkoutExercises = [],
                 ExerciseSets = []
             };
@@ -58,6 +61,7 @@ namespace EasyWorkout.Api.Mapping
                 AddedDate = exercise.AddedDate,
                 Name = request.Name,
                 Notes = request.Notes,
+                LastEditedDate = DateTime.UtcNow,
                 WorkoutExercises = exercise.WorkoutExercises,
                 ExerciseSets = exercise.ExerciseSets
             };
@@ -88,6 +92,7 @@ namespace EasyWorkout.Api.Mapping
                 WorkoutId = request.WorkoutId,
                 CompletedDate = request.CompletedDate,
                 CompletedNotes = request.CompletedNotes,
+                LastEditedDate = DateTime.UtcNow,
                 CompletedExercises = [.. request.CompletedExercises.Select(e => e.MapToCompletedExercise(userId))]
             };
         }
@@ -129,6 +134,7 @@ namespace EasyWorkout.Api.Mapping
                 Name = workout.Name,
                 Notes = workout.Notes,
                 LastCompletedDate = lastCompletedDate,
+                LastEditedDate = workout.LastEditedDate,
                 Exercises = workout.WorkoutExercises
                     .OrderBy(we => we.ExerciseNumber)
                     .Select(we => we.Exercise.MapToResponse(we.ExerciseNumber))
@@ -144,6 +150,7 @@ namespace EasyWorkout.Api.Mapping
                 AddedDate = workout.AddedDate,
                 Name = workout.Name,
                 Notes = workout.Notes,
+                LastEditedDate = workout.LastEditedDate,
                 Exercises = workout.WorkoutExercises
                     .OrderBy(we => we.ExerciseNumber)
                     .Select(we => we.Exercise.MapToResponse(we.ExerciseNumber))
@@ -160,6 +167,7 @@ namespace EasyWorkout.Api.Mapping
                 ExerciseNumber = exerciseNumber,
                 Name = exercise.Name,
                 Notes = exercise.Notes,
+                LastEditedDate = exercise.LastEditedDate,
                 ExerciseSets = exercise.ExerciseSets.Select(es => es.MapToResponse())
             };
         }
@@ -174,6 +182,7 @@ namespace EasyWorkout.Api.Mapping
                 ExerciseNumber = -1, // when not attached to workout
                 Name = exercise.Name,
                 Notes = exercise.Notes,
+                LastEditedDate = exercise.LastEditedDate,
                 ExerciseSets = exercise.ExerciseSets.Select(es => es.MapToResponse())
             };
         }
@@ -204,6 +213,7 @@ namespace EasyWorkout.Api.Mapping
                 CompletedNotes = completedWorkout.CompletedNotes,
                 OriginalName = completedWorkout.Name,
                 OriginalNotes = completedWorkout.OriginalNotes,
+                LastEditedDate = completedWorkout.LastEditedDate,
                 CompletedExercises = completedWorkout.CompletedExercises.Select(ce => ce.MapToResponse())
             };
         }

@@ -1,3 +1,4 @@
+using DotNetEnv;
 using EasyWorkout.Identity.Api.Data;
 using EasyWorkout.Identity.Api.Model;
 using EasyWorkout.Identity.Api.Services;
@@ -8,14 +9,21 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Threading.RateLimiting;
 
-string root = Directory.GetCurrentDirectory();
-string solutionDotEnvPath = Path.Combine(root, "../.env");
-if (File.Exists(solutionDotEnvPath))
-{
-    DotNetEnv.Env.Load(solutionDotEnvPath);
-}
-
 var builder = WebApplication.CreateBuilder(args);
+
+string root = Directory.GetCurrentDirectory();
+string solutionEnvironmentPath = Path.Combine(root, $"../.env.{builder.Environment.EnvironmentName}");
+string solutionDefaultPath = Path.Combine(root, "../.env");
+
+if (File.Exists(solutionEnvironmentPath))
+{
+    Env.Load(solutionEnvironmentPath);
+}
+else
+{
+    // Fallback to the default .env if the specific one isn't found
+    Env.Load(solutionDefaultPath);
+}
 
 builder.WebHost.UseKestrel(options =>
 {

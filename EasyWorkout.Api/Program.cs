@@ -1,3 +1,4 @@
+using DotNetEnv;
 using EasyWorkout.Application.Data;
 using EasyWorkout.Application.Services;
 using EasyWorkout.Identity.Api;
@@ -18,14 +19,21 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
-    string root = Directory.GetCurrentDirectory();
-    string solutionDotEnvPath = Path.Combine(root, "../.env");
-    if (File.Exists(solutionDotEnvPath))
-    {
-        DotNetEnv.Env.Load(solutionDotEnvPath);
-    }
-
     var builder = WebApplication.CreateBuilder(args);
+
+    string root = Directory.GetCurrentDirectory();
+    string solutionEnvironmentPath = Path.Combine(root, $"../.env.{builder.Environment.EnvironmentName}");
+    string solutionDefaultPath = Path.Combine(root, "../.env");
+
+    if (File.Exists(solutionEnvironmentPath))
+    {
+        Env.Load(solutionEnvironmentPath);
+    }
+    else
+    {
+        // Fallback to the default .env if the specific one isn't found
+        Env.Load(solutionDefaultPath);
+    }
 
     builder.Host.UseSerilog();
 

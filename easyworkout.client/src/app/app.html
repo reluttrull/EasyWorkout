@@ -1,20 +1,24 @@
-<div id="root">
-    <div class="two-column-flex-container">
-        <a href="/" class="logo"><h1>Easy Workout</h1></a>
-        <div class="horizontal-flex">
-            @if (isLoggedIn()) {
-                <div>{{ user()?.userName }}</div>
-                <div><a matButton="text" href="workouts" alt="workouts">Workouts</a></div>
-                <div><a matButton="text" href="exercises" alt="exercises">Exercises</a></div>
-                <div><a matButton="text" href="completed-workouts" alt="completed workouts">Completed Workouts</a></div>
-                <div><a matButton="text" href="account" alt="account info">Account info</a></div>
-                <button matIconButton  (click)="logout()" alt="logout">
-                    <mat-icon>logout</mat-icon>
-                </button>
-            }
-        </div>
+<header class="two-column-flex-container">
+    <a href="/" class="logo"><h1>Easy Workout</h1></a>
+    <div class="horizontal-flex">
+        @if (isLoggedIn()) {
+            <div>{{ user()?.userName }}</div>
+            <div><a matButton="text" href="workouts" alt="workouts">Workouts</a></div>
+            <div><a matButton="text" href="exercises" alt="exercises">Exercises</a></div>
+            <div><a matButton="text" href="completed-workouts" alt="completed workouts">Completed Workouts</a></div>
+            <div><a matButton="text" href="account" alt="account info">Account info</a></div>
+            <button matIconButton  (click)="logout()" alt="logout">
+                <mat-icon>logout</mat-icon>
+            </button>
+        }
     </div>
-    <div id="content">
-        <router-outlet></router-outlet>
+</header>
+<main>
+    <router-outlet></router-outlet>
+</main>
+<footer>
+    <div class="horizontal-flex">
+        <div>Copyright © {{ currentYear }} Ryan Luttrull.  All rights reserved.</div>
+        <div><a matButton="text" href="privacy" alt="privacy policy">Privacy Policy</a></div>
     </div>
-</div>
+</footer>

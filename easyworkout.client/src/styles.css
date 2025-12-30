@@ -1,15 +1,22 @@
-#content {
+html, body, app-root {
+  height: 100vh;
+  margin: 0;
+}
+
+app-root {
+  display: grid;
+  grid-template-rows: auto 1fr auto; 
+  font-family: "Arvo", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+main {
     padding: 0 30px 0 30px;
 }
 
 ul {
     list-style-type: none;
-}
-
-body {
-  font-family: "Arvo", serif;
-  font-weight: 400;
-  font-style: normal;
 }
 
 h1, h2, h3, h4, h5 {

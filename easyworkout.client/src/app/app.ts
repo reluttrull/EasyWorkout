@@ -16,6 +16,7 @@ export class AppComponent {
   private accountService = inject(AccountService);
   private authService = inject(AuthService);
   user = this.accountService.user;
+  currentYear = new Date().getFullYear();
   
   logout() {
     this.authService.logout();

@@ -5,6 +5,7 @@ import { Account } from './account/account';
 import { Home } from './components/home/home';
 import { LoginComponent } from './auth/login/login';
 import { RegisterComponent } from './auth/register/register';
+import { PrivacyPolicy } from './privacy-policy/privacy-policy';
 import { authGuard } from './auth/auth.guard';
 
 export const routes: Routes = [
@@ -40,6 +41,10 @@ export const routes: Routes = [
     path: 'account',
     component: Account,
     canActivate: [authGuard]
+  },
+  {
+    path: 'privacy',
+    component: PrivacyPolicy
   },
   { path: '', redirectTo: 'workouts', pathMatch: 'full' }
 ];

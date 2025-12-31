@@ -1,3 +1,4 @@
+using Amazon.Runtime;
 using DotNetEnv;
 using EasyWorkout.Application.Data;
 using EasyWorkout.Application.Services;
@@ -9,36 +10,58 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using Serilog.Events;
 using System.Text;
 using System.Threading.RateLimiting;
-
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Information()
-    .WriteTo.Debug()
-    .CreateLogger();
 
 try
 {
     var builder = WebApplication.CreateBuilder(args);
 
     string root = Directory.GetCurrentDirectory();
+    //string solutionEnvironmentPath = Path.Combine(root, $"../.env.production"); // for testing env
     string solutionEnvironmentPath = Path.Combine(root, $"../.env.{builder.Environment.EnvironmentName}");
     string solutionDefaultPath = Path.Combine(root, "../.env");
 
-    if (File.Exists(solutionDefaultPath))
+    if (File.Exists(solutionEnvironmentPath))
     {
+        Env.Load(solutionEnvironmentPath);
+    }
+    else
+    {
+        // fallback to the default .env if the specific one isn't found
         Env.Load(solutionDefaultPath);
     }
 
-    //if (File.Exists(solutionEnvironmentPath))
-    //{
-    //    Env.Load(solutionEnvironmentPath);
-    //}
-    //else
-    //{
-    //    // Fallback to the default .env if the specific one isn't found
-    //    Env.Load(solutionDefaultPath);
-    //}
+    var awsAccessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY");
+    var awsSecretKey = Environment.GetEnvironmentVariable("AWS_SECRET_KEY");
+    var bucketPath = Environment.GetEnvironmentVariable("AWS_BUCKET_PATH");
+
+    Serilog.Debugging.SelfLog.Enable(msg => Console.Error.WriteLine(msg));
+
+    Log.Logger = new LoggerConfiguration()
+        .MinimumLevel.Information()
+        .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+        .MinimumLevel.Override("System", LogEventLevel.Warning)
+        .WriteTo.Debug()
+        .WriteTo.AmazonS3(
+            path: "log.txt",
+            bucketName: "easyworkout-backups-logs",
+            bucketPath: bucketPath,
+            endpoint: Amazon.RegionEndpoint.USEast2,
+            awsAccessKeyId: awsAccessKey,
+            awsSecretAccessKey: awsSecretKey,
+            restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information,
+            outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
+            rollingInterval: Serilog.Sinks.AmazonS3.RollingInterval.Day,
+            batchSizeLimit: 20,                    
+            batchingPeriod: TimeSpan.FromSeconds(30),
+            eagerlyEmitFirstEvent: true,          
+            queueSizeLimit: 5000,
+            disablePayloadSigning: false,         
+            failureCallback: ex => Console.WriteLine($"S3 sink failed: {ex.Message}")
+        )
+        .CreateLogger();
 
     builder.Host.UseSerilog();
 

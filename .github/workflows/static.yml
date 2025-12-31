@@ -41,8 +41,13 @@ jobs:
         working-directory: easyworkout.client
         run: npm run build
         
+      - name: Debug files
+        working-directory: easyworkout.client
+        run: ls -l docs
+        
       - name: Copy index.html to 404.html (Fix for Angular routing)
-        run: cp easyworkout.client/docs/index.html easyworkout.client/docs/404.html
+        working-directory: easyworkout.client
+        run: cp docs/index.html docs/404.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

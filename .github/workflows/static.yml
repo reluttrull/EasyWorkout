@@ -43,7 +43,7 @@ jobs:
         
       - name: Debug files
         working-directory: easyworkout.client
-        run: ls -l docs
+        run: ls -l docs/browser
         
       - name: Copy index.html to 404.html (Fix for Angular routing)
         working-directory: easyworkout.client
@@ -55,7 +55,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: easyworkout.client/docs
+          path: easyworkout.client/docs/browser
 
       - name: Deploy to GitHub Pages
         id: deployment

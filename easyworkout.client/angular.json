@@ -39,7 +39,7 @@
               "src/styles.css"
             ],
             "baseHref": "/EasyWorkout/",
-            "outputPath": "docs/browser"
+            "outputPath": "docs"
           },
           "configurations": {
             "production": {

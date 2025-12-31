@@ -40,6 +40,9 @@ jobs:
       - name: Build
         working-directory: easyworkout.client
         run: npm run build
+        
+      - name: Copy index.html to 404.html (Fix for Angular routing)
+        run: cp docs/index.html docs/404.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -47,7 +50,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: easyworkout.client/docs/browser
+          path: easyworkout.client/docs
 
       - name: Deploy to GitHub Pages
         id: deployment

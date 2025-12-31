@@ -38,7 +38,7 @@
               "src/material-theme.scss",
               "src/styles.css"
             ],
-            "baseHref": "/easyworkout/",
+            "baseHref": "/EasyWorkout/",
             "outputPath": "docs"
           },
           "configurations": {

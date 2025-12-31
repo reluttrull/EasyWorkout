@@ -21,7 +21,7 @@ jobs:
             AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
             AWS_S3_BUCKET_REGION: ${{ secrets.AWS_S3_BUCKET_REGION }}
             RETENTION_DAYS: 21
-            PG_VERSION: '17.7'
+            PG_VERSION: '17'
 
         steps:
             - name: Install PostgreSQL

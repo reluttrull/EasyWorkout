@@ -12,12 +12,13 @@ namespace EasyWorkout.Identity.Api.Services
 {
     public class TokenService : ITokenService
     {
-        private string tokenSecret = Environment.GetEnvironmentVariable("TOKEN_SECRET")!;
+        private string tokenSecret = string.Empty;
         private static readonly TimeSpan tokenLifetime = TimeSpan.FromMinutes(15);
         private readonly IConfiguration _config;
         public TokenService(IConfiguration config)
         {
-            _config = config;
+            _config = config; 
+            tokenSecret = Environment.GetEnvironmentVariable("TOKEN_SECRET") ?? _config.GetValue<string>("TOKEN_SECRET")!;
         }
 
         public string GenerateAccessToken(User user)
@@ -40,8 +41,8 @@ namespace EasyWorkout.Identity.Api.Services
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.Add(tokenLifetime),
-                Issuer = _config["Jwt:Issuer"],
-                Audience = _config["Jwt:Audience"],
+                Issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? _config.GetValue<string>("JWT_ISSUER"),
+                Audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? _config.GetValue<string>("JWT_AUDIENCE"),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 

@@ -23,19 +23,22 @@ try
     string solutionEnvironmentPath = Path.Combine(root, $"../.env.{builder.Environment.EnvironmentName}");
     string solutionDefaultPath = Path.Combine(root, "../.env");
 
-    if (File.Exists(solutionEnvironmentPath))
+    if (builder.Environment.IsDevelopment())
     {
-        Env.Load(solutionEnvironmentPath);
-    }
-    else
-    {
-        // fallback to the default .env if the specific one isn't found
-        Env.Load(solutionDefaultPath);
+        if (File.Exists(solutionEnvironmentPath))
+        {
+            Env.Load(solutionEnvironmentPath);
+        }
+        else
+        {
+            // fallback to the default .env if the specific one isn't found
+            Env.Load(solutionDefaultPath);
+        }
     }
 
-    var awsAccessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY");
-    var awsSecretKey = Environment.GetEnvironmentVariable("AWS_SECRET_KEY");
-    var bucketPath = Environment.GetEnvironmentVariable("AWS_BUCKET_PATH");
+    var awsAccessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY") ?? builder.Configuration["AWS_ACCESS_KEY"];
+    var awsSecretKey = Environment.GetEnvironmentVariable("AWS_SECRET_KEY") ?? builder.Configuration["AWS_SECRET_KEY"];
+    var bucketPath = Environment.GetEnvironmentVariable("AWS_BUCKET_PATH") ?? builder.Configuration["AWS_BUCKET_PATH"];
 
     Serilog.Debugging.SelfLog.Enable(msg => Console.Error.WriteLine(msg));
 
@@ -65,10 +68,10 @@ try
 
     builder.Host.UseSerilog();
 
-    builder.WebHost.UseKestrel(options =>
-    {
-        options.AddServerHeader = false;
-    });
+    //builder.WebHost.UseKestrel(options =>
+    //{
+    //    options.AddServerHeader = false;
+    //});
 
     builder.Services.AddCors(options =>
     {
@@ -81,8 +84,8 @@ try
 
     var config = builder.Configuration;
 
-    var workoutsConnectionString = Environment.GetEnvironmentVariable("WORKOUTSDB_CONNECTIONSTRING");
-    var usersConnectionString = Environment.GetEnvironmentVariable("USERSDB_CONNECTIONSTRING");
+    var workoutsConnectionString = Environment.GetEnvironmentVariable("WORKOUTSDB_CONNECTIONSTRING") ?? builder.Configuration["WORKOUTSDB_CONNECTIONSTRING"];
+    var usersConnectionString = Environment.GetEnvironmentVariable("USERSDB_CONNECTIONSTRING") ?? builder.Configuration["USERSDB_CONNECTIONSTRING"];
 
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseNpgsql(usersConnectionString));
@@ -99,11 +102,11 @@ try
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
-                ValidIssuer = config["Jwt:Issuer"],
+                ValidIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? builder.Configuration["JWT_ISSUER"],
                 ValidateAudience = true,
-                ValidAudience = config["Jwt:Audience"],
+                ValidAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? builder.Configuration["JWT_AUDIENCE"],
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("TOKEN_SECRET")!)),
+                    Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("TOKEN_SECRET") ?? builder.Configuration["TOKEN_SECRET"]!)),
                 ValidateIssuerSigningKey = true,
                 ValidateLifetime = true
             };

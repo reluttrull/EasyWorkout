@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+	<RuntimeIdentifier>win-x86</RuntimeIdentifier>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -17,5 +18,14 @@
   <ItemGroup>
     <ProjectReference Include="..\EasyWorkout.Identity.Api\EasyWorkout.Identity.Api.csproj" />
   </ItemGroup>
+
+    <ItemGroup>
+	    <None Update="appsettings.json">
+		    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	    </None>
+	    <None Update="appsettings.Development.json">
+		    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	    </None>
+    </ItemGroup>
 
 </Project>

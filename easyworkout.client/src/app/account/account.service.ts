@@ -1,5 +1,6 @@
 import { Injectable, signal, effect } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 import { UserResponse, UpdateUserRequest, ChangeEmailRequest, ChangePasswordRequest } from '../model/interfaces';
 import { TokenService } from '../core/token.service';
 import { tap } from 'rxjs/operators';
@@ -7,7 +8,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-  private baseUrl = 'https://localhost:7033/api/auth';
+  private baseUrl = `${environment.authApi}/api/auth`;
   private readonly _user = signal<UserResponse | null>(null);
   readonly user = this._user.asReadonly();
 

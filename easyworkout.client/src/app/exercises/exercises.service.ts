@@ -1,12 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 import { CreateExerciseRequest, UpdateExerciseRequest, CreateSetRequest, ExerciseResponse } from '../model/interfaces';
 
 
 @Injectable({ providedIn: 'root' })
 export class ExercisesService {
-  private baseUrl = 'https://localhost:7011/api/exercises';
+  private baseUrl = `${environment.workoutsApi}/api/exercises`;
   http = inject(HttpClient);
   router = inject(Router);
 

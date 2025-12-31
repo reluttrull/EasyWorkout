@@ -1,12 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 import { FinishWorkoutRequest, UpdateCompletedWorkoutRequest, CompletedWorkoutResponse } from '../model/interfaces';
 
 
 @Injectable({ providedIn: 'root' })
 export class CompletedWorkoutsService {
-  private baseUrl = 'https://localhost:7011/api/completed-workouts';
+  private baseUrl = `${environment.workoutsApi}/api/completed-workouts`;
   http = inject(HttpClient);
   router = inject(Router);
 

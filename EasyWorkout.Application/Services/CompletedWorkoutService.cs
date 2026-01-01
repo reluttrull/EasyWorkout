@@ -38,7 +38,9 @@ namespace EasyWorkout.Application.Services
             var completedWorkoutToDelete = await _workoutsContext.CompletedWorkouts
                 .Include(cw => cw.CompletedExercises)
                     .ThenInclude(ce => ce.CompletedExerciseSets)
-                .SingleAsync(cw => cw.Id == id, token);
+                .SingleOrDefaultAsync(cw => cw.Id == id, token);
+
+            if (completedWorkoutToDelete is null) return false;
 
             _workoutsContext.CompletedExerciseSets.RemoveRange(completedWorkoutToDelete.CompletedExercises.SelectMany(ce => ce.CompletedExerciseSets));
             _workoutsContext.CompletedExercises.RemoveRange(completedWorkoutToDelete.CompletedExercises);

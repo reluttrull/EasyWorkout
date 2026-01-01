@@ -29,7 +29,9 @@ namespace EasyWorkout.Application.Services
 
         public async Task<bool> DeleteAsync(Guid id, CancellationToken token = default)
         {
-            var exerciseToDelete = _workoutsContext.Exercises.Single(e => e.Id == id);
+            var exerciseToDelete = _workoutsContext.Exercises.SingleOrDefault(e => e.Id == id);
+
+            if (exerciseToDelete is null) return false;
 
             _workoutsContext.Exercises.Remove(exerciseToDelete);
             var result = await _workoutsContext.SaveChangesAsync(token);

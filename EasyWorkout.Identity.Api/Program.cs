@@ -72,7 +72,7 @@ builder.Host.UseSerilog();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowClient", policy =>
-        policy.WithOrigins("https://reluttrull.github.io", "https://localhost:55169")
+        policy.WithOrigins("https://reluttrull.github.io", "https://localhost:4200")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials());

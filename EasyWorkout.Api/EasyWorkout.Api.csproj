@@ -7,7 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <SpaRoot>..\easyworkout.client</SpaRoot>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
-    <SpaProxyServerUrl>https://localhost:55169</SpaProxyServerUrl>
+    <SpaProxyServerUrl>https://localhost:4200</SpaProxyServerUrl>
   </PropertyGroup>
 
   <ItemGroup>

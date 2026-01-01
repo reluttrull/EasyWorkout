@@ -36,7 +36,7 @@ export class LoginComponent {
       this.form.value.password!
     ).subscribe({
       next: () => {
-        this.router.navigate(['/workouts']);
+        this.router.navigate(['workouts']);
       },
       error: (err) => {
         this.validationErrors.update(errs => [...errs, err.error?.message ?? 'Login failed.']);

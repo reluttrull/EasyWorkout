@@ -135,7 +135,7 @@ export class DoWorkout implements OnInit {
     }
 
     this.completedWorkoutsService.create(request).subscribe({
-      next: () => this.router.navigate(['/completed-workouts']),
+      next: () => this.router.navigate(['completed-workouts']),
       error: err => console.error(err)
     });
   }

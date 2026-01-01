@@ -41,7 +41,7 @@ export class RegisterComponent {
     }
     this.auth.register(this.form.value).subscribe({
       next: () => {
-        this.router.navigate(['/login']);
+        this.router.navigate(['login']);
       },
       error: (err) => {
         if (err.status == 400 && err.error?.errors) {

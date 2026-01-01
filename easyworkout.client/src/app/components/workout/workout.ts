@@ -54,7 +54,7 @@ export class WorkoutComponent {
   }
 
   startWorkout() {
-    this.router.navigate([`/do-workout/${this.workout().id}`]);
+    this.router.navigate([`do-workout/${this.workout().id}`]);
   }
 
   edit() {

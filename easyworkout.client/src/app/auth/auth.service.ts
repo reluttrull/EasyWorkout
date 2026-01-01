@@ -43,6 +43,6 @@ export class AuthService {
 
   logout() {
     this.tokenService.clear();
-    this.router.navigate(['/login']);
+    this.router.navigate(['login']);
   }
 }

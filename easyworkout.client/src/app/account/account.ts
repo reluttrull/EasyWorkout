@@ -54,7 +54,7 @@ export class Account {
     this.accountService.update(request).subscribe({
       next: (res:UserResponse) => {
         this.isEdit.set(false);
-        this.router.navigate(['/account']);
+        this.router.navigate(['account']);
       },
       error: (err:any) => {
         if (err.status == 400 && err.error?.errors) {

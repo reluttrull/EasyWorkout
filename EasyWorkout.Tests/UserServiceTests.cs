@@ -40,10 +40,11 @@ namespace EasyWorkout.Tests
             {
                 var userService = new UserService(context, _userManager);
                 var userId = Guid.NewGuid();
+                var firstEdited = DateTime.UtcNow;
                 var user = new User()
                 {
                     Id = userId,
-                    LastEditedDate = DateTime.UtcNow
+                    LastEditedDate = firstEdited
                 };
                 context.Users.Add(user);
                 await context.SaveChangesAsync();
@@ -56,6 +57,7 @@ namespace EasyWorkout.Tests
                 var changedUser = await userService.ChangeEmailAsync(userId, request);
                 Assert.NotNull(changedUser);
                 Assert.Equal("new@email.com", changedUser.Email);
+                Assert.NotEqual(firstEdited, changedUser.LastEditedDate);
             }
         }
 
@@ -82,6 +84,39 @@ namespace EasyWorkout.Tests
                 var retrievedUser = await userService.GetByIdAsync(userId);
                 Assert.NotNull(retrievedUser);
                 Assert.Equal("Ron", retrievedUser.FirstName);
+            }
+        }
+
+        [Fact]
+        public async Task TestUpdateInfoSuccess()
+        {
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .Options;
+
+            await using (var context = new AppDbContext(options))
+            {
+                var userService = new UserService(context, _userManager);
+                var userId = Guid.NewGuid();
+                var firstEdited = DateTime.UtcNow;
+                var user = new User()
+                {
+                    Id = userId,
+                    LastEditedDate = firstEdited
+                };
+                context.Users.Add(user);
+                await context.SaveChangesAsync();
+
+                UpdateUserRequest request = new()
+                {
+                    FirstName = "Bob",
+                    LastName = "The Builder"
+                };
+
+                var changedUser = await userService.UpdateAsync(userId, request);
+                Assert.NotNull(changedUser);
+                Assert.Equal("Bob", changedUser.FirstName);
+                Assert.NotEqual(firstEdited, changedUser.LastEditedDate);
             }
         }
     }

@@ -20,5 +20,14 @@ namespace EasyWorkout.Contracts.Model
             Minutes = 1,
             Hours = 2
         }
+        public enum DistanceUnit
+        {
+            Feet = 0,
+            Yards = 1,
+            Miles = 2,
+            Meters = 3,
+            Kilometers = 4,
+            Laps = 5
+        }
     }
 }

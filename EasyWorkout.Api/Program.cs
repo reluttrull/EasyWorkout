@@ -19,8 +19,8 @@ try
     var builder = WebApplication.CreateBuilder(args);
 
     string root = Directory.GetCurrentDirectory();
-    //string solutionEnvironmentPath = Path.Combine(root, $"../.env.production"); // for testing env
-    string solutionEnvironmentPath = Path.Combine(root, $"../.env.{builder.Environment.EnvironmentName}");
+    string solutionEnvironmentPath = Path.Combine(root, $"../.env.production"); // for testing env
+    //string solutionEnvironmentPath = Path.Combine(root, $"../.env.{builder.Environment.EnvironmentName}");
     string solutionDefaultPath = Path.Combine(root, "../.env");
 
     if (builder.Environment.IsDevelopment())

@@ -1,5 +1,6 @@
 ﻿using EasyWorkout.Contracts.Model;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace EasyWorkout.Application.Model
 {
@@ -19,5 +20,8 @@ namespace EasyWorkout.Application.Model
         [Range(0, 3600, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public double? Duration { get; set; }
         public Enums.DurationUnit? DurationUnit { get; set; }
+        [Range(0, 1000, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
+        public double? Distance { get; set; }
+        public Enums.DistanceUnit? DistanceUnit { get; set; }
     }
 }

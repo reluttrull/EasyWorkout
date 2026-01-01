@@ -1,7 +1,9 @@
-﻿using System;
+﻿using EasyWorkout.Contracts.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace EasyWorkout.Contracts.Requests
 {
@@ -18,5 +20,7 @@ namespace EasyWorkout.Contracts.Requests
         public double? Weight { get; set; }
         [Range(0, 3600, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public double? Duration { get; set; }
+        [Range(0, 1000, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
+        public double? Distance { get; set; }
     }
 }

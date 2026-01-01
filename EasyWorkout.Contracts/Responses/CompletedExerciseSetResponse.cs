@@ -19,5 +19,9 @@ namespace EasyWorkout.Contracts.Responses
         public double? Duration { get; set; }
         public double? GoalDuration { get; set; }
         public string? DurationUnit { get; set; }
+        public double? Distance { get; set; }
+        public double? GoalDistance { get; set; }
+        public string? DistanceUnit { get; set; }
+
     }
 }

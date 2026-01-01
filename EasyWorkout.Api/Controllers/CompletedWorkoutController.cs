@@ -21,9 +21,9 @@ namespace EasyWorkout.Api.Controllers
         private readonly ILogger _logger;
 
         public CompletedWorkoutController(
-            ICompletedWorkoutService completedWorkoutService, 
+            ICompletedWorkoutService completedWorkoutService,
             IWorkoutService workoutService,
-            IExerciseService exerciseService, 
+            IExerciseService exerciseService,
             ILogger<CompletedWorkoutController> logger)
         {
             _completedWorkoutService = completedWorkoutService;
@@ -67,15 +67,17 @@ namespace EasyWorkout.Api.Controllers
                         if (basedOnSet is null) return NotFound();
                         completedExerciseSet.DurationUnit = basedOnSet.DurationUnit;
                         completedExerciseSet.WeightUnit = basedOnSet.WeightUnit;
+                        completedExerciseSet.DistanceUnit = basedOnSet.DistanceUnit;
                         completedExerciseSet.GoalDuration = basedOnSet.Duration;
                         completedExerciseSet.GoalWeight = basedOnSet.Weight;
+                        completedExerciseSet.GoalDistance = basedOnSet.Distance;
                         completedExerciseSet.GoalReps = basedOnSet.Reps;
                     }
                 }
             }
             await _completedWorkoutService.CreateAsync(completedWorkout, token);
 
-            _logger.LogInformation("User {userId} finished workout {workoutId} with completed workout id {completedWorkoutId}.", 
+            _logger.LogInformation("User {userId} finished workout {workoutId} with completed workout id {completedWorkoutId}.",
                 userId, completedWorkout.WorkoutId, completedWorkout.Id);
             return CreatedAtAction(nameof(Get), new { id = completedWorkout.Id }, completedWorkout.MapToResponse());
         }

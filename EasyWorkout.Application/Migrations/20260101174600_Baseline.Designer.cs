@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyWorkout.Application.Migrations
 {
     [DbContext(typeof(WorkoutsContext))]
-    [Migration("20251230215006_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260101174600_Baseline")]
+    partial class Baseline
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

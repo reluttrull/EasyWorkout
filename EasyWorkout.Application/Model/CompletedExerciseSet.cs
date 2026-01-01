@@ -24,5 +24,9 @@ namespace EasyWorkout.Application.Model
         public double? Duration { get; set; }
         public double? GoalDuration { get; set; }
         public Enums.DurationUnit? DurationUnit { get; set; }
+        [Range(0, 1000, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
+        public double? Distance { get; set; }
+        public double? GoalDistance { get; set; }
+        public Enums.DistanceUnit? DistanceUnit { get; set; }
     }
 }

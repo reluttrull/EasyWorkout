@@ -3,6 +3,9 @@
     @for (completedWorkout of completedWorkouts() | orderBy:'completedDate':'desc'; track completedWorkout.id) {
         <app-completed-workout [completedWorkout]="completedWorkout" (onCompletedWorkoutChanged)="reload()"/>
     }
+    @if (completedWorkouts().length == 0) {
+        <div>Looks like you haven't tried any of your workouts yet.  <a matButton="text" href="workouts" alt="workouts">Pick one to try?</a></div>
+    }
 } @else {
     <mat-spinner></mat-spinner>
 }

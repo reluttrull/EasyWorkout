@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
 import { CompletedWorkoutsService } from './completed-workouts.service';
 import { CompletedWorkoutResponse } from '../model/interfaces';
 import { CompletedWorkoutComponent } from '../components/completed-workout/completed-workout';
@@ -8,7 +9,7 @@ import { OrderByPipe } from '../pipes/order-by-pipe';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, MatProgressSpinnerModule, CompletedWorkoutComponent, OrderByPipe],
+  imports: [CommonModule, MatProgressSpinnerModule, MatButtonModule, CompletedWorkoutComponent, OrderByPipe],
   templateUrl: './completed-workouts.html',
   styleUrl: './completed-workouts.css'
 })

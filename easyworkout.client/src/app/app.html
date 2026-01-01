@@ -1,18 +1,19 @@
 <header class="two-column-flex-container">
-    <a href="/" class="logo"><h1>Easy Workout</h1></a>
-    <div class="horizontal-flex">
-        @if (isLoggedIn()) {
-            <menu class="desktop horizontal-flex">
-                <div>{{ user()?.userName }}</div>
-                <div><a matButton="text" href="workouts" alt="workouts">Workouts</a></div>
-                <div><a matButton="text" href="exercises" alt="exercises">Exercises</a></div>
-                <div><a matButton="text" href="completed-workouts" alt="completed workouts">Completed Workouts</a></div>
-                <div><a matButton="text" href="account" alt="account info">Account info</a></div>
-                <button matIconButton  (click)="logout()" alt="logout">
-                    <mat-icon>logout</mat-icon>
-                </button>
-            </menu>
-            <menu class="mobile">
+    <a href="/EasyWorkout/" class="logo"><h1>Easy Workout</h1></a>
+    @if (isLoggedIn()) {
+        <menu class="desktop horizontal-flex">
+            <div>{{ user()?.userName }}</div>
+            <div><a matButton="text" href="workouts" alt="workouts">Workouts</a></div>
+            <div><a matButton="text" href="exercises" alt="exercises">Exercises</a></div>
+            <div><a matButton="text" href="completed-workouts" alt="completed workouts">Completed Workouts</a></div>
+            <div><a matButton="text" href="account" alt="account info">Account info</a></div>
+            <button matIconButton  (click)="logout()" alt="logout">
+                <mat-icon>logout</mat-icon>
+            </button>
+        </menu>
+        <menu class="mobile horizontal-flex">
+            <div>{{ user()?.userName }}</div>
+            <div>
                 <button matIconButton [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
                     <mat-icon>menu</mat-icon>
                 </button>
@@ -25,9 +26,9 @@
                         <mat-icon>logout</mat-icon>
                     </button>
                 </mat-menu>
-            </menu>
-        }
-    </div>
+            </div>
+        </menu>
+    }
 </header>
 <main>
     <router-outlet></router-outlet>

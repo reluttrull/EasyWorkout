@@ -1,4 +1,4 @@
-import { WeightUnit, DurationUnit } from './enums';
+import { WeightUnit, DurationUnit, DistanceUnit } from './enums';
 
 export interface CreateWorkoutRequest {
   name: string;
@@ -31,6 +31,7 @@ export interface FinishExerciseSetRequest {
   reps?: number | null;
   weight?: number | null;
   duration?: number | null;
+  distance?: number | null;
 }
 
 export interface UpdateCompletedWorkoutRequest {
@@ -87,6 +88,9 @@ export interface CompletedExerciseSetResponse {
   duration?: number | null;
   goalDuration?: number | null;
   durationUnit?: string | null;
+  distance?: number | null;
+  goalDistance?: number | null;
+  distanceUnit?: string | null;
 }
 
 export interface CreateExerciseRequest {
@@ -119,6 +123,8 @@ export interface ExerciseSetResponse {
   weightUnit?: string | null;
   duration?: number | null;
   durationUnit?: string | null;
+  distance?: number | null;
+  distanceUnit?: string | null;
 }
 
 export interface CreateSetRequest {
@@ -127,6 +133,8 @@ export interface CreateSetRequest {
   weightUnit?: WeightUnit | null;
   duration?: number | null;
   durationUnit?: DurationUnit | null;
+  distance?: number | null;
+  distanceUnit?: DistanceUnit | null;
 }
 
 export interface UpdateUserRequest {

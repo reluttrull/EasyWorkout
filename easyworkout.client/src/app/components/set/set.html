@@ -9,6 +9,9 @@
     @if (set().duration) {
         - <span><strong>Duration</strong> ({{ set().durationUnit }}) {{ set().duration }}</span>
     }
+    @if (set().distance) {
+        - <span><strong>Distance</strong> ({{ set().distanceUnit }}) {{ set().distance }}</span>
+    }
     
     <button matIconButton extended (click)="delete(set().id)" alt="delete set">
         <mat-icon>delete</mat-icon>

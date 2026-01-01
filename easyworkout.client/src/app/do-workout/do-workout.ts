@@ -82,7 +82,8 @@ export class DoWorkout implements OnInit {
             setNumber: [set.setNumber],
             weight: [null],
             reps: [null],
-            duration: [null]
+            duration: [null],
+            distance: [null]
           })
         );
       }
@@ -125,7 +126,8 @@ export class DoWorkout implements OnInit {
           setNumber: set.setNumber!,
           reps: set.reps,
           weight: set.weight,
-          duration: set.duration
+          duration: set.duration,
+          distance: set.distance
         });
       }
 

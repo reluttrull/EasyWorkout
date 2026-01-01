@@ -27,6 +27,10 @@
                 @if (set.duration || set.goalDuration) {
                     <div>{{ set.duration }} / {{ set.goalDuration }} {{ set.durationUnit }}</div>
                 }
+
+                @if (set.distance || set.goalDistance) {
+                    <div>{{ set.distance }} / {{ set.goalDistance }} {{ set.distanceUnit }}</div>
+                }
             </div>
         }
         </div>

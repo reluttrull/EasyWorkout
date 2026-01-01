@@ -11,3 +11,12 @@ export enum DurationUnit {
     Minutes = "Minutes",
     Hours = "Hours"
 }
+
+export enum DistanceUnit {
+    Feet = "Feet",
+    Yards = "Yards",
+    Miles = "Miles",
+    Meters = "Meters",
+    Kilometers = "Kilometers",
+    Laps = "Laps"
+}

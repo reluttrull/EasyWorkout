@@ -6,7 +6,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import { ExercisesService } from '../../exercises/exercises.service';
-import { WeightUnit, DurationUnit } from '../../model/enums';
+import { WeightUnit, DurationUnit, DistanceUnit } from '../../model/enums';
 import { CreateSetRequest } from '../../model/interfaces';
 
 @Component({
@@ -27,14 +27,18 @@ export class CreateSet {
     weight: [null],
     weightUnit: [null],
     duration: [null],
-    durationUnit: [null]
+    durationUnit: [null],
+    distance: [null],
+    distanceUnit: [null]
   });
   validationErrors = signal<string[]>([]);
 
   public readonly WeightUnit = WeightUnit;
   public readonly DurationUnit = DurationUnit;
+  public readonly DistanceUnit = DistanceUnit;
   public weightUnitOptions = Object.values(this.WeightUnit);
   public durationUnitOptions = Object.values(this.DurationUnit);
+  public distanceUnitOptions = Object.values(this.DistanceUnit);
   
   submit() {
     this.validationErrors.set([]);
@@ -44,7 +48,9 @@ export class CreateSet {
       weight: this.form.value.weight,
       weightUnit: this.form.value.weightUnit,
       duration: this.form.value.duration,
-      durationUnit: this.form.value.durationUnit
+      durationUnit: this.form.value.durationUnit,
+      distance: this.form.value.distance,
+      distanceUnit: this.form.value.distanceUnit
     };
 
     this.exercisesService.createSet(this.exerciseId(), setRequest).subscribe({

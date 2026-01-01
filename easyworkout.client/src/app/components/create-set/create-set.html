@@ -36,6 +36,21 @@
             </mat-select>
         </mat-form-field>
     </div>
+    <div>
+        <mat-form-field class="small-form-field">
+            <mat-label>Distance</mat-label>
+            <input matInput placeholder="Distance" formControlName="distance" type="number" />
+        </mat-form-field>
+        <mat-form-field class="medium-form-field">
+            <mat-label>Distance units:</mat-label>
+            <mat-select matInput title="Distance Units" placeholder="Distance Units" formControlName="distanceUnit">
+                <mat-option value="">--Please choose an option--</mat-option>
+                @for (distanceUnit of distanceUnitOptions; track $index) {
+                    <mat-option [value]="distanceUnit">{{distanceUnit}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+    </div>
     <button matFab extended type="submit" alt="save new set">
         <mat-icon>save</mat-icon>
         Save set

@@ -1,4 +1,5 @@
 ﻿using EasyWorkout.Application.Data;
+using EasyWorkout.Identity.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,15 @@ namespace EasyWorkout.Tests
                 .UseInMemoryDatabase("Warmup")
                 .Options;
 
-            using var ctx = new WorkoutsContext(options);
-            ctx.Database.EnsureCreated();
+            using var context = new WorkoutsContext(options);
+            context.Database.EnsureCreated();
+
+            var authOptions = new DbContextOptionsBuilder<AppDbContext>()
+                .UseInMemoryDatabase("Warmup")
+                .Options;
+
+            using var authcontext = new AppDbContext(authOptions);
+            authcontext.Database.EnsureCreated();
         }
     }
 

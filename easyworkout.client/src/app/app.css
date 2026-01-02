@@ -2,9 +2,33 @@
     max-width: 1920px;
 }
 
-.logo {
+.logo-anchor {
     text-decoration: none;
     color: inherit;
+    position: relative;
+}
+
+.logo {
+    position: absolute;
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 1.8em;
+}
+
+.main-logo {
+    top: 0px;
+    left: 5px;
+    color: rgb(0, 92, 187);
+    z-index: 1;
+}
+
+.offset-logo {
+    top: 2px;
+    left: 7px;
+    color: #bbb;
+    z-index: -1;
 }
 
 .horizontal-flex {
@@ -15,6 +39,12 @@
 }
 
 @media screen and (max-width: 860px) {
+    .horizontal-flex {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
     .desktop {
         display:none;
     }

@@ -1,5 +1,10 @@
 <header class="two-column-flex-container">
-    <a href="/EasyWorkout/" class="logo"><h1>Easy Workout</h1></a>
+    <div>
+        <a href="/EasyWorkout/" class="logo-anchor">
+            <div class="logo main-logo">Easy Workout</div>
+            <div class="logo offset-logo">Easy Workout</div>
+        </a>
+    </div>
     @if (isLoggedIn()) {
         <menu class="desktop horizontal-flex">
             <div>{{ user()?.userName }}</div>

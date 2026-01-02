@@ -45,6 +45,7 @@ export class RegisterComponent {
     }
     this.auth.register(this.form.value).subscribe({
       next: () => {
+        this.isWaiting.set(false);
         this.router.navigate(['login']);
       },
       error: (err) => {
@@ -55,10 +56,8 @@ export class RegisterComponent {
         } else {
           this.validationErrors.update(errs => [...errs, 'An unexpected error occurred.']);
         };
-        return;
-      },
-      complete: () => {
         this.isWaiting.set(false);
+        return;
       }
     });
   }

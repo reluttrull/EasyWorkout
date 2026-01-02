@@ -40,12 +40,11 @@ export class LoginComponent {
       this.form.value.password!
     ).subscribe({
       next: () => {
+        this.isWaiting.set(false);
         this.router.navigate(['workouts']);
       },
       error: (err) => {
         this.validationErrors.update(errs => [...errs, err.error?.message ?? 'Login failed.']);
-      },
-      complete: () => {
         this.isWaiting.set(false);
       }
     });

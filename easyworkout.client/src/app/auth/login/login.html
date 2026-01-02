@@ -9,12 +9,16 @@
         <mat-label labelfor="password">Password</mat-label>
         <input matInput placeholder="Password" type="password" formControlName="password" />
     </mat-form-field>
-    <div>
-        <button matFab extended type="submit" alt="login">
-            <mat-icon>login</mat-icon>    
-            Login
-        </button>
-    </div>
+    @if (!isWaiting()) {
+        <div>
+            <button matFab extended type="submit" alt="login">
+                <mat-icon>login</mat-icon>    
+                Login
+            </button>
+        </div>
+    } @else {
+        <mat-spinner></mat-spinner>
+    }
 </form>
 <div>
     @for (error of validationErrors(); track $index) {

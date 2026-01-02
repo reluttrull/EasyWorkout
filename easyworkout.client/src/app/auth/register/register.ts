@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -10,11 +11,13 @@ import { AuthService } from '../auth.service';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule],
+  imports: [ReactiveFormsModule, MatProgressSpinnerModule, MatIconModule, MatButtonModule, 
+    MatFormFieldModule, MatInputModule],
   templateUrl: './register.html',
   styleUrl: './register.css'
 })
 export class RegisterComponent {
+  isWaiting = signal(false);
   validationErrors = signal<string[]>([]);
   form!: FormGroup;
 
@@ -34,6 +37,7 @@ export class RegisterComponent {
   }
 
   submit() {
+    this.isWaiting.set(true);
     this.validationErrors.set([]);
     if (this.form.value.password != this.form.value.confirmPassword) {
       this.validationErrors.update(errs => [...errs, 'Typed passwords do not match.']);
@@ -52,6 +56,9 @@ export class RegisterComponent {
           this.validationErrors.update(errs => [...errs, 'An unexpected error occurred.']);
         };
         return;
+      },
+      complete: () => {
+        this.isWaiting.set(false);
       }
     });
   }

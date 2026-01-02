@@ -29,10 +29,14 @@
         <input matInput placeholder="Confirm Password" type="password" formControlName="confirmPassword" />
     </mat-form-field>
     <br />
-    <button matFab extended type="submit" alt="register">
-        <mat-icon>perm_identity</mat-icon>
-        Register
-    </button>
+    @if (!isWaiting()) {
+        <button matFab extended type="submit" alt="register">
+            <mat-icon>perm_identity</mat-icon>
+            Register
+        </button>
+    } @else {
+        <mat-spinner></mat-spinner>
+    }
     <div>
         @for (error of validationErrors(); track $index) {
             <div class="error">{{ error }}</div>

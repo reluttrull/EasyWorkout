@@ -146,7 +146,11 @@ try
     builder.Services.AddScoped<IExerciseService, ExerciseService>();
     builder.Services.AddScoped<ICompletedWorkoutService, CompletedWorkoutService>();
 
+    builder.Services.AddHealthChecks();
+
     var app = builder.Build();
+
+    app.MapHealthChecks("/health");
 
     app.UseSerilogRequestLogging();
 

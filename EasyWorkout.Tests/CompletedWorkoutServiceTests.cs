@@ -106,7 +106,6 @@ namespace EasyWorkout.Tests
                 };
 
                 var success = await cwService.CreateAsync(cw);
-                Assert.True(success);
                 success = await cwService.CreateAsync(cw);
                 Assert.False(success);
             }

@@ -49,9 +49,10 @@ export class RegisterComponent {
         this.router.navigate(['login']);
       },
       error: (err) => {
+        console.log(err);
         if (err.status == 400 && err.error?.errors) {
-          for (const key of Object.keys(err.error.errors)) {
-            this.validationErrors.update(errs => [...errs, ...err.error.errors[key]]);
+          for (var currentError in err.error.errors) {
+            this.validationErrors.update(errs => [...errs, `${currentError}: ${err.error.errors[currentError]}`]);
           }
         } else {
           this.validationErrors.update(errs => [...errs, 'An unexpected error occurred.']);

@@ -42,7 +42,7 @@ namespace EasyWorkout.Tests
         }
 
         [Fact]
-        public async Task TestRegisterSuccessful()
+        public async Task Register_ValidRequest_ShouldReturnCreatedAtAction()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")

@@ -14,7 +14,7 @@ namespace EasyWorkout.Tests
     {
 
         [Fact]
-        public async Task TestGetByIdAsyncSuccess()
+        public async Task GetByIdAsync_ExistingCompletedWorkoutWithDependents_ShouldBeFetchedWithDependents()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -55,7 +55,7 @@ namespace EasyWorkout.Tests
         }
 
         [Fact]
-        public async Task TestCreate()
+        public async Task CreateAsync_ValidCompletedWorkout_ShouldBeAddedToContext()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -77,19 +77,16 @@ namespace EasyWorkout.Tests
 
                 var success = await cwService.CreateAsync(cw);
                 Assert.True(success);
+                Assert.NotEmpty(context.CompletedWorkouts);
 
-                var result = await cwService.GetByIdAsync(cwId);
-
-                Assert.NotNull(result);
-                Assert.Equal(userId, result.CompletedByUserId);
-
+                // todo: separate
                 var belongsToUser = await cwService.BelongsToUserAsync(cwId, userId);
                 Assert.True(belongsToUser);
             }
         }
 
         [Fact]
-        public async Task TestCreateDuplicate()
+        public async Task CreateAsync_DuplicateCompletedWorkout_ShouldNotBeCreated()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -116,7 +113,7 @@ namespace EasyWorkout.Tests
         }
 
         [Fact]
-        public async Task TestDeleteSuccess()
+        public async Task DeleteAsync_ExistingCompletedWorkout_ShouldBeDeleted()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -143,7 +140,7 @@ namespace EasyWorkout.Tests
         }
 
         [Fact]
-        public async Task TestDeleteNotFound()
+        public async Task DeleteAsync_NonExistingCompletedWorkout_ShouldReturnFalse()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -159,7 +156,7 @@ namespace EasyWorkout.Tests
 
 
         [Fact]
-        public async Task TestGetAllForUser()
+        public async Task GetAllForUserAsync_ShouldReturnOnlyCompletedWorkoutsOfUser()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -210,7 +207,7 @@ namespace EasyWorkout.Tests
         }
 
         [Fact]
-        public async Task TestUpdateSuccess()
+        public async Task UpdateAsync_ValidRequest_ShouldUpdateCompletedWorkoutProperties()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")

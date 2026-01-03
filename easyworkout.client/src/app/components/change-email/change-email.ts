@@ -45,6 +45,8 @@ export class ChangeEmail {
           for (const key of Object.keys(err.error.errors)) {
             this.validationErrors.update(errs => [...errs, ...err.error.errors[key]]);
           }
+        } else if (err.error) {
+          this.validationErrors.update(errs => [...errs, err.error]);
         } else {
           this.validationErrors.update(errs => [...errs, 'An unexpected error occurred.']);
         };

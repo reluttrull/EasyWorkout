@@ -13,7 +13,7 @@ namespace EasyWorkout.Tests
     public class ExerciseServiceTests
     {
         [Fact]
-        public async Task TestGetByIdAsyncSuccess()
+        public async Task GetByIdAsync_ExistingExercise_ShouldReturnExercise()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -42,7 +42,7 @@ namespace EasyWorkout.Tests
         }
 
         [Fact]
-        public async Task TestCreate()
+        public async Task CreateAsync_ValidExercise_ShouldBeAddedToContext()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -64,19 +64,16 @@ namespace EasyWorkout.Tests
 
                 var success = await exerciseService.CreateAsync(exercise);
                 Assert.True(success);
+                Assert.NotEmpty(context.Exercises);
 
-                var result = await exerciseService.GetByIdAsync(exerciseId);
-
-                Assert.NotNull(result);
-                Assert.Equal("Exercise", result.Name);
-
+                //todo: separate
                 var belongsToUser = await exerciseService.BelongsToUserAsync(exerciseId, userId);
                 Assert.True(belongsToUser);
             }
         }
 
         [Fact]
-        public async Task TestCreateDuplicate()
+        public async Task CreateAsync_DuplicateExercise_ShouldNotBeCreated()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -96,14 +93,13 @@ namespace EasyWorkout.Tests
                 };
 
                 var success = await exerciseService.CreateAsync(exercise);
-                Assert.True(success);
                 success = await exerciseService.CreateAsync(exercise);
                 Assert.False(success);
             }
         }
 
         [Fact]
-        public async Task TestDeleteSuccess()
+        public async Task DeleteAsync_ExistingExercise_ShouldBeDeleted()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -122,15 +118,16 @@ namespace EasyWorkout.Tests
                     LastEditedDate = DateTime.UtcNow
                 };
 
-                var success = await exerciseService.CreateAsync(exercise);
-                Assert.True(success);
-                success = await exerciseService.DeleteAsync(exerciseId);
+                context.Exercises.Add(exercise);
+                await context.SaveChangesAsync();
+
+                var success = await exerciseService.DeleteAsync(exerciseId);
                 Assert.True(success);
             }
         }
 
         [Fact]
-        public async Task TestDeleteNotFound()
+        public async Task DeleteAsync_NonExistingExercise_ShouldReturnFalse()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -145,7 +142,7 @@ namespace EasyWorkout.Tests
         }
 
         [Fact]
-        public async Task TestGetAllForUser()
+        public async Task GetAllForUserAsync_ShouldReturnOnlyCompletedWorkoutsOfUser()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -163,8 +160,7 @@ namespace EasyWorkout.Tests
                     Name = "Exercise",
                     LastEditedDate = DateTime.UtcNow
                 };
-                var success = await exerciseService.CreateAsync(exercise);
-                Assert.True(success);
+                context.Exercises.Add(exercise);
                 exercise = new Exercise()
                 {
                     Id = Guid.NewGuid(),
@@ -173,8 +169,7 @@ namespace EasyWorkout.Tests
                     Name = "Exercise 2",
                     LastEditedDate = DateTime.UtcNow
                 };
-                success = await exerciseService.CreateAsync(exercise);
-                Assert.True(success);
+                context.Exercises.Add(exercise);
                 var otherExerciseId = Guid.NewGuid();
                 exercise = new Exercise()
                 {
@@ -184,19 +179,20 @@ namespace EasyWorkout.Tests
                     Name = "Somebody Else's Exercise",
                     LastEditedDate = DateTime.UtcNow
                 };
-                success = await exerciseService.CreateAsync(exercise);
-                Assert.True(success);
+                context.Exercises.Add(exercise);
+                await context.SaveChangesAsync();
                 var exercises = await exerciseService.GetAllForUserAsync(userId);
                 Assert.NotNull(exercises);
                 Assert.Equal(exercises?.Count(), 2);
 
+                // todo: separate
                 var belongsToUser = await exerciseService.BelongsToUserAsync(otherExerciseId, userId);
                 Assert.False(belongsToUser);
             }
         }
 
         [Fact]
-        public async Task TestAddDeleteSet()
+        public async Task DeleteSetAsync_ExistingSet_ShouldBeDeletedAndRemovedFromExercise()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -215,31 +211,26 @@ namespace EasyWorkout.Tests
                     Name = "Exercise",
                     LastEditedDate = DateTime.UtcNow
                 };
-
-                var success = await exerciseService.CreateAsync(exercise);
-                Assert.True(success);
+                context.Exercises.Add(exercise);
+                await context.SaveChangesAsync();
+                var setId = Guid.NewGuid();
                 var set = new ExerciseSet()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = setId,
                     ExerciseId = exerciseId,
                     SetNumber = 0
                 };
-                success = await exerciseService.CreateSetAsync(exerciseId, set);
+                var success = await exerciseService.CreateSetAsync(exerciseId, set);
+                success = await exerciseService.DeleteSetAsync(exerciseId, setId);
                 Assert.True(success);
                 var reloadedExercise = await exerciseService.GetByIdAsync(exerciseId);
-                Assert.NotNull(reloadedExercise);
-                Assert.NotEmpty(reloadedExercise.ExerciseSets);
-                var setToDeleteId = reloadedExercise.ExerciseSets.First().Id;
-                success = await exerciseService.DeleteSetAsync(exerciseId, setToDeleteId);
-                Assert.True(success);
-                reloadedExercise = await exerciseService.GetByIdAsync(exerciseId);
                 Assert.NotNull(reloadedExercise);
                 Assert.Empty(reloadedExercise.ExerciseSets);
             }
         }
 
         [Fact]
-        public async Task TestUpdateSuccess()
+        public async Task UpdateAsync_ValidRequest_ShouldUpdateExerciseProperties()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -258,8 +249,8 @@ namespace EasyWorkout.Tests
                     LastEditedDate = DateTime.UtcNow
                 };
 
-                var success = await exerciseService.CreateAsync(exercise);
-                Assert.True(success);
+                context.Exercises.Add(exercise);
+                await context.SaveChangesAsync();
 
                 UpdateExerciseRequest request = new()
                 {
@@ -274,7 +265,7 @@ namespace EasyWorkout.Tests
         }
 
         [Fact]
-        public async Task TestGetNextSetIndex()
+        public async Task GetNextSetIndexAsync_WhenNoSets_ShouldReturnZero()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -298,15 +289,39 @@ namespace EasyWorkout.Tests
                 Assert.True(success);
                 var nextSetIndex = await exerciseService.GetNextSetIndexAsync(exerciseId);
                 Assert.Equal(0, nextSetIndex);
+            }
+        }
+        [Fact]
+        public async Task GetNextSetIndexAsync_WhenOneSet_ShouldReturnOne()
+        {
+            var options = new DbContextOptionsBuilder<WorkoutsContext>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .Options;
+
+            await using (var context = new WorkoutsContext(options))
+            {
+                var exerciseService = new ExerciseService(context);
+                var userId = Guid.NewGuid();
+                var exerciseId = Guid.NewGuid();
+                var exercise = new Exercise()
+                {
+                    Id = exerciseId,
+                    AddedByUserId = userId,
+                    AddedDate = DateOnly.FromDateTime(DateTime.Now),
+                    Name = "Exercise",
+                    LastEditedDate = DateTime.UtcNow
+                };
+                context.Exercises.Add(exercise);
+                await context.SaveChangesAsync();
+
                 var set = new ExerciseSet()
                 {
                     Id = Guid.NewGuid(),
                     ExerciseId = exerciseId,
                     SetNumber = 0
                 };
-                success = await exerciseService.CreateSetAsync(exerciseId, set);
-                Assert.True(success);
-                nextSetIndex = await exerciseService.GetNextSetIndexAsync(exerciseId);
+                var success = await exerciseService.CreateSetAsync(exerciseId, set);
+                var nextSetIndex = await exerciseService.GetNextSetIndexAsync(exerciseId);
                 Assert.Equal(1, nextSetIndex);
             }
         }

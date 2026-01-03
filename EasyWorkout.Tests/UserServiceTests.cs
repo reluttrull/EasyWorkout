@@ -30,7 +30,7 @@ namespace EasyWorkout.Tests
         }
 
         [Fact]
-        public async Task TestChangeEmailAddressSuccess()
+        public async Task ChangeEmailAsync_WhenValidRequest_ShouldChangeEmailAddress()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -62,7 +62,7 @@ namespace EasyWorkout.Tests
         }
 
         [Fact]
-        public async Task TestGetByIdSuccess()
+        public async Task GetByIdAsync_WhenUserExists_ShouldReturnUser()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -83,12 +83,13 @@ namespace EasyWorkout.Tests
 
                 var retrievedUser = await userService.GetByIdAsync(userId);
                 Assert.NotNull(retrievedUser);
+                Assert.IsType<User>(retrievedUser);
                 Assert.Equal("Ron", retrievedUser.FirstName);
             }
         }
 
         [Fact]
-        public async Task TestUpdateInfoSuccess()
+        public async Task UpdateAsync_WhenRequestValid_ShouldUpdateUserProperties()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")

@@ -11,8 +11,10 @@ using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Sprache;
 using System.Data;
 using System.Security.Claims;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EasyWorkout.Identity.Api.Controllers
 {
@@ -46,7 +48,11 @@ namespace EasyWorkout.Identity.Api.Controllers
             try
             {
                 var existingUser = await _context.Users.FirstOrDefaultAsync(x => x.UserName == request.UserName);
-                if (existingUser is not null) return BadRequest("User already exists.");
+                if (existingUser is not null)
+                {
+                    ModelState.AddModelError("errors", $"Username {request.UserName} is already taken.");
+                    return BadRequest(ModelState);
+                }
 
                 User user = new()
                 {
@@ -65,7 +71,11 @@ namespace EasyWorkout.Identity.Api.Controllers
                 {
                     var errorsText = string.Join(", ", createUserResult.Errors.Select(e => e.Description));
                     _logger.LogError("Failed to create user.  Errors: {e}", errorsText);
-                    return BadRequest($"Failed to create user.  Errors: {errorsText}");
+                    foreach (var error in createUserResult.Errors)
+                    {
+                        ModelState.AddModelError("errors", error.Description);
+                    }
+                    return BadRequest(ModelState);
                 }
 
                 var addClaimUserResult = await _userManager.AddClaimAsync(user, new Claim(AuthConstants.FreeMemberUserClaimName, "true"));
@@ -196,7 +206,7 @@ namespace EasyWorkout.Identity.Api.Controllers
             }
 
             var user = await _userService.ChangeEmailAsync(userId!.Value, request, token);
-            if (user is null) return NotFound();
+            if (user is null) return NotFound("Problem updating email.  Please check that your email address is typed correctly.");
             _logger.LogInformation("User with id {id} changed email to {email}.", userId, request.Email);
             return Ok(user.MapToResponse());
         }
@@ -212,7 +222,7 @@ namespace EasyWorkout.Identity.Api.Controllers
             }
 
             var user = await _userService.ChangePasswordAsync(userId!.Value, request, token);
-            if (user is null) return NotFound();
+            if (user is null) return NotFound("Problem updating password. Please check that current password is correct and matches, and that new password is at least 6 characters and contains an uppercase character, lowercase character, digit, and a non-alphanumeric character.");
             _logger.LogInformation("User with id {id} changed password.", userId);
             return Ok(user.MapToResponse());
         }

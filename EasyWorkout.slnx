@@ -4,6 +4,7 @@
     <File Path=".env.development" />
     <File Path=".env.production" />
     <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
     <File Path="ditchall.sql" />
     <File Path="docker-compose.yml" />
   </Folder>

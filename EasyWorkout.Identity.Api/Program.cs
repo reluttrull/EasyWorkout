@@ -45,7 +45,7 @@ try
         .MinimumLevel.Override("System", LogEventLevel.Warning)
         .WriteTo.Debug()
         .WriteTo.AmazonS3(
-            path: "log.txt",
+            path: "authlog.txt",
             bucketName: "easyworkout-backups-logs",
             bucketPath: bucketPath,
             endpoint: Amazon.RegionEndpoint.USEast2,

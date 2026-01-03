@@ -206,7 +206,7 @@ namespace EasyWorkout.Identity.Api.Controllers
             }
 
             var user = await _userService.ChangeEmailAsync(userId!.Value, request, token);
-            if (user is null) return NotFound();
+            if (user is null) return NotFound("Problem updating email.  Please check that your email address is typed correctly.");
             _logger.LogInformation("User with id {id} changed email to {email}.", userId, request.Email);
             return Ok(user.MapToResponse());
         }
@@ -222,7 +222,7 @@ namespace EasyWorkout.Identity.Api.Controllers
             }
 
             var user = await _userService.ChangePasswordAsync(userId!.Value, request, token);
-            if (user is null) return NotFound();
+            if (user is null) return NotFound("Problem updating password. Please check that current password is correct and matches, and that new password is at least 6 characters and contains an uppercase character, lowercase character, digit, and a non-alphanumeric character.");
             _logger.LogInformation("User with id {id} changed password.", userId);
             return Ok(user.MapToResponse());
         }

@@ -54,6 +54,8 @@ export class RegisterComponent {
           for (var currentError in err.error.errors) {
             this.validationErrors.update(errs => [...errs, `${currentError}: ${err.error.errors[currentError]}`]);
           }
+        } else if (err.error) {
+          this.validationErrors.update(errs => [...errs, err.error]);
         } else {
           this.validationErrors.update(errs => [...errs, 'An unexpected error occurred.']);
         };

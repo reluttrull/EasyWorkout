@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace EasyWorkout.Application.Model
 {
+    [Index(nameof(AddedByUserId))]
     public class Exercise
     {
         [Key]

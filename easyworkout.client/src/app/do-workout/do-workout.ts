@@ -1,23 +1,25 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import {MatButtonModule} from '@angular/material/button';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { WorkoutsService } from '../workouts/workouts.service';
 import { CompletedWorkoutsService } from '../completed-workouts/completed-workouts.service';
 import {
   WorkoutResponse,
   FinishWorkoutRequest,
   FinishExerciseRequest,
-  FinishExerciseSetRequest
+  FinishExerciseSetRequest,
+  ExerciseSetResponse
 } from '../model/interfaces';
 import { OrderByPipe } from '../pipes/order-by-pipe';
 
 @Component({
   selector: 'app-do-workout',
   providers: [OrderByPipe],
-  imports: [MatButtonModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
+  imports: [MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
   templateUrl: './do-workout.html',
   styleUrl: './do-workout.css',
 })
@@ -39,19 +41,19 @@ export class DoWorkout implements OnInit {
     exercises: this.fb.array<FormGroup>([])
   });
 
-  
+
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private router: Router,
-    private workoutsService: WorkoutsService, 
-    private completedWorkoutsService : CompletedWorkoutsService,
-    private orderByPipe: OrderByPipe) {}
+    private workoutsService: WorkoutsService,
+    private completedWorkoutsService: CompletedWorkoutsService,
+    private orderByPipe: OrderByPipe) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.id = params.get('id');
     });
-    this.workoutsService.get(this.id??'').subscribe(w => {
+    this.workoutsService.get(this.id ?? '').subscribe(w => {
       this.workoutGoal.set(w);
       console.log(this.workoutGoal());
       this.initForm();
@@ -59,7 +61,11 @@ export class DoWorkout implements OnInit {
   }
 
   get exercisesArray() {
-    return this.form.controls.exercises;
+    return this.form.controls.exercises as FormArray;
+  }
+
+  getExerciseForm(index: number): FormGroup {
+    return this.exercisesArray.at(index) as FormGroup;
   }
 
   initForm() {
@@ -101,8 +107,61 @@ export class DoWorkout implements OnInit {
     this.orderedExercises = this.workoutGoal().exercises;
   }
 
-  submit() {
+  addSetToExercise(exerciseIndex: number): void {
+    const exercise = this.orderedExercises[exerciseIndex];
+    const exerciseForm = this.getExerciseForm(exerciseIndex);
+    const setsFormArray = exerciseForm.get('sets') as FormArray;
 
+    const lastSet = exercise.exerciseSets.reduce((max, set) =>
+      set.setNumber > max.setNumber ? set : max
+    );
+
+    const newSet: ExerciseSetResponse = {
+      id: crypto.randomUUID(),
+      exerciseId: exercise.id,
+      setNumber: lastSet.setNumber + 1,
+      reps: lastSet.reps,
+      weight: lastSet.weight, 
+      weightUnit: lastSet.weightUnit, 
+      duration: lastSet.duration, 
+      durationUnit: lastSet.durationUnit,
+      distance: lastSet.distance,
+      distanceUnit: lastSet.distanceUnit
+    };
+
+    exercise.exerciseSets.push(newSet);
+    console.log('last set', lastSet);
+    setsFormArray.push(
+      this.fb.group({
+        exerciseSetId: [null],
+        completedDate: [new Date().toJSON()],
+        setNumber: [newSet.setNumber],
+        weight: [null],
+        reps: [null],
+        duration: [null],
+        distance: [null],
+        goalReps: [lastSet.reps],
+        goalWeight: [lastSet.weight],
+        weightUnit: [lastSet.weightUnit],
+        goalDuration: [lastSet.duration],
+        durationUnit: [lastSet.durationUnit],
+        goalDistance: [lastSet.distance],
+        distanceUnit: [lastSet.distanceUnit]
+      })
+    );
+  }
+
+  removeSetFromExercise(exerciseIndex: number, setIndex: number): void {
+    const exercise = this.orderedExercises[exerciseIndex];
+    const exerciseForm = this.getExerciseForm(exerciseIndex);
+    const setsFormArray = exerciseForm.get('sets') as FormArray;
+
+    setsFormArray.removeAt(setIndex);
+
+    exercise.exerciseSets.splice(setIndex, 1);
+  }
+
+  submit() {
     const request: FinishWorkoutRequest = {
       workoutId: this.id!,
       completedDate: new Date(),
@@ -119,17 +178,24 @@ export class DoWorkout implements OnInit {
         completedExerciseSets: []
       };
 
-      for (const set of exercise.sets ?? []) {
+      exercise.sets?.forEach((set: FinishExerciseSetRequest, setIndex: number) => {
         completedExercise.completedExerciseSets.push({
-          exerciseSetId: set.exerciseSetId!,
+          exerciseSetId: set.exerciseSetId,
           completedDate: set.completedDate!,
-          setNumber: set.setNumber!,
+          setNumber: setIndex,
           reps: set.reps,
           weight: set.weight,
           duration: set.duration,
-          distance: set.distance
+          distance: set.distance,
+          goalReps: set.goalReps,
+          goalWeight: set.goalWeight,
+          weightUnit: set.weightUnit == '' ? null : set.weightUnit,
+          goalDuration: set.goalDuration,
+          durationUnit: set.durationUnit == '' ? null : set.durationUnit,
+          goalDistance: set.goalDistance,
+          distanceUnit: set.distanceUnit == '' ? null : set.distanceUnit
         });
-      }
+      });
 
       request.completedExercises.push(completedExercise);
     }

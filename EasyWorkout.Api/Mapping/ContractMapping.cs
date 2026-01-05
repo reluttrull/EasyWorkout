@@ -123,7 +123,14 @@ namespace EasyWorkout.Api.Mapping
                 Reps = request.Reps,
                 Weight = request.Weight,
                 Duration = request.Duration,
-                Distance = request.Distance
+                Distance = request.Distance,
+                GoalReps = request.GoalReps,
+                GoalWeight = request.GoalWeight,
+                GoalDuration = request.GoalDuration,
+                GoalDistance = request.GoalDistance,
+                WeightUnit = request.WeightUnit,
+                DurationUnit = request.DurationUnit,
+                DistanceUnit = request.DistanceUnit
             };
         }
 
@@ -252,10 +259,10 @@ namespace EasyWorkout.Api.Mapping
                 GoalWeight = completedSet.GoalWeight,
                 WeightUnit = completedSet.WeightUnit.ToString(),
                 Duration = completedSet.Duration,
-                GoalDuration = completedSet.Duration,
+                GoalDuration = completedSet.GoalDuration,
                 DurationUnit = completedSet.DurationUnit.ToString(),
                 Distance = completedSet.Distance,
-                GoalDistance = completedSet.Distance,
+                GoalDistance = completedSet.GoalDistance,
                 DistanceUnit = completedSet.DistanceUnit.ToString()
             };
         }

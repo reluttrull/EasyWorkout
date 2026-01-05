@@ -29,9 +29,16 @@ export interface FinishExerciseSetRequest {
   completedDate: string;
   setNumber: number;
   reps?: number | null;
+  goalReps?: number | null;
   weight?: number | null;
+  goalWeight?: number | null;
+  weightUnit?: string | null;
   duration?: number | null;
+  goalDuration?: number | null;
+  durationUnit?: string | null;
   distance?: number | null;
+  goalDistance?: number | null;
+  distanceUnit?: string | null;
 }
 
 export interface UpdateCompletedWorkoutRequest {
@@ -76,7 +83,7 @@ export interface CompletedExerciseResponse {
 export interface CompletedExerciseSetResponse {
   id: string;
   exerciseName: string;
-  exerciseSetId: string;
+  exerciseSetId: string | null;
   completedWorkoutId: string;
   completedDate: Date;
   setNumber: number;

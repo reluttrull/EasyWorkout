@@ -5,17 +5,17 @@
             <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="edit()" alt="edit exercise">
+            <button mat-menu-item (click)="edit()">
                 <mat-icon>edit</mat-icon>
                 <span>Edit exercise</span>
             </button>
             @if (workoutId()) {
-                <button mat-menu-item (click)="remove(exercise().id)" alt="remove exercise from workout">
+                <button mat-menu-item (click)="remove(exercise().id)">
                     <mat-icon>remove</mat-icon>
                     <span>Remove exercise</span>
                 </button>
             }
-            <button mat-menu-item (click)="delete(exercise().id)" alt="delete exercise">
+            <button mat-menu-item (click)="delete(exercise().id)">
                 <mat-icon>delete</mat-icon>
                 <span>Delete exercise</span>
             </button>
@@ -31,20 +31,20 @@
                         <app-set [set]="set" [exerciseId]="exercise().id" (onSetChanged)="reload()" />
                     </div>
                 }
-                <button matIconButton (click)="toggleExerciseDetail()" alt="hide set detail">
+                <button matIconButton (click)="toggleExerciseDetail()" aria-label="hide set detail">
                     <mat-icon>expand_less</mat-icon>
                 </button>
                 @if (isCreateSetVisible) {
                     <app-create-set [exerciseId]="exercise().id" (onCreate)="reload()" (onReturn)="returnCreateSet()" />
                 } @else {
-                    <button matButton="elevated" extended (click)="clickCreateSet()" alt="create set">
+                    <button matButton="elevated" extended (click)="clickCreateSet()">
                         Add set
                     </button>
                 }
             </div>
         } @else {
             <div><strong>Number of sets:</strong> {{ exercise().exerciseSets.length }}</div>
-            <button matIconButton (click)="toggleExerciseDetail()" alt="show set detail">
+            <button matIconButton (click)="toggleExerciseDetail()" aria-label="show set detail">
                 <mat-icon>expand_more</mat-icon>
             </button>
         }
@@ -61,7 +61,7 @@
                 <textarea matInput class="text-area" placeholder="Notes" formControlName="notes"></textarea>
             </mat-form-field>
             <br />
-            <button matFab extended type="submit" alt="save exercise changes">
+            <button matFab extended type="submit">
                 <mat-icon>save</mat-icon>
                 Save changes
             </button>
@@ -71,6 +71,6 @@
                 }
             </div>
         </form>
-        <button matButton="elevated" (click)="cancelEdit()" alt="cancel edit exercise">Cancel</button>
+        <button matButton="elevated" (click)="cancelEdit()">Cancel</button>
     }
 </div>

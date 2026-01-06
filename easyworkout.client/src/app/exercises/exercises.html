@@ -11,7 +11,7 @@
 @if (isCreateVisible) {
     <app-create-exercise (onReturn)="handleCancelCreate()" />
 } @else {
-    <button matButton="elevated" (click)="showAddExercise()" alt="add exercise">
+    <button matButton="elevated" (click)="showAddExercise()">
         Create new exercise
     </button>
 }

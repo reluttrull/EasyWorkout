@@ -42,11 +42,7 @@
         </mat-form-field> /
         <span>{{ set.distance }} {{ set.distanceUnit }}</span>
         }
-        <button mat-icon-button
-                color="warn"
-                type="button"
-                (click)="removeSetFromExercise(exIndex, setIndex)"
-                aria-label="Remove set">
+        <button mat-icon-button type="button" (click)="removeSetFromExercise(exIndex, setIndex)" aria-label="Remove set">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
@@ -54,12 +50,12 @@
     </div>
 
     @if (exercise.exerciseSets.length > 0) {
-      <button matButton type="button" (click)="addSetToExercise(exIndex)">
-        Add Set
+      <button mat-icon-button type="button" (click)="addSetToExercise(exIndex)" aria-label="Add set">
+        <mat-icon>add</mat-icon>
       </button>
     }
   </div>
   }
 
-  <button matButton="filled" type="submit" (click)="submit()" alt="finish and save">Finish and save</button>
+  <button matButton="filled" type="submit" (click)="submit()">Finish and save</button>
 </form>

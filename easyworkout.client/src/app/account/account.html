@@ -1,7 +1,7 @@
 @if (!isEdit()) {
     <h2>Account information</h2>
     @if (user()) {
-        <button matButton="tonal" (click)="toggleIsEdit()" alt="edit account info">
+        <button matButton="tonal" (click)="toggleIsEdit()">
             Edit account info
         </button>
         <div><strong>First name:</strong> {{ user()?.firstName }}</div>
@@ -27,7 +27,7 @@
             <input matInput placeholder="Last Name" formControlName="lastName" />
         </mat-form-field>
         <div>
-        <button matFab extended type="submit" alt="save changes to account">
+        <button matFab extended type="submit">
             <mat-icon>save</mat-icon>
             Save changes
         </button>
@@ -38,19 +38,19 @@
             }
         </div>
     </form>
-    <button matButton="elevated" (click)="toggleIsEdit()" alt="cancel">Cancel</button>
+    <button matButton="elevated" (click)="toggleIsEdit()">Cancel</button>
 }
 <div>
     @if (changeEmail()) {
         <app-change-email (onCancel)="toggleChangeEmail()" />
     } @else {
-        <button matButton="tonal" (click)="toggleChangeEmail()" alt="change email">Change email</button>
+        <button matButton="tonal" (click)="toggleChangeEmail()">Change email</button>
     }
 </div>
 <div>
     @if (changePassword()) {
         <app-change-password (onCancel)="toggleChangePassword()" />
     } @else {
-        <button matButton="tonal" (click)="toggleChangePassword()" alt="change password">Change password</button>
+        <button matButton="tonal" (click)="toggleChangePassword()">Change password</button>
     }
 </div>

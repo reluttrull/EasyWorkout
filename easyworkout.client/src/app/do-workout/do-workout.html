@@ -3,50 +3,59 @@
   <h3>{{ workoutGoal().name }}</h3>
 
   @for (exercise of orderedExercises; track exercise.id; let exIndex = $index) {
-    <div [formGroup]="exercisesArray.at(exIndex)">
-      <h4>Exercise #{{ exIndex + 1 }}: {{ exercise.name }}</h4>
+  <div [formGroup]="getExerciseForm(exIndex)">
+    <h4>Exercise #{{ exIndex + 1 }}: {{ exercise.name }}</h4>
 
-      <div formArrayName="sets">
-        @for (set of exercise.exerciseSets; track set.id; let setIndex = $index) {
-          <div [formGroupName]="setIndex">
-            <span>Set {{ set.setNumber }}:</span>
+    <div formArrayName="sets">
+      @for (set of exercise.exerciseSets; track set.id; let setIndex = $index) {
+      <div [formGroupName]="setIndex" class="box">
+        <span>Set {{ set.setNumber + 1 }}:</span>
 
-            @if (set.reps) {
-              <mat-form-field class="small-form-field">
-                <mat-label labelfor="reps">Reps</mat-label>
-                <input matInput type="number" title="reps" formControlName="reps" />
-              </mat-form-field> /
-              <span>{{ set.reps }} reps</span>
-            }
-
-            @if (set.weight) {
-              <mat-form-field class="small-form-field">
-                <mat-label labelfor="weight">Weight</mat-label>
-                <input matInput type="number" title="weight" formControlName="weight" />
-              </mat-form-field> /
-              <span>{{ set.weight }} {{ set.weightUnit }}</span>
-            }
-
-            @if (set.duration) {
-              <mat-form-field class="small-form-field">
-                <mat-label labelfor="duration">Duration</mat-label>
-                <input matInput type="number" title="duration" formControlName="duration" />
-              </mat-form-field> /
-              <span>{{ set.duration }} {{ set.durationUnit }}</span>
-            }
-
-            @if (set.distance) {
-              <mat-form-field class="small-form-field">
-                <mat-label labelfor="distance">Distance</mat-label>
-                <input matInput type="number" title="distance" formControlName="distance" />
-              </mat-form-field> /
-              <span>{{ set.distance }} {{ set.distanceUnit }}</span>
-            }
-          </div>
+        @if (set.reps) {
+        <mat-form-field class="small-form-field">
+          <mat-label labelfor="reps">Reps</mat-label>
+          <input matInput type="number" title="reps" formControlName="reps" />
+        </mat-form-field> /
+        <span>{{ set.reps }} reps</span>
         }
+
+        @if (set.weight) {
+        <mat-form-field class="small-form-field">
+          <mat-label labelfor="weight">Weight</mat-label>
+          <input matInput type="number" title="weight" formControlName="weight" />
+        </mat-form-field> /
+        <span>{{ set.weight }} {{ set.weightUnit }}</span>
+        }
+
+        @if (set.duration) {
+        <mat-form-field class="small-form-field">
+          <mat-label labelfor="duration">Duration</mat-label>
+          <input matInput type="number" title="duration" formControlName="duration" />
+        </mat-form-field> /
+        <span>{{ set.duration }} {{ set.durationUnit }}</span>
+        }
+
+        @if (set.distance) {
+        <mat-form-field class="small-form-field">
+          <mat-label labelfor="distance">Distance</mat-label>
+          <input matInput type="number" title="distance" formControlName="distance" />
+        </mat-form-field> /
+        <span>{{ set.distance }} {{ set.distanceUnit }}</span>
+        }
+        <button mat-icon-button type="button" (click)="removeSetFromExercise(exIndex, setIndex)" aria-label="Remove set">
+          <mat-icon>delete</mat-icon>
+        </button>
       </div>
+      }
     </div>
+
+    @if (exercise.exerciseSets.length > 0) {
+      <button mat-icon-button type="button" (click)="addSetToExercise(exIndex)" aria-label="Add set">
+        <mat-icon>add</mat-icon>
+      </button>
+    }
+  </div>
   }
 
-  <button matButton="filled" type="submit" (click)="submit()" alt="finish and save">Finish and save</button>
+  <button matButton="filled" type="submit" (click)="submit()">Finish and save</button>
 </form>

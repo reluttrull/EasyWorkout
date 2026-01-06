@@ -5,15 +5,15 @@
             <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="startWorkout()" alt="start workout">
+            <button mat-menu-item (click)="startWorkout()">
                 <mat-icon>fitness_center</mat-icon>
                 <span>Start workout</span>
             </button>
-            <button mat-menu-item (click)="edit()" alt="edit workout">
+            <button mat-menu-item (click)="edit()">
                 <mat-icon>edit</mat-icon>
                 <span>Edit Workout</span>
             </button>
-            <button mat-menu-item (click)="delete()" alt="delete workout">
+            <button mat-menu-item (click)="delete()">
                 <mat-icon>delete</mat-icon>
                 <span>Delete workout</span>
             </button>
@@ -34,17 +34,17 @@
                 <app-add-exercise (onClose)="closeAddExercise()" [workoutId]="workout().id" />
             } @else {
                 <div>
-                    <button matIconButton (click)="toggleWorkoutDetail()" alt="hide exercise detail">
+                    <button matIconButton (click)="toggleWorkoutDetail()" aria-label="hide exercise detail">
                         <mat-icon>expand_less</mat-icon>
                     </button>
-                    <button matButton="elevated" (click)="openAddExercise()" alt="add exercise">
+                    <button matButton="elevated" (click)="openAddExercise()">
                         Add exercise
                     </button>
                 </div>
             }
         } @else {
             <div><strong>Number of exercises:</strong> {{ workout().exercises.length }}</div>
-            <button matIconButton (click)="toggleWorkoutDetail()" alt="show exercise detail">
+            <button matIconButton (click)="toggleWorkoutDetail()" aria-label="show exercise detail">
                 <mat-icon>expand_more</mat-icon>
             </button>
         }
@@ -61,7 +61,7 @@
                 <textarea matInput class="text-area" placeholder="Notes" formControlName="notes"></textarea>
             </mat-form-field>
             <br />
-            <button matFab extended type="submit" alt="save changes to workout">
+            <button matFab extended type="submit">
                 <mat-icon>save</mat-icon>
                 Save changes
             </button>
@@ -71,6 +71,6 @@
                 }
             </div>
         </form>
-        <button matButton="elevated" (click)="cancelEdit()" alt="cancel">Cancel</button>
+        <button matButton="elevated" (click)="cancelEdit()">Cancel</button>
     }
 </div>

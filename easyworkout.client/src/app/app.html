@@ -8,26 +8,26 @@
     @if (isLoggedIn()) {
         <menu class="desktop horizontal-flex">
             <div>{{ user()?.userName }}</div>
-            <div><a matButton="text" href="workouts" alt="workouts">Workouts</a></div>
-            <div><a matButton="text" href="exercises" alt="exercises">Exercises</a></div>
-            <div><a matButton="text" href="completed-workouts" alt="completed workouts">Completed Workouts</a></div>
-            <div><a matButton="text" href="account" alt="account info">Account info</a></div>
-            <button matIconButton  (click)="logout()" alt="logout">
+            <div><a matButton="text" href="workouts">Workouts</a></div>
+            <div><a matButton="text" href="exercises">Exercises</a></div>
+            <div><a matButton="text" href="completed-workouts">Completed Workouts</a></div>
+            <div><a matButton="text" href="account">Account info</a></div>
+            <button matIconButton  (click)="logout()" aria-label="logout">
                 <mat-icon>logout</mat-icon>
             </button>
         </menu>
         <menu class="mobile horizontal-flex">
             <div>{{ user()?.userName }}</div>
             <div>
-                <button matIconButton [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                <button matIconButton [matMenuTriggerFor]="menu" aria-label="navigation menu">
                     <mat-icon>menu</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                    <a mat-menu-item href="workouts" alt="workouts">Workouts</a>
-                    <a mat-menu-item href="exercises" alt="exercises">Exercises</a>
-                    <a mat-menu-item href="completed-workouts" alt="completed workouts">Completed Workouts</a>
-                    <a mat-menu-item href="account" alt="account info">Account info</a>
-                    <button matIconButton  (click)="logout()" alt="logout">
+                    <a mat-menu-item href="workouts">Workouts</a>
+                    <a mat-menu-item href="exercises">Exercises</a>
+                    <a mat-menu-item href="completed-workouts">Completed Workouts</a>
+                    <a mat-menu-item href="account">Account info</a>
+                    <button matIconButton  (click)="logout()" aria-label="logout">
                         <mat-icon>logout</mat-icon>
                     </button>
                 </mat-menu>
@@ -41,7 +41,7 @@
 <footer>
     <div class="horizontal-flex">
         <div>Copyright © {{ currentYear }} Ryan Luttrull.  All rights reserved.</div>
-        <div><a matButton="text" href="terms" alt="terms of service">Terms of Service</a></div>
-        <div><a matButton="text" href="privacy" alt="privacy policy">Privacy Policy</a></div>
+        <div><a matButton="text" href="terms">Terms of Service</a></div>
+        <div><a matButton="text" href="privacy">Privacy Policy</a></div>
     </div>
 </footer>

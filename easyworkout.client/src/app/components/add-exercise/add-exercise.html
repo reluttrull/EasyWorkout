@@ -7,9 +7,9 @@
     @if (isCreateVisible) {
         <app-create-exercise (onCreate)="add($event)" (onReturn)="closeCreate()" />
     } @else {
-        <button matButton="elevated" (click)="toggleIsCreateVisible()" alt="create new exercise">
+        <button matButton="elevated" (click)="toggleIsCreateVisible()">
             Create new exercise
         </button>
-        <button matButton="elevated" (click)="close()" alt="cancel">Cancel</button>
+        <button matButton="elevated" (click)="close()">Cancel</button>
     }
 </div>

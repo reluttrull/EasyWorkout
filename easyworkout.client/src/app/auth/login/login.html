@@ -11,7 +11,7 @@
     </mat-form-field>
     @if (!isWaiting()) {
         <div>
-            <button matFab extended type="submit" alt="login">
+            <button matFab extended type="submit">
                 <mat-icon>login</mat-icon>    
                 Login
             </button>
@@ -25,4 +25,4 @@
         <div class="error">{{ error }}</div>
     }
 </div>
-<div>Don't have an account? <a matButton="text" href="register" alt="register">Register</a></div>
+<div>Don't have an account? <a matButton="text" href="register">Register</a></div>

@@ -13,7 +13,7 @@
         - <span><strong>Distance</strong> ({{ set().distanceUnit }}) {{ set().distance }}</span>
     }
     
-    <button matIconButton extended (click)="delete(set().id)" alt="delete set">
+    <button matIconButton extended (click)="delete(set().id)" aria-label="delete set">
         <mat-icon>delete</mat-icon>
     </button>
 </div>

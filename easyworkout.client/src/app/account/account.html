@@ -54,3 +54,10 @@
         <button matButton="tonal" (click)="toggleChangePassword()">Change password</button>
     }
 </div>
+<div>
+  @if (isDeleteVisible()) {
+    <app-delete-account (onCancel)="toggleIsDelete()" />
+  } @else {
+    <button matButton="filled" (click)="toggleIsDelete()">Delete account</button>
+  }
+</div>

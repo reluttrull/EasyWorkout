@@ -5,6 +5,7 @@ using EasyWorkout.Application.Services;
 using EasyWorkout.Contracts.Requests;
 using EasyWorkout.Identity.Api.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using System.Diagnostics;
@@ -19,7 +20,7 @@ namespace EasyWorkout.Tests
         public async Task GetByIdAsync_WhenWorkoutExists_ShouldReturnWorkout()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             var workout = new Workout()
@@ -51,7 +52,7 @@ namespace EasyWorkout.Tests
         public async Task CreateAsync_WhenRequestValid_ShouldAddWorkoutToContext()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             await using (var context = new WorkoutsContext(options))
@@ -83,7 +84,7 @@ namespace EasyWorkout.Tests
         public async Task CreateAsync_WhenWorkoutWithIdExists_ShouldReturnFalse()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             await using (var context = new WorkoutsContext(options))
@@ -111,7 +112,7 @@ namespace EasyWorkout.Tests
         public async Task DeleteAsync_WhenWorkoutExists_ShouldDeleteWorkout()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             await using (var context = new WorkoutsContext(options))
@@ -128,7 +129,7 @@ namespace EasyWorkout.Tests
                     WorkoutExercises = []
                 };
 
-                context.Workouts.Add(workout); 
+                context.Workouts.Add(workout);
                 await context.SaveChangesAsync();
 
                 var success = await workoutService.DeleteAsync(workoutId);
@@ -141,7 +142,7 @@ namespace EasyWorkout.Tests
         public async Task DeleteAsync_WhenWorkoutDoesNotExist_ShouldReturnFalse()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             await using (var context = new WorkoutsContext(options))
@@ -153,10 +154,106 @@ namespace EasyWorkout.Tests
         }
 
         [Fact]
+        public async Task DeleteAllAsync_ShouldDeleteAllAddedByUserId()
+        {
+            var options = new DbContextOptionsBuilder<WorkoutsContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            await using (var context = new WorkoutsContext(options))
+            {
+                var workoutService = new WorkoutService(context);
+                var userId = Guid.NewGuid();
+                List<Workout> workouts = [new Workout()
+                {
+                    Id = Guid.NewGuid(),
+                    AddedByUserId = userId,
+                    AddedDate = DateOnly.FromDateTime(DateTime.Now),
+                    Name = "Workout",
+                    LastEditedDate = DateTime.UtcNow,
+                    WorkoutExercises = []
+                },
+                new Workout()
+                {
+                    Id = Guid.NewGuid(),
+                    AddedByUserId = Guid.NewGuid(),
+                    AddedDate = DateOnly.FromDateTime(DateTime.Now),
+                    Name = "Workout",
+                    LastEditedDate = DateTime.UtcNow,
+                    WorkoutExercises = []
+                },
+                new Workout()
+                {
+                    Id = Guid.NewGuid(),
+                    AddedByUserId = userId,
+                    AddedDate = DateOnly.FromDateTime(DateTime.Now),
+                    Name = "Workout",
+                    LastEditedDate = DateTime.UtcNow,
+                    WorkoutExercises = []
+                }];
+
+
+                context.Workouts.AddRange(workouts);
+                await context.SaveChangesAsync();
+
+                var success = await workoutService.DeleteAllAsync(userId);
+                Assert.True(success);
+                Assert.Equal(1, context.Workouts.Count());
+            }
+        }
+
+        [Fact]
+        public async Task DeleteAllAsync_ShouldDeleteLinkButNotExercise()
+        {
+            var options = new DbContextOptionsBuilder<WorkoutsContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            await using (var context = new WorkoutsContext(options))
+            {
+                var workoutService = new WorkoutService(context);
+                var userId = Guid.NewGuid();
+                var workout = new Workout()
+                {
+                    Id = Guid.NewGuid(),
+                    AddedByUserId = userId,
+                    AddedDate = DateOnly.FromDateTime(DateTime.Now),
+                    Name = "Workout",
+                    LastEditedDate = DateTime.UtcNow,
+                    WorkoutExercises = []
+                };
+                var exercise = new Exercise()
+                {
+                    Id = Guid.NewGuid(),
+                    AddedByUserId = userId,
+                    AddedDate = DateOnly.FromDateTime(DateTime.Now),
+                    Name = "",
+                    LastEditedDate = DateTime.UtcNow
+                };
+                workout.WorkoutExercises.Add(new WorkoutExercise()
+                {
+                    Id = Guid.NewGuid(),
+                    WorkoutId = workout.Id,
+                    ExerciseId = exercise.Id
+                });
+
+                context.Workouts.Add(workout);
+                context.Exercises.Add(exercise);
+                await context.SaveChangesAsync();
+
+                var success = await workoutService.DeleteAllAsync(userId);
+                Assert.True(success);
+                Assert.Empty(context.Workouts);
+                Assert.Empty(context.WorkoutExercises);
+                Assert.NotEmpty(context.Exercises);
+            }
+        }
+
+        [Fact]
         public async Task GetAllDetailedForUserAsync_ShouldReturnOnlyWorkoutsBelongingToUser()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             await using (var context = new WorkoutsContext(options))
@@ -210,7 +307,7 @@ namespace EasyWorkout.Tests
         public async Task AddDeleteExercise_ShouldAddAndDeleteWorkoutExerciseLinks()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             await using (var context = new WorkoutsContext(options))
@@ -262,7 +359,7 @@ namespace EasyWorkout.Tests
         public async Task UpdateAsync_WhenRequestValidAndWorkoutExists_ShouldUpdateWorkoutProperties()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             await using (var context = new WorkoutsContext(options))
@@ -298,7 +395,7 @@ namespace EasyWorkout.Tests
         public async Task GetLastCompletedDateAsync_WhenNoCompletedWorkouts_ShouldReturnNull()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             await using (var context = new WorkoutsContext(options))
@@ -327,7 +424,7 @@ namespace EasyWorkout.Tests
         public async Task GetLastCompletedDateAsync_WhenOneCompletedWorkoutExists_ShouldReturnDate()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             await using (var context = new WorkoutsContext(options))

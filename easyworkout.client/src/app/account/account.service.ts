@@ -57,6 +57,10 @@ export class AccountService {
       );
   }
 
+  delete() {
+    return this.http.delete(`${this.baseUrl}/me`);
+  }
+
   clear() {
     this._user.set(null);
   }

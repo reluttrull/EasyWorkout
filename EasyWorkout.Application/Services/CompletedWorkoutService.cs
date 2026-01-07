@@ -33,6 +33,24 @@ namespace EasyWorkout.Application.Services
             return result > 0;
         }
 
+        public async Task<bool> DeleteAllAsync(Guid userId, CancellationToken token = default)
+        {
+            var completedWorkoutsToDelete = _workoutsContext.CompletedWorkouts
+                .Include(cw => cw.CompletedExercises)
+                    .ThenInclude(ce => ce.CompletedExerciseSets)
+                .Where(cw => cw.CompletedByUserId == userId);
+
+            _workoutsContext.CompletedWorkouts.RemoveRange(completedWorkoutsToDelete);
+            _workoutsContext.CompletedExercises.RemoveRange(completedWorkoutsToDelete
+                .SelectMany(cw => cw.CompletedExercises));
+            _workoutsContext.CompletedExerciseSets.RemoveRange(completedWorkoutsToDelete
+                .SelectMany(cw => cw.CompletedExercises)
+                    .SelectMany(ce => ce.CompletedExerciseSets));
+
+            var result = await _workoutsContext.SaveChangesAsync(token);
+            return result > 0;
+        }
+
         public async Task<bool> DeleteAsync(Guid id, CancellationToken token = default)
         {
             var completedWorkoutToDelete = await _workoutsContext.CompletedWorkouts

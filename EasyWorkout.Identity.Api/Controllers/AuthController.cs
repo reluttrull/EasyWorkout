@@ -226,5 +226,25 @@ namespace EasyWorkout.Identity.Api.Controllers
             _logger.LogInformation("User with id {id} changed password.", userId);
             return Ok(user.MapToResponse());
         }
+
+        [HttpDelete(Endpoints.Auth.DeleteAccount)]
+        public async Task<IActionResult> DeleteAccount(CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null)
+            {
+                _logger.LogWarning("Userid not found in context.");
+                return BadRequest("User not found.");
+            }
+
+            var user = await _userService.GetByIdAsync(userId.Value);
+            if (user is null)
+            {
+                _logger.LogWarning("User could not be loaded from id {id}", userId);
+                return NotFound("User data not found.");
+            }
+            var result = await _userManager.DeleteAsync(user);
+            return Ok(result);
+        }
     }
 }

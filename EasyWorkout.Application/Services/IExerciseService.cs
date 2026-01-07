@@ -20,7 +20,7 @@ namespace EasyWorkout.Application.Services
 
         Task<bool> DeleteAsync(Guid id, CancellationToken token = default);
 
-        Task<bool> DeleteAllAsync(Guid userId, CancellationToken token);
+        Task<bool> DeleteAllAsync(Guid userId, CancellationToken token = default);
 
         Task<bool> CreateSetAsync(Guid id, ExerciseSet set, CancellationToken token = default);
 

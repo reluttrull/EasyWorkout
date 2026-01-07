@@ -40,7 +40,7 @@ namespace EasyWorkout.Application.Services
             return result > 0;
         }
 
-        public async Task<bool> DeleteAllAsync(Guid userId, CancellationToken token)
+        public async Task<bool> DeleteAllAsync(Guid userId, CancellationToken token = default)
         {
             var workoutsToDelete = _workoutsContext.Workouts
                 .Where(w => w.AddedByUserId == userId);

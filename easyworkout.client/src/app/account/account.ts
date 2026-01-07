@@ -10,11 +10,12 @@ import { AccountService } from './account.service';
 import { UserResponse, UpdateUserRequest } from '../model/interfaces';
 import { ChangePassword } from '../components/change-password/change-password';
 import { ChangeEmail } from '../components/change-email/change-email';
+import { DeleteAccount } from '../components/delete-account/delete-account';
 
 @Component({
   selector: 'app-account',
   imports: [ReactiveFormsModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, 
-    ChangePassword, ChangeEmail, DatePipe],
+    ChangePassword, ChangeEmail, DeleteAccount, DatePipe],
   templateUrl: './account.html',
   styleUrl: './account.css',
 })
@@ -31,6 +32,7 @@ export class Account {
   isEdit = signal(false);
   changeEmail = signal(false);
   changePassword = signal(false);
+  isDeleteVisible = signal(false);
 
   toggleIsEdit() {
     this.isEdit.set(!this.isEdit());
@@ -42,6 +44,10 @@ export class Account {
   
   toggleChangePassword() {
     this.changePassword.set(!this.changePassword());
+  }
+
+  toggleIsDelete() {
+    this.isDeleteVisible.set(!this.isDeleteVisible());
   }
   
   submit() {

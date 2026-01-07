@@ -12,6 +12,7 @@
             public const string GetAllForUser = $"{Base}/me";
             public const string Update = $"{Base}/{{id}}";
             public const string Delete = $"{Base}/{{id}}";
+            public const string DeleteAll = $"{Base}";
             public const string AddExercise = $"{Base}/{{id}}/exercises/{{exerciseId}}";
             public const string RemoveExercise = $"{Base}/{{id}}/exercises/{{exerciseId}}";
         }
@@ -23,6 +24,7 @@
             public const string GetAllForUser = $"{Base}/me";
             public const string Update = $"{Base}/{{id}}";
             public const string Delete = $"{Base}/{{id}}";
+            public const string DeleteAll = $"{Base}";
             public const string CreateSet = $"{Base}/{{id}}/sets";
             public const string DeleteSet = $"{Base}/{{id}}/sets/{{exerciseSetId}}";
         }
@@ -46,6 +48,7 @@
             public const string GetLastCompletedDate = $"{Base}/me/latest";
             public const string Update = $"{Base}/{{id}}";
             public const string Delete = $"{Base}/{{id}}";
+            public const string DeleteAll = $"{Base}";
         }
     }
 }

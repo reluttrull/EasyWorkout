@@ -1,4 +1,5 @@
-﻿using System.Runtime.Intrinsics.Arm;
+﻿using Amazon.S3.Model;
+using System.Runtime.Intrinsics.Arm;
 
 namespace EasyWorkout.Identity.Api
 {
@@ -16,6 +17,7 @@ namespace EasyWorkout.Identity.Api
             public const string Update = $"{Base}/me";
             public const string ChangeEmail = $"{Base}/email";
             public const string ChangePassword = $"{Base}/password";
+            public const string DeleteAccount = $"{Base}/me";
         }
     }
 }

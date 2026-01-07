@@ -34,4 +34,8 @@ export class ExercisesService {
   delete(id: string) {
     return this.http.delete<any>(`${this.baseUrl}/${id}`);
   }
+
+  deleteAll() {
+    return this.http.delete(`${this.baseUrl}`);
+  }
 }

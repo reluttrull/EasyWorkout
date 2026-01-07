@@ -182,5 +182,22 @@ namespace EasyWorkout.Api.Controllers
             _logger.LogInformation("User {userId} deleted completed workout {workoutId}", userId, id);
             return Ok();
         }
+
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
+        [HttpDelete(Endpoints.CompletedWorkouts.DeleteAll)]
+        public async Task<IActionResult> DeleteAll(CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null)
+            {
+                _logger.LogWarning("Userid not found in context.");
+                return BadRequest("User not found.");
+            }
+
+            var success = await _completedWorkoutService.DeleteAllAsync(userId!.Value, token);
+            if (!success) return NotFound();
+            _logger.LogInformation("User {userId} deleted all completed workouts", userId);
+            return Ok();
+        }
     }
 }

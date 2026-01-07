@@ -38,6 +38,18 @@ namespace EasyWorkout.Application.Services
             return result > 0;
         }
 
+        public async Task<bool> DeleteAllAsync(Guid userId, CancellationToken token)
+        {
+            var exercisesToDelete = _workoutsContext.Exercises
+                .Where(w => w.AddedByUserId == userId);
+
+            _workoutsContext.ExerciseSets.RemoveRange(exercisesToDelete.SelectMany(e => e.ExerciseSets));
+            _workoutsContext.Exercises.RemoveRange(exercisesToDelete);
+
+            var result = await _workoutsContext.SaveChangesAsync(token);
+            return result > 0;
+        }
+
         public async Task<bool> CreateSetAsync(Guid id, ExerciseSet set, CancellationToken token = default)
         {
             var exercise = await GetByIdAsync(id);

@@ -129,6 +129,23 @@ namespace EasyWorkout.Api.Controllers
         }
 
         [Authorize(AuthConstants.FreeMemberUserPolicyName)]
+        [HttpDelete(Endpoints.Exercises.DeleteAll)]
+        public async Task<IActionResult> DeleteAll(CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null)
+            {
+                _logger.LogWarning("Userid not found in context.");
+                return BadRequest("User not found.");
+            }
+
+            var success = await _exerciseService.DeleteAllAsync(userId!.Value, token);
+            if (!success) return NotFound();
+            _logger.LogInformation("User {userId} deleted all exercises", userId);
+            return Ok();
+        }
+
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
         [HttpPost(Endpoints.Exercises.CreateSet)]
         public async Task<IActionResult> CreateSet([FromRoute] Guid id, [FromBody] CreateSetRequest request, CancellationToken token)
         {

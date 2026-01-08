@@ -5,6 +5,7 @@
     <File Path=".env.production" />
     <File Path=".github/workflows/azure-static-web-apps-victorious-bush-0d064d310.yml" />
     <File Path=".github/workflows/main.yml" />
+    <File Path=".github/workflows/playwright.yml" />
     <File Path=".github/workflows/static.yml" />
     <File Path=".gitignore" />
     <File Path="Directory.Build.props" />

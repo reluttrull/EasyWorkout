@@ -14,7 +14,7 @@ namespace EasyWorkout.Application.Model
         public required DateTime CompletedDate { get; init; }
         [Required]
         [MaxLength(75)]
-        public string FallbackName { get; set; } = string.Empty;
+        public string? FallbackName { get; set; }
         [Required]
         [Range(0, 100, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public required int ExerciseNumber { get; set; }

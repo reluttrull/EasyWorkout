@@ -1,61 +1,146 @@
-<form [formGroup]="form">
-  <h2>Doing workout...</h2>
-  <h3>{{ workoutGoal().name }}</h3>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  @if (isLoading()) {
+    <mat-spinner></mat-spinner>
+  }
+  <h2>Doing workout: {{ workoutName() }}</h2>
+  
+  <div formArrayName="exercises">
+    <div *ngFor="let exercise of exercises.controls; let e = index"
+         [formGroupName]="e"
+         style="border: 1px solid #ccc; padding: 12px; margin-bottom: 12px;">
+      
+      <h3>Exercise {{ e + 1 }}: {{ exercise.value.name }}</h3>
 
-  @for (exercise of orderedExercises; track exercise.id; let exIndex = $index) {
-  <div [formGroup]="getExerciseForm(exIndex)">
-    <h4>Exercise #{{ exIndex + 1 }}: {{ exercise.name }}</h4>
+      <button mat-button type="button" (click)="removeExercise(e)">
+        Remove Exercise
+      </button>
 
-    <div formArrayName="sets">
-      @for (set of exercise.exerciseSets; track set.id; let setIndex = $index) {
-      <div [formGroupName]="setIndex" class="box">
-        <span>Set {{ set.setNumber + 1 }}:</span>
+      <div formArrayName="sets">
+        <div *ngFor="let set of sets(e).controls; let s = index"
+             [formGroupName]="s"
+             style="border: 1px solid #e0e0e0; padding: 8px; margin-bottom: 6px;">
+          
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+            <strong>Set {{ s + 1 }}:</strong>
 
-        @if (set.reps) {
-        <mat-form-field class="small-form-field">
-          <mat-label labelfor="reps">Reps</mat-label>
-          <input matInput type="number" title="reps" formControlName="reps" />
-        </mat-form-field> /
-        <span>{{ set.reps }} reps</span>
-        }
+            <!-- Reps -->
+            <div>
+              @if (set.value.goalReps || !set.value.exerciseSetId) {
+                <mat-form-field class="small-form-field">
+                  <mat-label>Reps</mat-label>
+                  <input matInput type="number" formControlName="reps" />
+                </mat-form-field>
+                @if (set.value.goalReps) {
+                  <span>/ {{ set.value.goalReps }}</span>
+                }
+              }
+            </div>
 
-        @if (set.weight) {
-        <mat-form-field class="small-form-field">
-          <mat-label labelfor="weight">Weight</mat-label>
-          <input matInput type="number" title="weight" formControlName="weight" />
-        </mat-form-field> /
-        <span>{{ set.weight }} {{ set.weightUnit }}</span>
-        }
+            <!-- Weight -->
+            <div>
+              @if (set.value.goalWeight || !set.value.exerciseSetId) {
+                 <mat-form-field class="small-form-field">
+                   <mat-label>Weight</mat-label>
+                   <input matInput type="number" formControlName="weight" />
+                 </mat-form-field>
+                @if (set.value.goalWeight) {
+                  <span>/ {{ set.value.goalWeight }}</span>
+                }
+                @if (set.value.exerciseSetId && set.value.weightUnit) {
+                  <span>{{ set.value.weightUnit }}</span>
+                } @else {
+                  <mat-form-field class="small-form-field">
+                    <mat-label>Units:</mat-label>
+                    <mat-select matInput title="Weight Units" placeholder="Units" formControlName="weightUnit">
+                      <mat-option value="">--Please choose an option--</mat-option>
+                      @for (weightUnit of weightUnitOptions; track $index) {
+                      <mat-option [value]="weightUnit">{{weightUnit}}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                }
+              }
+            </div>
 
-        @if (set.duration) {
-        <mat-form-field class="small-form-field">
-          <mat-label labelfor="duration">Duration</mat-label>
-          <input matInput type="number" title="duration" formControlName="duration" />
-        </mat-form-field> /
-        <span>{{ set.duration }} {{ set.durationUnit }}</span>
-        }
+            <!-- Duration -->
+            <div>
+              @if (set.value.goalDuration || !set.value.exerciseSetId) {
+              <mat-form-field class="small-form-field">
+                <mat-label>Duration</mat-label>
+                <input matInput type="number" formControlName="duration" />
+              </mat-form-field>
+              @if (set.value.goalDuration) {
+              <span>/ {{ set.value.goalDuration }}</span>
+              }
+              @if (set.value.exerciseSetId && set.value.durationUnit) {
+              <span>{{ set.value.durationUnit }}</span>
+              } @else {
+              <mat-form-field class="small-form-field">
+                <mat-label>Units:</mat-label>
+                <mat-select matInput title="Duration Units" placeholder="Units" formControlName="durationUnit">
+                  <mat-option value="">--Please choose an option--</mat-option>
+                  @for (durationUnit of durationUnitOptions; track $index) {
+                  <mat-option [value]="durationUnit">{{durationUnit}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              }
+              }
+            </div>
 
-        @if (set.distance) {
-        <mat-form-field class="small-form-field">
-          <mat-label labelfor="distance">Distance</mat-label>
-          <input matInput type="number" title="distance" formControlName="distance" />
-        </mat-form-field> /
-        <span>{{ set.distance }} {{ set.distanceUnit }}</span>
-        }
-        <button mat-icon-button type="button" (click)="removeSetFromExercise(exIndex, setIndex)" aria-label="Remove set">
-          <mat-icon>delete</mat-icon>
-        </button>
+            <!-- Distance -->
+            <div>
+              @if (set.value.goalDistance || !set.value.exerciseSetId) {
+              <mat-form-field class="small-form-field">
+                <mat-label>Distance</mat-label>
+                <input matInput type="number" formControlName="distance" />
+              </mat-form-field>
+              @if (set.value.goalDistance) {
+              <span>/ {{ set.value.goalDistance }}</span>
+              }
+              @if (set.value.exerciseSetId && set.value.distanceUnit) {
+              <span>{{ set.value.distanceUnit }}</span>
+              } @else {
+              <mat-form-field class="small-form-field">
+                <mat-label>Units:</mat-label>
+                <mat-select matInput title="Distance Units" placeholder="Units" formControlName="distanceUnit">
+                  <mat-option value="">--Please choose an option--</mat-option>
+                  @for (distanceUnit of distanceUnitOptions; track $index) {
+                  <mat-option [value]="distanceUnit">{{distanceUnit}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              }
+              }
+            </div>
+
+            <button mat-icon-button type="button"
+                    (click)="removeSet(e, s)" aria-label="remove set">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
       </div>
-      }
-    </div>
 
-    @if (exercise.exerciseSets.length > 0) {
-      <button mat-icon-button type="button" (click)="addSetToExercise(exIndex)" aria-label="Add set">
+      <button mat-icon-button type="button" (click)="addEmptySet(e)" aria-label="add empty set">
         <mat-icon>add</mat-icon>
       </button>
-    }
+    </div>
   </div>
-  }
 
-  <button matButton="filled" type="submit" (click)="submit()">Finish and save</button>
+  <hr />
+
+  <mat-form-field class="small-form-field">
+    <mat-label>New exercise name</mat-label>
+    <input matInput type="text" formControlName="newExerciseName" />
+  </mat-form-field>
+  <button mat-button type="button" (click)="addEmptyExercise()">
+    Add Exercise
+  </button>
+
+  <hr />
+
+  <button type="submit" [disabled]="form.invalid">
+    Submit
+  </button>
 </form>

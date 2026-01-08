@@ -105,6 +105,7 @@ namespace EasyWorkout.Api.Mapping
             {
                 Id = Guid.NewGuid(),
                 ExerciseId = request.ExerciseId,
+                FallbackName = request.FallbackName,
                 ExerciseNumber = request.ExerciseNumber,
                 CompletedByUserId = userId,
                 CompletedDate = request.CompletedDate,
@@ -206,11 +207,11 @@ namespace EasyWorkout.Api.Mapping
                 SetNumber = exerciseSet.SetNumber,
                 Reps = exerciseSet.Reps,
                 Weight = exerciseSet.Weight,
-                WeightUnit = exerciseSet.WeightUnit.ToString(),
+                WeightUnit = exerciseSet.WeightUnit?.ToString(),
                 Duration = exerciseSet.Duration,
-                DurationUnit = exerciseSet.DurationUnit.ToString(),
+                DurationUnit = exerciseSet.DurationUnit?.ToString(),
                 Distance = exerciseSet.Distance,
-                DistanceUnit = exerciseSet.DistanceUnit.ToString()
+                DistanceUnit = exerciseSet.DistanceUnit?.ToString()
             };
         }
 
@@ -257,13 +258,13 @@ namespace EasyWorkout.Api.Mapping
                 GoalReps = completedSet.GoalReps,
                 Weight = completedSet.Weight,
                 GoalWeight = completedSet.GoalWeight,
-                WeightUnit = completedSet.WeightUnit.ToString(),
+                WeightUnit = completedSet.WeightUnit?.ToString(),
                 Duration = completedSet.Duration,
                 GoalDuration = completedSet.GoalDuration,
-                DurationUnit = completedSet.DurationUnit.ToString(),
+                DurationUnit = completedSet.DurationUnit?.ToString(),
                 Distance = completedSet.Distance,
                 GoalDistance = completedSet.GoalDistance,
-                DistanceUnit = completedSet.DistanceUnit.ToString()
+                DistanceUnit = completedSet.DistanceUnit?.ToString()
             };
         }
     }

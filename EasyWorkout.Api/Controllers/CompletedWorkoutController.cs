@@ -57,7 +57,7 @@ namespace EasyWorkout.Api.Controllers
                 {
                     var basedOnExercise = await _exerciseService.GetByIdAsync(completedExercise.ExerciseId!.Value);
                     if (basedOnExercise is null) return NotFound();
-                    completedExercise.FallbackName = basedOnExercise.Name;
+                    completedExercise.FallbackName ??= basedOnExercise.Name;
                 }
                 foreach (CompletedExerciseSet completedExerciseSet in completedExercise.CompletedExerciseSets)
                 {

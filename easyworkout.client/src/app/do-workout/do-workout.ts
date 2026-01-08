@@ -1,208 +1,208 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { WorkoutsService } from '../workouts/workouts.service';
 import { CompletedWorkoutsService } from '../completed-workouts/completed-workouts.service';
-import {
-  WorkoutResponse,
-  FinishWorkoutRequest,
-  FinishExerciseRequest,
-  FinishExerciseSetRequest,
-  ExerciseSetResponse
-} from '../model/interfaces';
-import { OrderByPipe } from '../pipes/order-by-pipe';
+import { FinishWorkoutRequest, FinishExerciseRequest } from '../model/interfaces';
+import { WeightUnit, DurationUnit, DistanceUnit } from '../model/enums';
 
 @Component({
   selector: 'app-do-workout',
-  providers: [OrderByPipe],
-  imports: [MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, MatSelectModule, MatProgressSpinnerModule,
+    MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule],
   templateUrl: './do-workout.html',
-  styleUrl: './do-workout.css',
 })
 export class DoWorkout implements OnInit {
-  fb = inject(FormBuilder);
   id: string | null = null;
-  workoutGoal = signal<WorkoutResponse>({
-    id: '',
-    addedByUserId: '',
-    addedDate: new Date(0),
-    lastEditedDate: new Date(0),
-    name: '',
-    notes: '',
-    exercises: []
-  });
-  orderedExercises: WorkoutResponse['exercises'] = [];
-
+  isLoading = signal(true);
+  workoutName = signal('');
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+  fb = inject(FormBuilder);
   form = this.fb.group({
-    exercises: this.fb.array<FormGroup>([])
+    exercises: this.fb.array<FormGroup>([]),
+    newExerciseName: ['']
   });
-
+  public readonly WeightUnit = WeightUnit;
+  public readonly DurationUnit = DurationUnit;
+  public readonly DistanceUnit = DistanceUnit;
+  public weightUnitOptions = Object.values(this.WeightUnit);
+  public durationUnitOptions = Object.values(this.DurationUnit);
+  public distanceUnitOptions = Object.values(this.DistanceUnit);
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
     private workoutsService: WorkoutsService,
-    private completedWorkoutsService: CompletedWorkoutsService,
-    private orderByPipe: OrderByPipe) { }
+    private completedWorkoutsService: CompletedWorkoutsService) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.id = params.get('id');
-    });
-    this.workoutsService.get(this.id ?? '').subscribe(w => {
-      this.workoutGoal.set(w);
-      console.log(this.workoutGoal());
-      this.initForm();
-    });
-  }
-
-  get exercisesArray() {
-    return this.form.controls.exercises as FormArray;
-  }
-
-  getExerciseForm(index: number): FormGroup {
-    return this.exercisesArray.at(index) as FormGroup;
-  }
-
-  initForm() {
-    this.exercisesArray.clear();
-
-    for (const exercise of this.workoutGoal().exercises) {
-      const setsArray = this.fb.array<FormGroup>([]);
-
-      exercise.exerciseSets = this.orderByPipe.transform(
-        exercise.exerciseSets,
-        'setNumber',
-        'asc'
-      );
-
-      for (const set of exercise.exerciseSets) {
-        setsArray.push(
-          this.fb.group({
-            exerciseSetId: [set.id],
+      
+      this.workoutsService.get(this.id ?? '').subscribe(w => {
+        console.log('got a response', w);
+        this.workoutName.set(w.name);
+        
+        this.exercises.clear();
+        
+        for (let exIndex: number = 0; exIndex < w.exercises.length; exIndex++) {
+          let exercise = w.exercises[exIndex];
+          let exerciseFormGroup = this.fb.group({
+            name: [exercise.name],
+            exerciseId: [exercise.id],
             completedDate: [new Date().toJSON()],
-            setNumber: [set.setNumber],
-            weight: [null],
-            reps: [null],
-            duration: [null],
-            distance: [null]
-          })
-        );
-      }
+            sets: this.fb.array<FormGroup>([])
+          });
+          this.exercises.push(exerciseFormGroup);
 
-      this.exercisesArray.push(
-        this.fb.group({
-          exerciseId: [exercise.id],
-          completedDate: [new Date().toJSON()],
-          exerciseNumber: [exercise.exerciseNumber],
-          sets: setsArray
-        })
-      );
-    }
-
-    this.orderedExercises = this.workoutGoal().exercises;
+          for (let setIndex: number = 0; setIndex < exercise.exerciseSets.length; setIndex++) {
+            let set = exercise.exerciseSets[setIndex];
+            let setFormGroup = this.fb.group({
+              exerciseSetId: [set.id],
+              completedDate: [new Date().toJSON()],
+              reps: [null],
+              goalReps: [set.reps],
+              weight: [null],
+              goalWeight: [set.weight],
+              weightUnit: [set.weightUnit],
+              duration: [null],
+              goalDuration: [set.duration],
+              durationUnit: [set.durationUnit],
+              distance: [null],
+              goalDistance: [set.distance],
+              distanceUnit: [set.distanceUnit]
+            });
+            this.sets(exIndex).push(setFormGroup);
+          }
+        }
+        this.isLoading.set(false);
+      });
+    });
   }
 
-  addSetToExercise(exerciseIndex: number): void {
-    const exercise = this.orderedExercises[exerciseIndex];
-    const exerciseForm = this.getExerciseForm(exerciseIndex);
-    const setsFormArray = exerciseForm.get('sets') as FormArray;
+  /* ------------------ Getters ------------------ */
 
-    const lastSet = exercise.exerciseSets.reduce((max, set) =>
-      set.setNumber > max.setNumber ? set : max
-    );
-
-    const newSet: ExerciseSetResponse = {
-      id: crypto.randomUUID(),
-      exerciseId: exercise.id,
-      setNumber: lastSet.setNumber + 1,
-      reps: lastSet.reps,
-      weight: lastSet.weight, 
-      weightUnit: lastSet.weightUnit, 
-      duration: lastSet.duration, 
-      durationUnit: lastSet.durationUnit,
-      distance: lastSet.distance,
-      distanceUnit: lastSet.distanceUnit
-    };
-
-    exercise.exerciseSets.push(newSet);
-    console.log('last set', lastSet);
-    setsFormArray.push(
-      this.fb.group({
-        exerciseSetId: [null],
-        completedDate: [new Date().toJSON()],
-        setNumber: [newSet.setNumber],
-        weight: [null],
-        reps: [null],
-        duration: [null],
-        distance: [null],
-        goalReps: [lastSet.reps],
-        goalWeight: [lastSet.weight],
-        weightUnit: [lastSet.weightUnit],
-        goalDuration: [lastSet.duration],
-        durationUnit: [lastSet.durationUnit],
-        goalDistance: [lastSet.distance],
-        distanceUnit: [lastSet.distanceUnit]
-      })
-    );
+  get exercises(): FormArray {
+    return this.form.get('exercises') as FormArray;
   }
 
-  removeSetFromExercise(exerciseIndex: number, setIndex: number): void {
-    const exercise = this.orderedExercises[exerciseIndex];
-    const exerciseForm = this.getExerciseForm(exerciseIndex);
-    const setsFormArray = exerciseForm.get('sets') as FormArray;
+  sets(exIndex: number): FormArray {
+    return this.exercises.at(exIndex).get('sets') as FormArray;
+  }
 
-    setsFormArray.removeAt(setIndex);
+  /* ------------------ Builders ------------------ */
 
-    exercise.exerciseSets.splice(setIndex, 1);
+  createEmptyExercise(): FormGroup {
+    let name = this.form.get('newExerciseName');
+    let nameVal = name?.value;
+    name?.reset();
+    
+    return this.fb.group({
+      name: [nameVal],
+      exerciseId: [null],
+      completedDate: [new Date().toJSON()],
+      sets: this.fb.array([])
+    });
+  }
+
+  createEmptySet(exIndex: number): FormGroup {
+    return this.fb.group({
+      exerciseSetId: [null],
+      completedDate: [new Date().toJSON()],
+      reps: [null],
+      goalReps: [null],
+      weight: [null],
+      goalWeight: [null],
+      weightUnit: [null],
+      duration: [null],
+      goalDuration: [null],
+      durationUnit: [null],
+      distance: [null],
+      goalDistance: [null],
+      distanceUnit: [null]
+    });
+  }
+
+  /* ------------------ Actions ------------------ */
+
+  addEmptyExercise() {
+    this.exercises.push(this.createEmptyExercise());
+  }
+
+  removeExercise(index: number) {
+    this.exercises.removeAt(index);
+  }
+
+  addEmptySet(exIndex: number) {
+    this.sets(exIndex).push(this.createEmptySet(exIndex));
+  }
+
+  removeSet(exIndex: number, setIndex: number) {
+    this.sets(exIndex).removeAt(setIndex);
   }
 
   submit() {
-    const request: FinishWorkoutRequest = {
-      workoutId: this.id!,
-      completedDate: new Date(),
-      completedNotes: null,
-      completedExercises: []
-    };
+    if (this.form.valid) {
+      const exercises: FinishExerciseRequest[] = [];
+      
+      this.exercises.controls.forEach((exerciseControl, exIndex) => {
+        const exerciseValue = exerciseControl.value;
+        const sets = this.sets(exIndex);
+        
+        const completedExercise: FinishExerciseRequest = {
+          exerciseId: exerciseValue.exerciseId,
+          fallbackName: exerciseValue.name,
+          completedDate: exerciseValue.completedDate,
+          exerciseNumber: exIndex, // use index as exerciseNumber
+          completedExerciseSets: []
+        };
 
-    for (const exercise of this.form.value.exercises ?? []) {
-
-      const completedExercise: FinishExerciseRequest = {
-        exerciseId: exercise.exerciseId!,
-        completedDate: exercise.completedDate!,
-        exerciseNumber: exercise.exerciseNumber!,
-        completedExerciseSets: []
-      };
-
-      exercise.sets?.forEach((set: FinishExerciseSetRequest, setIndex: number) => {
-        completedExercise.completedExerciseSets.push({
-          exerciseSetId: set.exerciseSetId,
-          completedDate: set.completedDate!,
-          setNumber: setIndex,
-          reps: set.reps,
-          weight: set.weight,
-          duration: set.duration,
-          distance: set.distance,
-          goalReps: set.goalReps,
-          goalWeight: set.goalWeight,
-          weightUnit: set.weightUnit == '' ? null : set.weightUnit,
-          goalDuration: set.goalDuration,
-          durationUnit: set.durationUnit == '' ? null : set.durationUnit,
-          goalDistance: set.goalDistance,
-          distanceUnit: set.distanceUnit == '' ? null : set.distanceUnit
+        sets.controls.forEach((setControl, setIndex) => {
+          const setVal = setControl.value;
+          completedExercise.completedExerciseSets.push({
+            exerciseSetId: setVal.exerciseSetId,
+            completedDate: setVal.completedDate,
+            setNumber: setIndex, // use index as setNumber
+            reps: setVal.reps,
+            goalReps: setVal.goalReps,
+            weight: setVal.weight,
+            goalWeight: setVal.goalWeight,
+            weightUnit: setVal.weightUnit,
+            duration: setVal.duration,
+            goalDuration: setVal.goalDuration,
+            durationUnit: setVal.durationUnit,
+            distance: setVal.distance,
+            goalDistance: setVal.goalDistance,
+            distanceUnit: setVal.distanceUnit
+          });
         });
+
+        exercises.push(completedExercise);
       });
 
-      request.completedExercises.push(completedExercise);
-    }
+      console.log('Submitting exercises:', exercises);
 
-    this.completedWorkoutsService.create(request).subscribe({
-      next: () => this.router.navigate(['completed-workouts']),
-      error: err => console.error(err)
-    });
+      const request: FinishWorkoutRequest = {
+        workoutId: this.id ?? '',
+        completedDate: new Date(),
+        completedExercises: exercises
+      };
+      this.completedWorkoutsService.create(request).subscribe({
+        next: () => this.router.navigate(['completed-workouts']),
+        error: err => console.error(err)
+      });
+    }
   }
 }

@@ -19,6 +19,7 @@ export interface FinishWorkoutRequest {
 
 export interface FinishExerciseRequest {
   exerciseId: string;
+  fallbackName: string | null;
   completedDate: Date;
   exerciseNumber: number;
   completedExerciseSets: FinishExerciseSetRequest[];

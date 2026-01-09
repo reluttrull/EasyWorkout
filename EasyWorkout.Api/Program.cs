@@ -145,6 +145,7 @@ try
     builder.Services.AddScoped<IWorkoutService, WorkoutService>();
     builder.Services.AddScoped<IExerciseService, ExerciseService>();
     builder.Services.AddScoped<ICompletedWorkoutService, CompletedWorkoutService>();
+    builder.Services.AddScoped<IReportService, ReportService>();
 
     builder.Services.AddHealthChecks();
 

@@ -1,3 +1,14 @@
 Reports
 
 <button (click)="fetchTotalVolume()">Fetch total volume data</button>
+
+@if (isChartLoaded()) {
+    <div style="display: block; width: 600px;">
+        <canvas baseChart
+            [options]="lineChartOptions"
+            [data]="lineChartData"
+            [type]="lineChartType"
+            [legend]="lineChartLegend">
+        </canvas>
+    </div>
+}

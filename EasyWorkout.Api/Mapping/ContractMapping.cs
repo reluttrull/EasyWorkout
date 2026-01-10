@@ -287,5 +287,14 @@ namespace EasyWorkout.Api.Mapping
                 DataPoints = [.. completedWorkouts.Select(cw => new DataPointResponse(cw.Id, cw.CompletedDate, cw.GetTotalTime(durationUnit)))]
             };
         }
+
+        public static TotalDistanceReportResponse MapToResponse(this IEnumerable<CompletedWorkout> completedWorkouts, DistanceUnit distanceUnit)
+        {
+            return new TotalDistanceReportResponse()
+            {
+                DistanceUnit = distanceUnit,
+                DataPoints = [.. completedWorkouts.Select(cw => new DataPointResponse(cw.Id, cw.CompletedDate, cw.GetTotalDistance(distanceUnit)))]
+            };
+        }
     }
 }

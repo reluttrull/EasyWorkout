@@ -197,3 +197,15 @@ export interface TotalTimeReportResponse {
   durationUnit: string;
   dataPoints: DataPointResponse[]
 }
+
+export interface TotalDistanceReportRequest {
+  fromDate?: Date | null;
+  toDate?: Date | null;
+  workoutId?: string | null;
+  distanceUnit: string;
+}
+
+export interface TotalDistanceReportResponse {
+  distanceUnit: string;
+  dataPoints: DataPointResponse[]
+}

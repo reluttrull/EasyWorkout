@@ -58,5 +58,23 @@ namespace EasyWorkout.Api.Controllers
 
             return Ok(totalTimeReportResponse);
         }
+
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
+        [HttpPost(Endpoints.Reports.GetTotalDistance)]
+        public async Task<IActionResult> GetTotalDistance([FromBody] TotalDistanceReportRequest request, CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null)
+            {
+                _logger.LogWarning("Userid not found in context.");
+                return BadRequest("User not found.");
+            }
+
+            var cwsToReportForUser = await _reportService.GetFilteredCompletedWorkoutsForUserAsync(userId!.Value,
+                            request.FromDate, request.ToDate, request.WorkoutId, token);
+            var totalDistanceReportResponse = cwsToReportForUser.MapToResponse(request.DistanceUnit);
+
+            return Ok(totalDistanceReportResponse);
+        }
     }
 }

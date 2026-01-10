@@ -22,6 +22,15 @@ namespace EasyWorkout.Application.Extensions
             { DurationUnit.Hours, 60.0 },
             { DurationUnit.Seconds, 0.016667 }
         };
+        private static Dictionary<DistanceUnit, double> _distanceConversionFactors = new Dictionary<DistanceUnit, double>()
+        {
+            { DistanceUnit.Miles, 1.0 },
+            { DistanceUnit.Feet, 0.000189 },
+            { DistanceUnit.Yards, 0.000568 },
+            { DistanceUnit.Laps, 0.248548 },
+            { DistanceUnit.Meters, 0.000621 },
+            { DistanceUnit.Kilometers, 0.621371 }
+        };
         public static double GetTotalVolume(this CompletedWorkout cw, WeightUnit targetUnit)
         {
             double totalVolume = 0;
@@ -40,6 +49,7 @@ namespace EasyWorkout.Application.Extensions
             }
             return totalVolume;
         }
+
         public static double GetTotalTime(this CompletedWorkout cw, DurationUnit targetUnit)
         {
             double totalTime = 0;
@@ -57,6 +67,25 @@ namespace EasyWorkout.Application.Extensions
                 }
             }
             return totalTime;
+        }
+
+        public static double GetTotalDistance(this CompletedWorkout cw, DistanceUnit targetUnit)
+        {
+            double totalDistance = 0;
+            foreach (CompletedExercise ex in cw.CompletedExercises)
+            {
+                foreach (CompletedExerciseSet set in ex.CompletedExerciseSets)
+                {
+                    if (set is { Distance: not null, DistanceUnit: not null })
+                    {
+                        double setDistance = set.Distance.Value;
+                        setDistance *= _distanceConversionFactors[set.DistanceUnit.Value];
+                        setDistance = setDistance / _distanceConversionFactors[targetUnit];
+                        totalDistance += setDistance;
+                    }
+                }
+            }
+            return totalDistance;
         }
     }
 }

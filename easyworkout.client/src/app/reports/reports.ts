@@ -11,7 +11,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ReportsService } from './reports.service';
 import { WorkoutsService } from '../workouts/workouts.service';
 import { WeightUnit, DurationUnit, DistanceUnit } from '../model/enums';
-import { WorkoutResponse, TotalVolumeReportRequest, TotalTimeReportRequest, DataPointResponse } from '../model/interfaces';
+import { WorkoutResponse, TotalVolumeReportRequest, TotalTimeReportRequest, 
+  TotalDistanceReportRequest, DataPointResponse } from '../model/interfaces';
 
 @Component({
   selector: 'app-reports',
@@ -29,7 +30,8 @@ export class Reports implements OnInit {
     toDate: new FormControl(null),
     workoutId: new FormControl(null),
     weightUnit: new FormControl(WeightUnit.Pounds),
-    durationUnit: new FormControl(DurationUnit.Minutes)
+    durationUnit: new FormControl(DurationUnit.Minutes),
+    distanceUnit: new FormControl(DistanceUnit.Miles)
   });
   reportsService = inject(ReportsService);
   workoutsService = inject(WorkoutsService);
@@ -85,6 +87,10 @@ export class Reports implements OnInit {
         this.unitLabel.set(this.form.value.durationUnit?.toString());
         this.fetchTotalTime();
         break;
+      case 'totalDistance':
+        this.unitLabel.set(this.form.value.distanceUnit?.toString());
+        this.fetchTotalDistance();
+        break;
     }
   }
 
@@ -112,6 +118,22 @@ export class Reports implements OnInit {
       durationUnit: this.form.value.durationUnit
     };
     this.reportsService.getTotalTimeReport(request).subscribe({
+      next: (response) => {
+        this.isChartLoaded.set(true);
+        this.displayData(response);
+      },
+      error: err => console.error('error fetching chart data', err)
+    });
+  }
+  
+  fetchTotalDistance() {
+    const request: TotalDistanceReportRequest = {
+      fromDate: this.form.value.fromDate,
+      toDate: this.form.value.toDate,
+      workoutId: this.form.value.workoutId,
+      distanceUnit: this.form.value.distanceUnit
+    };
+    this.reportsService.getTotalDistanceReport(request).subscribe({
       next: (response) => {
         this.isChartLoaded.set(true);
         this.displayData(response);

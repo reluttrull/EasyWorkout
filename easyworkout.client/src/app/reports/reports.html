@@ -6,6 +6,7 @@
         <mat-select matInput title="Chart type" placeholder="Chart type" formControlName="chartType">
             <mat-option value="totalVolume">Total Volume</mat-option>
             <mat-option value="totalTime">Total Time</mat-option>
+            <mat-option value="totalDistance">Total Distance</mat-option>
         </mat-select>
     </mat-form-field>
     <mat-form-field>
@@ -46,6 +47,16 @@
             <mat-select matInput title="Time unit" placeholder="Time unit" formControlName="durationUnit">
                 @for (durationUnit of durationUnitOptions; track $index) {
                     <mat-option [value]="durationUnit">{{durationUnit}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+    }
+    @if (this.form.value.chartType == 'totalDistance') {
+        <mat-form-field>
+            <mat-label>Distance unit</mat-label>
+            <mat-select matInput title="Distance unit" placeholder="Distance unit" formControlName="distanceUnit">
+                @for (distanceUnit of distanceUnitOptions; track $index) {
+                    <mat-option [value]="distanceUnit">{{distanceUnit}}</mat-option>
                 }
             </mat-select>
         </mat-form-field>

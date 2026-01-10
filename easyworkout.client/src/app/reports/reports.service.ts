@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { TotalVolumeReportRequest, TotalVolumeReportResponse, TotalTimeReportRequest, TotalTimeReportResponse } from '../model/interfaces';
+import { TotalVolumeReportRequest, TotalVolumeReportResponse, TotalTimeReportRequest, TotalTimeReportResponse,
+  TotalDistanceReportRequest, TotalDistanceReportResponse } from '../model/interfaces';
 
 
 @Injectable({ providedIn: 'root' })
@@ -15,5 +16,9 @@ export class ReportsService {
 
   getTotalTimeReport(request:TotalTimeReportRequest) {
     return this.http.post<TotalTimeReportResponse>(`${this.baseUrl}/totaltime`, request);
+  }
+  
+  getTotalDistanceReport(request:TotalDistanceReportRequest) {
+    return this.http.post<TotalDistanceReportResponse>(`${this.baseUrl}/totaldistance`, request);
   }
 }

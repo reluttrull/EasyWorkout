@@ -10,8 +10,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ReportsService } from './reports.service';
 import { WorkoutsService } from '../workouts/workouts.service';
-import { WeightUnit } from '../model/enums';
-import { WorkoutResponse, TotalVolumeReportRequest, DataPointResponse } from '../model/interfaces';
+import { WeightUnit, DurationUnit, DistanceUnit } from '../model/enums';
+import { WorkoutResponse, TotalVolumeReportRequest, TotalTimeReportRequest, DataPointResponse } from '../model/interfaces';
 
 @Component({
   selector: 'app-reports',
@@ -28,12 +28,13 @@ export class Reports implements OnInit {
     fromDate: new FormControl(null),
     toDate: new FormControl(null),
     workoutId: new FormControl(null),
-    weightUnit: new FormControl(WeightUnit.Pounds)
+    weightUnit: new FormControl(WeightUnit.Pounds),
+    durationUnit: new FormControl(DurationUnit.Minutes)
   });
   reportsService = inject(ReportsService);
   workoutsService = inject(WorkoutsService);
   isChartLoaded = signal(false);
-  weightUnitLabel = signal(WeightUnit.Pounds.toString());
+  unitLabel = signal(WeightUnit.Pounds.toString());
   workoutTemplates:WorkoutResponse[] = [];
 
   ngOnInit() {
@@ -46,7 +47,11 @@ export class Reports implements OnInit {
   }
   
   public readonly WeightUnit = WeightUnit;
+  public readonly DurationUnit = DurationUnit;
+  public readonly DistanceUnit = DistanceUnit;
   public weightUnitOptions = Object.values(this.WeightUnit);
+  public durationUnitOptions = Object.values(this.DurationUnit);
+  public distanceUnitOptions = Object.values(this.DistanceUnit);
   
   public lineChartOptions: ChartOptions = {
     responsive: true,
@@ -54,7 +59,7 @@ export class Reports implements OnInit {
       y: {
         title: {
           display: true,
-          text: this.weightUnitLabel()
+          text: this.unitLabel()
         }
       }
     }
@@ -70,11 +75,15 @@ export class Reports implements OnInit {
 
   submit() {
     this.isChartLoaded.set(false);
-    this.weightUnitLabel.set(this.form.value.weightUnit?.toString());
 
     switch (this.form.value.chartType) {
       case 'totalVolume':
+        this.unitLabel.set(this.form.value.weightUnit?.toString());
         this.fetchTotalVolume();
+        break;
+      case 'totalTime':
+        this.unitLabel.set(this.form.value.durationUnit?.toString());
+        this.fetchTotalTime();
         break;
     }
   }
@@ -93,6 +102,22 @@ export class Reports implements OnInit {
         },
         error: err => console.error('error fetching chart data', err)
       });
+  }
+
+  fetchTotalTime() {
+    const request: TotalTimeReportRequest = {
+      fromDate: this.form.value.fromDate,
+      toDate: this.form.value.toDate,
+      workoutId: this.form.value.workoutId,
+      durationUnit: this.form.value.durationUnit
+    };
+    this.reportsService.getTotalTimeReport(request).subscribe({
+      next: (response) => {
+        this.isChartLoaded.set(true);
+        this.displayData(response);
+      },
+      error: err => console.error('error fetching chart data', err)
+    });
   }
 
   displayData(response: { dataPoints: DataPointResponse[] }) {
@@ -116,7 +141,7 @@ export class Reports implements OnInit {
           ...this.lineChartOptions.scales?.['y'],
           title: {
             display: true,
-            text: this.weightUnitLabel()
+            text: this.unitLabel()
           }
         }
       }

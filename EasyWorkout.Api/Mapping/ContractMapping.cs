@@ -278,5 +278,14 @@ namespace EasyWorkout.Api.Mapping
                 DataPoints = [.. completedWorkouts.Select(cw => new DataPointResponse(cw.Id, cw.CompletedDate, cw.GetTotalVolume(weightUnit)))]
             };
         }
+
+        public static TotalTimeReportResponse MapToResponse(this IEnumerable<CompletedWorkout> completedWorkouts, DurationUnit durationUnit)
+        {
+            return new TotalTimeReportResponse()
+            {
+                DurationUnit = durationUnit,
+                DataPoints = [.. completedWorkouts.Select(cw => new DataPointResponse(cw.Id, cw.CompletedDate, cw.GetTotalTime(durationUnit)))]
+            };
+        }
     }
 }

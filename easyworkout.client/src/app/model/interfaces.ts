@@ -168,6 +168,12 @@ export interface UserResponse {
   lastEditedDate: Date;
 }
 
+export interface DataPointResponse {
+  completedWorkoutId: string;
+  completedDate: Date;
+  totalVolume: number;
+}
+
 export interface TotalVolumeReportRequest {
   fromDate?: Date | null;
   toDate?: Date | null;
@@ -180,8 +186,14 @@ export interface TotalVolumeReportResponse {
   dataPoints: DataPointResponse[]
 }
 
-export interface DataPointResponse {
-  completedWorkoutId: string;
-  completedDate: Date;
-  totalVolume: number;
+export interface TotalTimeReportRequest {
+  fromDate?: Date | null;
+  toDate?: Date | null;
+  workoutId?: string | null;
+  durationUnit: string;
+}
+
+export interface TotalTimeReportResponse {
+  durationUnit: string;
+  dataPoints: DataPointResponse[]
 }

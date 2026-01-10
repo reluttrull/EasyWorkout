@@ -17,7 +17,7 @@ namespace EasyWorkout.Application.Services
             _workoutsContext = workoutsContext;
         }
 
-        public async Task<IEnumerable<CompletedWorkout>> GetTotalVolumeForUserAsync(
+        public async Task<IEnumerable<CompletedWorkout>> GetFilteredCompletedWorkoutsForUserAsync(
             Guid userId, 
             DateTime? fromDate, 
             DateTime? toDate, 

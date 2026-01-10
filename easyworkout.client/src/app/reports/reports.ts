@@ -1,5 +1,5 @@
-import { Component, inject, signal } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { Component, inject, computed, signal } from '@angular/core';
+import { ReactiveFormsModule, Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartOptions, ChartData, ChartType } from 'chart.js';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,11 +19,15 @@ import { TotalVolumeReportRequest, DataPointResponse } from '../model/interfaces
 export class Reports {
   fb = inject(FormBuilder);
   form:FormGroup = this.fb.nonNullable.group({
-    chartType: [null]
+    chartType: new FormControl(null, Validators.required),
+    weightUnit: new FormControl(WeightUnit.Pounds)
   });
-  weightUnit = signal(WeightUnit.Pounds.toString());
   reportsService = inject(ReportsService);
   isChartLoaded = signal(false);
+  weightUnitLabel = signal(WeightUnit.Pounds.toString());
+  
+  public readonly WeightUnit = WeightUnit;
+  public weightUnitOptions = Object.values(this.WeightUnit);
   
   public lineChartOptions: ChartOptions = {
     responsive: true,
@@ -31,7 +35,7 @@ export class Reports {
       y: {
         title: {
           display: true,
-          text: this.weightUnit()
+          text: this.weightUnitLabel()
         }
       }
     }
@@ -46,50 +50,61 @@ export class Reports {
   public lineChartLegend = false;
 
   submit() {
-    switch (this.form.value.chartType) {
-      case 'totalVolume':
-        console.log('creating total volume report...');
-        this.fetchTotalVolume();
-        break;
-    }
+  this.isChartLoaded.set(false);
+
+  this.weightUnitLabel.set(this.form.value.weightUnit?.toString());
+
+  switch (this.form.value.chartType) {
+    case 'totalVolume':
+      this.fetchTotalVolume();
+      break;
+  }
+}
+
+
+  updateLineChartOptions() {
+    this.lineChartOptions = {
+      ...this.lineChartOptions,
+      scales: {
+        ...this.lineChartOptions.scales,
+        y: {
+          ...this.lineChartOptions.scales?.['y'],
+          title: {
+            display: true,
+            text: this.weightUnitLabel()
+          }
+        }
+      }
+    };
   }
 
   fetchTotalVolume() {
-    // default to pounds for now
     const request: TotalVolumeReportRequest = {
       fromDate: null,
       toDate: null,
       workoutId: null,
-      weightUnit: WeightUnit.Pounds
+      weightUnit: this.form.value.weightUnit
     };
     this.reportsService.getTotalVolumeReport(request).subscribe({
         next: (response) => {
           console.log(response);
           this.isChartLoaded.set(true);
-          this.weightUnit.set(response.weightUnit);
           this.displayData(response);
         },
         error: err => console.error(err)
       });
   }
 
-  displayData(response:{dataPoints: DataPointResponse[]}) {
-    let newDataArr:number[] = [];
-    let newLabelsArr:string[] = [];
-    response.dataPoints.forEach(d => {
-    // 1. Add the new label
-    newLabelsArr = [...newLabelsArr, new Date(d.completedDate).toISOString().split('T')[0]];
-
-    // 2. Add the new data point to the first dataset
-    newDataArr = [...newDataArr, d.totalVolume];
-      });
-
-    // 3. Clone the entire datasets array and reassign to trigger change detection
+displayData(response: { dataPoints: DataPointResponse[] }) {
     this.lineChartData = {
-      labels: newLabelsArr,
-      datasets: [
-      { data: newDataArr }
-      ]
+      labels: response.dataPoints.map(d =>
+        new Date(d.completedDate).toISOString().split('T')[0]
+      ),
+      datasets: [{ data: response.dataPoints.map(d => d.totalVolume) }]
     };
+
+    this.updateLineChartOptions();
+
+    this.isChartLoaded.set(true);
   }
 }

@@ -1,6 +1,8 @@
 html, body, app-root {
   height: 100vh;
   margin: 0;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 app-root {

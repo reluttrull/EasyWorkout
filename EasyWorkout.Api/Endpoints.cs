@@ -55,6 +55,9 @@
         {
             private const string Base = $"{ApiBase}/reports";
             public const string GetTotalVolume = $"{Base}/totalvolume";
+            public const string GetTotalTime = $"{Base}/totaltime";
+            public const string GetTotalDistance = $"{Base}/totaldistance";
+            public const string GetAveragePercentCompleted = $"{Base}/averagecompleted";
         }
     }
 }

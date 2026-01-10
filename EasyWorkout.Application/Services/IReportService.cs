@@ -7,7 +7,7 @@ namespace EasyWorkout.Application.Services
 {
     public interface IReportService
     {
-        Task<IEnumerable<CompletedWorkout>> GetTotalVolumeForUserAsync(
+        Task<IEnumerable<CompletedWorkout>> GetFilteredCompletedWorkoutsForUserAsync(
             Guid userId,
             DateTime? fromDate,
             DateTime? toDate,

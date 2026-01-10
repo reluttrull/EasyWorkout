@@ -1,0 +1,18 @@
+.chart-container {
+  height: 300px;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+@media (min-width: 600px) {
+    .chart-container {
+        height: 400px;
+    }
+}
+
+.chart-container canvas {
+  display: block;
+  max-width: 100% !important;
+  height: auto !important;
+}

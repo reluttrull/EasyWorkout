@@ -13,7 +13,7 @@ namespace EasyWorkout.Tests
     public class ReportServiceTests
     {
         [Fact]
-        public async Task GetTotalVolumeForUserAsync_WhenNoneExist_ShouldReturnEmpty()
+        public async Task GetFilteredCompletedWorkoutsForUserAsync_WhenNoneExist_ShouldReturnEmpty()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -22,13 +22,13 @@ namespace EasyWorkout.Tests
             await using (var context = new WorkoutsContext(options))
             {
                 var reportService = new ReportService(context);
-                var results = await reportService.GetTotalVolumeForUserAsync(Guid.NewGuid(), null, null, null);
+                var results = await reportService.GetFilteredCompletedWorkoutsForUserAsync(Guid.NewGuid(), null, null, null);
                 Assert.Empty(results);
             }
         }
 
         [Fact]
-        public async Task GetTotalVolumeForUserAsync_WhenOneExistsAndNoFilters_ShouldReturnOne()
+        public async Task GetFilteredCompletedWorkoutsForUserAsync_WhenOneExistsAndNoFilters_ShouldReturnOne()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -67,13 +67,13 @@ namespace EasyWorkout.Tests
                 context.CompletedWorkouts.Add(completedWorkout);
                 await context.SaveChangesAsync();
 
-                var results = await reportService.GetTotalVolumeForUserAsync(userId, null, null, null);
+                var results = await reportService.GetFilteredCompletedWorkoutsForUserAsync(userId, null, null, null);
                 Assert.Single(results);
             }
         }
 
         [Fact]
-        public async Task GetTotalVolumeForUserAsync_WhenOneExistsAndOutOfRange_ShouldReturnNone()
+        public async Task GetFilteredCompletedWorkoutsForUserAsync_WhenOneExistsAndOutOfRange_ShouldReturnNone()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -112,13 +112,13 @@ namespace EasyWorkout.Tests
                 context.CompletedWorkouts.Add(completedWorkout);
                 await context.SaveChangesAsync();
 
-                var results = await reportService.GetTotalVolumeForUserAsync(userId, null, DateTime.UtcNow.AddDays(-1), null);
+                var results = await reportService.GetFilteredCompletedWorkoutsForUserAsync(userId, null, DateTime.UtcNow.AddDays(-1), null);
                 Assert.Empty(results);
             }
         }
 
         [Fact]
-        public async Task GetTotalVolumeForUserAsync_WhenOneExistsAndDifferentWorkout_ShouldReturnNone()
+        public async Task GetFilteredCompletedWorkoutsForUserAsync_WhenOneExistsAndDifferentWorkout_ShouldReturnNone()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -157,13 +157,13 @@ namespace EasyWorkout.Tests
                 context.CompletedWorkouts.Add(completedWorkout);
                 await context.SaveChangesAsync();
 
-                var results = await reportService.GetTotalVolumeForUserAsync(userId, null, null, Guid.NewGuid());
+                var results = await reportService.GetFilteredCompletedWorkoutsForUserAsync(userId, null, null, Guid.NewGuid());
                 Assert.Empty(results);
             }
         }
 
         [Fact]
-        public async Task GetTotalVolumeForUserAsync_WhenOneExistsAndInRange_ShouldReturnOne()
+        public async Task GetFilteredCompletedWorkoutsForUserAsync_WhenOneExistsAndInRange_ShouldReturnOne()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -202,13 +202,13 @@ namespace EasyWorkout.Tests
                 context.CompletedWorkouts.Add(completedWorkout);
                 await context.SaveChangesAsync();
 
-                var results = await reportService.GetTotalVolumeForUserAsync(userId, DateTime.UtcNow.AddDays(-2), DateTime.UtcNow, null);
+                var results = await reportService.GetFilteredCompletedWorkoutsForUserAsync(userId, DateTime.UtcNow.AddDays(-2), DateTime.UtcNow, null);
                 Assert.Single(results);
             }
         }
 
         [Fact]
-        public async Task GetTotalVolumeForUserAsync_WhenOneExistsAndMatchesWorkout_ShouldReturnOne()
+        public async Task GetFilteredCompletedWorkoutsForUserAsync_WhenOneExistsAndMatchesWorkout_ShouldReturnOne()
         {
             var options = new DbContextOptionsBuilder<WorkoutsContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -249,7 +249,7 @@ namespace EasyWorkout.Tests
                 context.CompletedWorkouts.Add(completedWorkout);
                 await context.SaveChangesAsync();
 
-                var results = await reportService.GetTotalVolumeForUserAsync(userId, null, null, workoutId);
+                var results = await reportService.GetFilteredCompletedWorkoutsForUserAsync(userId, null, null, workoutId);
                 Assert.Single(results);
             }
         }

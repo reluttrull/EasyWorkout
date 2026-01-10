@@ -34,11 +34,65 @@ namespace EasyWorkout.Api.Controllers
                 return BadRequest("User not found.");
             }
 
-            var cwsToReportForUser = await _reportService.GetTotalVolumeForUserAsync(userId!.Value, 
+            var cwsToReportForUser = await _reportService.GetFilteredCompletedWorkoutsForUserAsync(userId!.Value, 
                             request.FromDate, request.ToDate, request.WorkoutId, token);
             var totalVolumeReportResponse = cwsToReportForUser.MapToResponse(request.WeightUnit);
 
             return Ok(totalVolumeReportResponse);
+        }
+
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
+        [HttpPost(Endpoints.Reports.GetTotalTime)]
+        public async Task<IActionResult> GetTotalTime([FromBody] TotalTimeReportRequest request, CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null)
+            {
+                _logger.LogWarning("Userid not found in context.");
+                return BadRequest("User not found.");
+            }
+
+            var cwsToReportForUser = await _reportService.GetFilteredCompletedWorkoutsForUserAsync(userId!.Value,
+                            request.FromDate, request.ToDate, request.WorkoutId, token);
+            var totalTimeReportResponse = cwsToReportForUser.MapToResponse(request.DurationUnit);
+
+            return Ok(totalTimeReportResponse);
+        }
+
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
+        [HttpPost(Endpoints.Reports.GetTotalDistance)]
+        public async Task<IActionResult> GetTotalDistance([FromBody] TotalDistanceReportRequest request, CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null)
+            {
+                _logger.LogWarning("Userid not found in context.");
+                return BadRequest("User not found.");
+            }
+
+            var cwsToReportForUser = await _reportService.GetFilteredCompletedWorkoutsForUserAsync(userId!.Value,
+                            request.FromDate, request.ToDate, request.WorkoutId, token);
+            var totalDistanceReportResponse = cwsToReportForUser.MapToResponse(request.DistanceUnit);
+
+            return Ok(totalDistanceReportResponse);
+        }
+
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
+        [HttpPost(Endpoints.Reports.GetAveragePercentCompleted)]
+        public async Task<IActionResult> GetAveragePercentCompleted([FromBody] AveragePercentCompletedReportRequest request, CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null)
+            {
+                _logger.LogWarning("Userid not found in context.");
+                return BadRequest("User not found.");
+            }
+
+            var cwsToReportForUser = await _reportService.GetFilteredCompletedWorkoutsForUserAsync(userId!.Value,
+                            request.FromDate, request.ToDate, request.WorkoutId, token);
+            var avgPercentCompletedReportResponse = cwsToReportForUser.MapToResponse();
+
+            return Ok(avgPercentCompletedReportResponse);
         }
     }
 }

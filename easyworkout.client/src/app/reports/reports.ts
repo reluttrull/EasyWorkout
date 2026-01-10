@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartOptions, ChartData, ChartType } from 'chart.js';
@@ -9,27 +9,41 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ReportsService } from './reports.service';
+import { WorkoutsService } from '../workouts/workouts.service';
 import { WeightUnit } from '../model/enums';
-import { TotalVolumeReportRequest, DataPointResponse } from '../model/interfaces';
+import { WorkoutResponse, TotalVolumeReportRequest, DataPointResponse } from '../model/interfaces';
 
 @Component({
   selector: 'app-reports',
   providers: [provideNativeDateAdapter()],
-  imports: [BaseChartDirective, ReactiveFormsModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatSelectModule, MatDatepickerModule],
+  imports: [BaseChartDirective, ReactiveFormsModule, MatInputModule, MatButtonModule, 
+    MatFormFieldModule, MatSelectModule, MatDatepickerModule],
   templateUrl: './reports.html',
   styleUrl: './reports.css',
 })
-export class Reports {
+export class Reports implements OnInit {
   fb = inject(FormBuilder);
   form:FormGroup = this.fb.nonNullable.group({
     chartType: new FormControl(null, Validators.required),
     fromDate: new FormControl(null),
     toDate: new FormControl(null),
+    workoutId: new FormControl(null),
     weightUnit: new FormControl(WeightUnit.Pounds)
   });
   reportsService = inject(ReportsService);
+  workoutsService = inject(WorkoutsService);
   isChartLoaded = signal(false);
   weightUnitLabel = signal(WeightUnit.Pounds.toString());
+  workoutTemplates:WorkoutResponse[] = [];
+
+  ngOnInit() {
+    this.workoutsService.getAll().subscribe({
+        next: (response) => {
+          this.workoutTemplates = response;
+        },
+        error: err => console.error('error loading workouts', err)
+      });
+  }
   
   public readonly WeightUnit = WeightUnit;
   public weightUnitOptions = Object.values(this.WeightUnit);
@@ -56,7 +70,6 @@ export class Reports {
 
   submit() {
     this.isChartLoaded.set(false);
-
     this.weightUnitLabel.set(this.form.value.weightUnit?.toString());
 
     switch (this.form.value.chartType) {
@@ -66,7 +79,34 @@ export class Reports {
     }
   }
 
+  fetchTotalVolume() {
+    const request: TotalVolumeReportRequest = {
+      fromDate: this.form.value.fromDate,
+      toDate: this.form.value.toDate,
+      workoutId: this.form.value.workoutId,
+      weightUnit: this.form.value.weightUnit
+    };
+    this.reportsService.getTotalVolumeReport(request).subscribe({
+        next: (response) => {
+          this.isChartLoaded.set(true);
+          this.displayData(response);
+        },
+        error: err => console.error('error fetching chart data', err)
+      });
+  }
 
+  displayData(response: { dataPoints: DataPointResponse[] }) {
+    this.lineChartData = {
+      labels: response.dataPoints.map(d =>
+        new Date(d.completedDate).toISOString().split('T')[0]
+      ),
+      datasets: [{ data: response.dataPoints.map(d => d.totalVolume) }]
+    };
+
+    this.updateLineChartOptions();
+    this.isChartLoaded.set(true);
+  }
+  
   updateLineChartOptions() {
     this.lineChartOptions = {
       ...this.lineChartOptions,
@@ -81,35 +121,5 @@ export class Reports {
         }
       }
     };
-  }
-
-  fetchTotalVolume() {
-    const request: TotalVolumeReportRequest = {
-      fromDate: this.form.value.fromDate,
-      toDate: this.form.value.toDate,
-      workoutId: null,
-      weightUnit: this.form.value.weightUnit
-    };
-    this.reportsService.getTotalVolumeReport(request).subscribe({
-        next: (response) => {
-          console.log(response);
-          this.isChartLoaded.set(true);
-          this.displayData(response);
-        },
-        error: err => console.error(err)
-      });
-  }
-
-displayData(response: { dataPoints: DataPointResponse[] }) {
-    this.lineChartData = {
-      labels: response.dataPoints.map(d =>
-        new Date(d.completedDate).toISOString().split('T')[0]
-      ),
-      datasets: [{ data: response.dataPoints.map(d => d.totalVolume) }]
-    };
-
-    this.updateLineChartOptions();
-
-    this.isChartLoaded.set(true);
   }
 }

@@ -21,6 +21,14 @@
         <mat-datepicker-toggle matIconSuffix [for]="toPicker"></mat-datepicker-toggle>
         <mat-datepicker #toPicker></mat-datepicker>
     </mat-form-field>
+    <mat-form-field>
+        <mat-label>Workout (optional)</mat-label>
+        <mat-select matInput title="Workout" placeholer="Workout" formControlName="workoutId">
+            @for (workout of workoutTemplates; track $index) {
+                <mat-option [value]="workout.id">{{ workout.name }}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
     @if (this.form.value.chartType == 'totalVolume') {
         <mat-form-field>
             <mat-label>Weight unit</mat-label>

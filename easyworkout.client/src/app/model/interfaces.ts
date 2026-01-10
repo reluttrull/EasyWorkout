@@ -209,3 +209,13 @@ export interface TotalDistanceReportResponse {
   distanceUnit: string;
   dataPoints: DataPointResponse[]
 }
+
+export interface AveragePercentCompletedReportRequest {
+  fromDate?: Date | null;
+  toDate?: Date | null;
+  workoutId?: string | null;
+}
+
+export interface AveragePercentCompletedReportResponse {
+  dataPoints: DataPointResponse[]
+}

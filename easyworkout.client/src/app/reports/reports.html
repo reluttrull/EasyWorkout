@@ -7,6 +7,7 @@
             <mat-option value="totalVolume">Total Volume</mat-option>
             <mat-option value="totalTime">Total Time</mat-option>
             <mat-option value="totalDistance">Total Distance</mat-option>
+            <mat-option value="avgPctCompleted">Average % Completed</mat-option>
         </mat-select>
     </mat-form-field>
     <mat-form-field>
@@ -65,7 +66,7 @@
 </form>
 
 @if (isChartLoaded()) {
-    <div style="display: block; width: 600px;">
+    <div class="chart-container">
         <canvas baseChart
             [options]="lineChartOptions"
             [data]="lineChartData"

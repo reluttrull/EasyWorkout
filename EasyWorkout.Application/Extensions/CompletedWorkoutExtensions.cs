@@ -1,7 +1,4 @@
 ﻿using EasyWorkout.Application.Model;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using static EasyWorkout.Contracts.Model.Enums;
 
 namespace EasyWorkout.Application.Extensions
@@ -86,6 +83,31 @@ namespace EasyWorkout.Application.Extensions
                 }
             }
             return totalDistance;
+        }
+
+        public static double GetAveragePercentCompleted(this CompletedWorkout cw)
+        {
+            List<double> percentages = [];
+            foreach (CompletedExerciseSet set in cw.CompletedExercises.SelectMany(ce => ce.CompletedExerciseSets))
+            {
+                if (set.GoalReps is not null && set.GoalReps != 0)
+                {
+                    percentages.Add((double)(set.Reps ?? 0) / set.GoalReps.Value);
+                }
+                if (set.GoalWeight is not null && set.GoalWeight != 0)
+                {
+                    percentages.Add((set.Weight ?? 0) / set.GoalWeight.Value);
+                }
+                if (set.GoalDuration is not null && set.GoalDuration != 0)
+                {
+                    percentages.Add((set.Duration ?? 0) / set.GoalDuration.Value);
+                }
+                if (set.GoalDistance is not null && set.GoalDistance != 0)
+                {
+                    percentages.Add((set.Distance ?? 0) / set.GoalDistance.Value);
+                }
+            }
+            return percentages.Count > 0 ? percentages.Average() * 100 : 100;
         }
     }
 }

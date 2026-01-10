@@ -296,5 +296,13 @@ namespace EasyWorkout.Api.Mapping
                 DataPoints = [.. completedWorkouts.Select(cw => new DataPointResponse(cw.Id, cw.CompletedDate, cw.GetTotalDistance(distanceUnit)))]
             };
         }
+
+        public static AveragePercentCompletedReportResponse MapToResponse(this IEnumerable<CompletedWorkout> completedWorkouts)
+        {
+            return new AveragePercentCompletedReportResponse()
+            {
+                DataPoints = [.. completedWorkouts.Select(cw => new DataPointResponse(cw.Id, cw.CompletedDate, cw.GetAveragePercentCompleted()))]
+            };
+        }
     }
 }

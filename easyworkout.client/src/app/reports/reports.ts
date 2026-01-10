@@ -12,7 +12,7 @@ import { ReportsService } from './reports.service';
 import { WorkoutsService } from '../workouts/workouts.service';
 import { WeightUnit, DurationUnit, DistanceUnit } from '../model/enums';
 import { WorkoutResponse, TotalVolumeReportRequest, TotalTimeReportRequest, 
-  TotalDistanceReportRequest, DataPointResponse } from '../model/interfaces';
+  TotalDistanceReportRequest, AveragePercentCompletedReportRequest, DataPointResponse } from '../model/interfaces';
 
 @Component({
   selector: 'app-reports',
@@ -57,6 +57,7 @@ export class Reports implements OnInit {
   
   public lineChartOptions: ChartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     scales: {
       y: {
         title: {
@@ -90,6 +91,10 @@ export class Reports implements OnInit {
       case 'totalDistance':
         this.unitLabel.set(this.form.value.distanceUnit?.toString());
         this.fetchTotalDistance();
+        break;
+      case 'avgPctCompleted':
+        this.unitLabel.set('% of goal achieved');
+        this.fetchAvgPctCompleted();
         break;
     }
   }
@@ -134,6 +139,21 @@ export class Reports implements OnInit {
       distanceUnit: this.form.value.distanceUnit
     };
     this.reportsService.getTotalDistanceReport(request).subscribe({
+      next: (response) => {
+        this.isChartLoaded.set(true);
+        this.displayData(response);
+      },
+      error: err => console.error('error fetching chart data', err)
+    });
+  }
+
+  fetchAvgPctCompleted() {
+    const request: AveragePercentCompletedReportRequest = {
+      fromDate: this.form.value.fromDate,
+      toDate: this.form.value.toDate,
+      workoutId: this.form.value.workoutId
+    };
+    this.reportsService.getAvgPctCompletedReport(request).subscribe({
       next: (response) => {
         this.isChartLoaded.set(true);
         this.displayData(response);

@@ -76,5 +76,23 @@ namespace EasyWorkout.Api.Controllers
 
             return Ok(totalDistanceReportResponse);
         }
+
+        [Authorize(AuthConstants.FreeMemberUserPolicyName)]
+        [HttpPost(Endpoints.Reports.GetAveragePercentCompleted)]
+        public async Task<IActionResult> GetAveragePercentCompleted([FromBody] AveragePercentCompletedReportRequest request, CancellationToken token)
+        {
+            var userId = HttpContext.GetUserId();
+            if (userId is null)
+            {
+                _logger.LogWarning("Userid not found in context.");
+                return BadRequest("User not found.");
+            }
+
+            var cwsToReportForUser = await _reportService.GetFilteredCompletedWorkoutsForUserAsync(userId!.Value,
+                            request.FromDate, request.ToDate, request.WorkoutId, token);
+            var avgPercentCompletedReportResponse = cwsToReportForUser.MapToResponse();
+
+            return Ok(avgPercentCompletedReportResponse);
+        }
     }
 }

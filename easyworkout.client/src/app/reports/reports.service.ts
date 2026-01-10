@@ -2,7 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { TotalVolumeReportRequest, TotalVolumeReportResponse, TotalTimeReportRequest, TotalTimeReportResponse,
-  TotalDistanceReportRequest, TotalDistanceReportResponse } from '../model/interfaces';
+  TotalDistanceReportRequest, TotalDistanceReportResponse, AveragePercentCompletedReportRequest, 
+  AveragePercentCompletedReportResponse } from '../model/interfaces';
 
 
 @Injectable({ providedIn: 'root' })
@@ -20,5 +21,9 @@ export class ReportsService {
   
   getTotalDistanceReport(request:TotalDistanceReportRequest) {
     return this.http.post<TotalDistanceReportResponse>(`${this.baseUrl}/totaldistance`, request);
+  }
+
+  getAvgPctCompletedReport(request:AveragePercentCompletedReportRequest) {
+    return this.http.post<AveragePercentCompletedReportResponse>(`${this.baseUrl}/averagecompleted`, request);
   }
 }

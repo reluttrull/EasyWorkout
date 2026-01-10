@@ -7,6 +7,20 @@
             <mat-option value="totalVolume">Total Volume</mat-option>
         </mat-select>
     </mat-form-field>
+    <mat-form-field>
+        <mat-label>Start date (optional)</mat-label>
+        <input matInput [matDatepicker]="fromPicker" title="From date" placeholder="From date" formControlName="fromDate">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="fromPicker"></mat-datepicker-toggle>
+        <mat-datepicker #fromPicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>End date (optional)</mat-label>
+        <input matInput [matDatepicker]="toPicker" title="To date" placeholder="To date" formControlName="toDate">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="toPicker"></mat-datepicker-toggle>
+        <mat-datepicker #toPicker></mat-datepicker>
+    </mat-form-field>
     @if (this.form.value.chartType == 'totalVolume') {
         <mat-form-field>
             <mat-label>Weight unit</mat-label>

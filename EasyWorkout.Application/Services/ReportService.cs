@@ -26,8 +26,8 @@ namespace EasyWorkout.Application.Services
         {
             var filteredCompletedWorkouts =  await _workoutsContext.CompletedWorkouts
                 .Where(cw => cw.CompletedByUserId == userId)
-                .WhereIf(fromDate is not null, cw => cw.CompletedDate >= fromDate)
-                .WhereIf(toDate is not null, cw => cw.CompletedDate <= toDate)
+                .WhereIf(fromDate is not null, cw => cw.CompletedDate.Date >= fromDate)
+                .WhereIf(toDate is not null, cw => cw.CompletedDate.Date <= toDate)
                 .WhereIf(connectedToWorkoutId is not null, cw => cw.WorkoutId == connectedToWorkoutId)
                 .Include(cw => cw.CompletedExercises)
                     .ThenInclude(ce => ce.CompletedExerciseSets)

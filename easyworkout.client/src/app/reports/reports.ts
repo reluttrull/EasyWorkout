@@ -1,7 +1,9 @@
-import { Component, inject, computed, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartOptions, ChartData, ChartType } from 'chart.js';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -12,7 +14,8 @@ import { TotalVolumeReportRequest, DataPointResponse } from '../model/interfaces
 
 @Component({
   selector: 'app-reports',
-  imports: [BaseChartDirective, ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatSelectModule, MatDatepickerModule],
+  providers: [provideNativeDateAdapter()],
+  imports: [BaseChartDirective, ReactiveFormsModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatSelectModule, MatDatepickerModule],
   templateUrl: './reports.html',
   styleUrl: './reports.css',
 })
@@ -20,6 +23,8 @@ export class Reports {
   fb = inject(FormBuilder);
   form:FormGroup = this.fb.nonNullable.group({
     chartType: new FormControl(null, Validators.required),
+    fromDate: new FormControl(null),
+    toDate: new FormControl(null),
     weightUnit: new FormControl(WeightUnit.Pounds)
   });
   reportsService = inject(ReportsService);
@@ -50,16 +55,16 @@ export class Reports {
   public lineChartLegend = false;
 
   submit() {
-  this.isChartLoaded.set(false);
+    this.isChartLoaded.set(false);
 
-  this.weightUnitLabel.set(this.form.value.weightUnit?.toString());
+    this.weightUnitLabel.set(this.form.value.weightUnit?.toString());
 
-  switch (this.form.value.chartType) {
-    case 'totalVolume':
-      this.fetchTotalVolume();
-      break;
+    switch (this.form.value.chartType) {
+      case 'totalVolume':
+        this.fetchTotalVolume();
+        break;
+    }
   }
-}
 
 
   updateLineChartOptions() {
@@ -80,8 +85,8 @@ export class Reports {
 
   fetchTotalVolume() {
     const request: TotalVolumeReportRequest = {
-      fromDate: null,
-      toDate: null,
+      fromDate: this.form.value.fromDate,
+      toDate: this.form.value.toDate,
       workoutId: null,
       weightUnit: this.form.value.weightUnit
     };

@@ -167,3 +167,21 @@ export interface UserResponse {
   joinedDate: Date;
   lastEditedDate: Date;
 }
+
+export interface TotalVolumeReportRequest {
+  fromDate?: Date | null;
+  toDate?: Date | null;
+  workoutId?: string | null;
+  weightUnit: string;
+}
+
+export interface TotalVolumeReportResponse {
+  weightUnit: string;
+  dataPoints: DataPointResponse[]
+}
+
+export interface DataPointResponse {
+  completedWorkoutId: string;
+  completedDate: Date;
+  totalVolume: number;
+}

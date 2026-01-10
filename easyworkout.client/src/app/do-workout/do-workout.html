@@ -28,7 +28,7 @@
               @if (set.value.goalReps || !set.value.exerciseSetId) {
                 <mat-form-field class="small-form-field">
                   <mat-label>Reps</mat-label>
-                  <input matInput type="number" formControlName="reps" />
+                  <input matInput type="number" title="Reps" formControlName="reps" />
                 </mat-form-field>
                 @if (set.value.goalReps) {
                   <span>/ {{ set.value.goalReps }}</span>
@@ -41,7 +41,7 @@
               @if (set.value.goalWeight || !set.value.exerciseSetId) {
                  <mat-form-field class="small-form-field">
                    <mat-label>Weight</mat-label>
-                   <input matInput type="number" formControlName="weight" />
+                   <input matInput type="number" title="Weight" formControlName="weight" />
                  </mat-form-field>
                 @if (set.value.goalWeight) {
                   <span>/ {{ set.value.goalWeight }}</span>
@@ -67,7 +67,7 @@
               @if (set.value.goalDuration || !set.value.exerciseSetId) {
               <mat-form-field class="small-form-field">
                 <mat-label>Duration</mat-label>
-                <input matInput type="number" formControlName="duration" />
+                <input matInput type="number" title="Duration" formControlName="duration" />
               </mat-form-field>
               @if (set.value.goalDuration) {
               <span>/ {{ set.value.goalDuration }}</span>
@@ -93,7 +93,7 @@
               @if (set.value.goalDistance || !set.value.exerciseSetId) {
               <mat-form-field class="small-form-field">
                 <mat-label>Distance</mat-label>
-                <input matInput type="number" formControlName="distance" />
+                <input matInput type="number" title="Distance" formControlName="distance" />
               </mat-form-field>
               @if (set.value.goalDistance) {
               <span>/ {{ set.value.goalDistance }}</span>
@@ -132,7 +132,7 @@
 
   <mat-form-field class="small-form-field">
     <mat-label>New exercise name</mat-label>
-    <input matInput type="text" formControlName="newExerciseName" />
+    <input matInput type="text" title="New exercise name" formControlName="newExerciseName" />
   </mat-form-field>
   <button mat-button type="button" (click)="addEmptyExercise()">
     Add Exercise

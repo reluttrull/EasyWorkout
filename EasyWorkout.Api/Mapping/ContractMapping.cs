@@ -1,9 +1,11 @@
-﻿using EasyWorkout.Application.Model;
+﻿using EasyWorkout.Application.Extensions;
+using EasyWorkout.Application.Model;
 using EasyWorkout.Contracts.Requests;
 using EasyWorkout.Contracts.Responses;
 using EasyWorkout.Identity.Api.Model;
 using System.Runtime.CompilerServices;
 using static EasyWorkout.Api.Endpoints;
+using static EasyWorkout.Contracts.Model.Enums;
 
 namespace EasyWorkout.Api.Mapping
 {
@@ -265,6 +267,15 @@ namespace EasyWorkout.Api.Mapping
                 Distance = completedSet.Distance,
                 GoalDistance = completedSet.GoalDistance,
                 DistanceUnit = completedSet.DistanceUnit?.ToString()
+            };
+        }
+
+        public static TotalVolumeReportResponse MapToResponse(this IEnumerable<CompletedWorkout> completedWorkouts, WeightUnit weightUnit)
+        {
+            return new TotalVolumeReportResponse()
+            {
+                WeightUnit = weightUnit,
+                DataPoints = [.. completedWorkouts.Select(cw => new DataPointResponse(cw.Id, cw.CompletedDate, cw.GetTotalVolume(weightUnit)))]
             };
         }
     }

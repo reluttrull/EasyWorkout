@@ -50,5 +50,11 @@
             public const string Delete = $"{Base}/{{id}}";
             public const string DeleteAll = $"{Base}";
         }
+
+        public static class Reports
+        {
+            private const string Base = $"{ApiBase}/reports";
+            public const string GetTotalVolume = $"{Base}/totalvolume";
+        }
     }
 }

@@ -1,7 +1,8 @@
 import { Routes, provideRouter, withRouterConfig } from '@angular/router';
 import { DoWorkout } from './do-workout/do-workout';
 import { CompletedWorkoutsComponent } from './completed-workouts/completed-workouts';
-import { Account } from './account/account';
+import { Reports } from './reports/reports';
+import { Account } from './account/account'; 
 import { Home } from './components/home/home';
 import { LoginComponent } from './auth/login/login';
 import { RegisterComponent } from './auth/register/register';
@@ -36,6 +37,11 @@ export const routes: Routes = [
   {
     path: 'completed-workouts',
     component: CompletedWorkoutsComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'reports',
+    component: Reports,
     canActivate: [authGuard]
   },
   {

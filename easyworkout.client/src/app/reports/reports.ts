@@ -1,17 +1,26 @@
 import { Component, inject, signal } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
-import { ChartConfiguration, ChartOptions, ChartData, ChartType } from 'chart.js';
+import { ChartOptions, ChartData, ChartType } from 'chart.js';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ReportsService } from './reports.service';
 import { WeightUnit } from '../model/enums';
-import { TotalVolumeReportRequest, TotalVolumeReportResponse, DataPointResponse } from '../model/interfaces';
+import { TotalVolumeReportRequest, DataPointResponse } from '../model/interfaces';
 
 @Component({
   selector: 'app-reports',
-  imports: [BaseChartDirective],
+  imports: [BaseChartDirective, ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatSelectModule, MatDatepickerModule],
   templateUrl: './reports.html',
   styleUrl: './reports.css',
 })
 export class Reports {
+  fb = inject(FormBuilder);
+  form:FormGroup = this.fb.nonNullable.group({
+    chartType: [null]
+  });
   weightUnit = signal(WeightUnit.Pounds.toString());
   reportsService = inject(ReportsService);
   isChartLoaded = signal(false);
@@ -35,6 +44,15 @@ export class Reports {
     ]
   };
   public lineChartLegend = false;
+
+  submit() {
+    switch (this.form.value.chartType) {
+      case 'totalVolume':
+        console.log('creating total volume report...');
+        this.fetchTotalVolume();
+        break;
+    }
+  }
 
   fetchTotalVolume() {
     // default to pounds for now

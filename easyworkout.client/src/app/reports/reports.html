@@ -1,6 +1,14 @@
-Reports
+<h2>Reports</h2>
 
-<button (click)="fetchTotalVolume()">Fetch total volume data</button>
+<form [formGroup]="form" (ngSubmit)="submit()">
+    <mat-form-field>
+        <mat-label>Chart type</mat-label>
+        <mat-select matInput title="Chart type" placeholder="Chart type" formControlName="chartType">
+            <mat-option value="totalVolume">Total Volume</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <button matButton="filled" type="submit">Generate chart</button>
+</form>
 
 @if (isChartLoaded()) {
     <div style="display: block; width: 600px;">

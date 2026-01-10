@@ -31,6 +31,7 @@ namespace EasyWorkout.Application.Services
                 .WhereIf(connectedToWorkoutId is not null, cw => cw.WorkoutId == connectedToWorkoutId)
                 .Include(cw => cw.CompletedExercises)
                     .ThenInclude(ce => ce.CompletedExerciseSets)
+                .OrderBy(cw => cw.CompletedDate)
                 .ToListAsync();
 
             return filteredCompletedWorkouts;

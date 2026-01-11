@@ -383,5 +383,133 @@ namespace EasyWorkout.Tests
             var result = cw.GetTotalDistance(Contracts.Model.Enums.DistanceUnit.Laps);
             Assert.Equal(0, result);
         }
+
+
+        [Fact]
+        public async Task GetAveragePercentCompleted_WhenMultipleSetsWithGoals_ShouldReturnAverage()
+        {
+            CompletedWorkout cw = new CompletedWorkout()
+            {
+                Id = Guid.NewGuid(),
+                CompletedByUserId = Guid.NewGuid(),
+                CompletedDate = DateTime.UtcNow,
+                LastEditedDate = DateTime.UtcNow,
+                CompletedExercises = [
+                    new CompletedExercise()
+                    {
+                        Id = Guid.NewGuid(),
+                        CompletedByUserId = Guid.NewGuid(),
+                        CompletedDate = DateTime.UtcNow,
+                        ExerciseNumber = 0,
+                        CompletedExerciseSets = [
+                            new CompletedExerciseSet()
+                            {
+                                Id = Guid.NewGuid(),
+                                ExerciseSetId = null,
+                                CompletedDate = DateTime.UtcNow,
+                                SetNumber = 0,
+                                Distance = 2,
+                                GoalDistance = 4,
+                                DistanceUnit = Contracts.Model.Enums.DistanceUnit.Kilometers
+                            },
+                            new CompletedExerciseSet()
+                            {
+                                Id = Guid.NewGuid(),
+                                ExerciseSetId = null,
+                                CompletedDate = DateTime.UtcNow,
+                                SetNumber = 1,
+                                Distance = 500,
+                                GoalDistance = 500,
+                                DistanceUnit = Contracts.Model.Enums.DistanceUnit.Meters
+                            }]
+                    }]
+            };
+            var result = cw.GetAveragePercentCompleted();
+            Assert.Equal(75m, result);
+        }
+
+        [Fact]
+        public async Task GetAveragePercentCompleted_WhenExistSetsWithNoGoal_ShouldNotBeAffected()
+        {
+            CompletedWorkout cw = new CompletedWorkout()
+            {
+                Id = Guid.NewGuid(),
+                CompletedByUserId = Guid.NewGuid(),
+                CompletedDate = DateTime.UtcNow,
+                LastEditedDate = DateTime.UtcNow,
+                CompletedExercises = [
+                    new CompletedExercise()
+                    {
+                        Id = Guid.NewGuid(),
+                        CompletedByUserId = Guid.NewGuid(),
+                        CompletedDate = DateTime.UtcNow,
+                        ExerciseNumber = 0,
+                        CompletedExerciseSets = [
+                            new CompletedExerciseSet()
+                            {
+                                Id = Guid.NewGuid(),
+                                ExerciseSetId = null,
+                                CompletedDate = DateTime.UtcNow,
+                                SetNumber = 0,
+                                Reps = 2,
+                                Duration = 5,
+                                DurationUnit = Contracts.Model.Enums.DurationUnit.Minutes
+                            },
+                            new CompletedExerciseSet()
+                            {
+                                Id = Guid.NewGuid(),
+                                ExerciseSetId = null,
+                                CompletedDate = DateTime.UtcNow,
+                                SetNumber = 1,
+                                Distance = 5,
+                                GoalDistance = 10,
+                                DistanceUnit = Contracts.Model.Enums.DistanceUnit.Miles
+                            }]
+                    }]
+            };
+            var result = cw.GetAveragePercentCompleted();
+            Assert.Equal(50m, result);
+        }
+
+        [Fact]
+        public async Task GetAveragePercentCompleted_WhenNoSetsWithGoals_ShouldReturn100()
+        {
+            CompletedWorkout cw = new CompletedWorkout()
+            {
+                Id = Guid.NewGuid(),
+                CompletedByUserId = Guid.NewGuid(),
+                CompletedDate = DateTime.UtcNow,
+                LastEditedDate = DateTime.UtcNow,
+                CompletedExercises = [
+                    new CompletedExercise()
+                    {
+                        Id = Guid.NewGuid(),
+                        CompletedByUserId = Guid.NewGuid(),
+                        CompletedDate = DateTime.UtcNow,
+                        ExerciseNumber = 0,
+                        CompletedExerciseSets = [
+                            new CompletedExerciseSet()
+                            {
+                                Id = Guid.NewGuid(),
+                                ExerciseSetId = null,
+                                CompletedDate = DateTime.UtcNow,
+                                SetNumber = 0,
+                                Reps = 2,
+                                Weight = 5,
+                                WeightUnit = Contracts.Model.Enums.WeightUnit.Pounds
+                            },
+                            new CompletedExerciseSet()
+                            {
+                                Id = Guid.NewGuid(),
+                                ExerciseSetId = null,
+                                CompletedDate = DateTime.UtcNow,
+                                SetNumber = 1,
+                                Reps = 3
+                            }]
+                    }]
+            };
+            var result = cw.GetAveragePercentCompleted();
+            Assert.Equal(100m, result);
+        }
     }
 }

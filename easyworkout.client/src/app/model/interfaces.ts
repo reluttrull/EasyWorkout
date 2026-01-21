@@ -57,6 +57,14 @@ export interface WorkoutResponse {
   exercises: ExerciseResponse[];
 }
 
+export interface GetAllCompletedWorkoutsRequest {
+  minDate?: Date | null;
+  maxDate?: Date | null;
+  basedOnWorkoutId?: string | null;
+  containsExerciseId?: string | null;
+  containsText?: string | null;
+}
+
 export interface CompletedWorkoutResponse {
   id: string;
   completedByUserId: string;

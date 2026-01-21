@@ -7,8 +7,8 @@ POST {{EasyWorkout.Identity.Api_HostAddress}}/api/auth/login
 Content-Type: application/json
 
 {
-  "userName": "TestAddUserDb3",
-  "password": "@Hunter3"
+  "userName": "TestUser1",
+  "password": "@Hunter1"
 }
 
 ###

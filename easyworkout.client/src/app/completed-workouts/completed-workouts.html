@@ -1,10 +1,58 @@
 <h2>Completed Workouts</h2>
+@if (areFiltersVisible()) {
+<form [formGroup]="filters" (ngSubmit)="submit()">
+    <div>
+        <mat-form-field>
+            <mat-label>Start date (optional)</mat-label>
+            <input matInput [matDatepicker]="fromPicker" title="From date" placeholder="From date" formControlName="minDate">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="fromPicker"></mat-datepicker-toggle>
+            <mat-datepicker #fromPicker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>End date (optional)</mat-label>
+            <input matInput [matDatepicker]="toPicker" title="To date" placeholder="To date" formControlName="maxDate">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="toPicker"></mat-datepicker-toggle>
+            <mat-datepicker #toPicker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="medium-form-field skinny-form-field">
+            <mat-label>Based on workout</mat-label>
+            <mat-select matInput title="Based on workout" placeholder="Based on workout" formControlName="basedOnWorkoutId">
+                <mat-option value="">--Please choose an option--</mat-option>
+                @for (workout of workouts(); track $index) {
+                    <mat-option [value]="workout.id">{{workout.name}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="medium-form-field skinny-form-field">
+            <mat-label>Contains exercise</mat-label>
+            <mat-select matInput title="Contains exercise" placeholder="Contains exercise" formControlName="containsExerciseId">
+                <mat-option value="">--Please choose an option--</mat-option>
+                @for (exercise of exercises(); track $index) {
+                    <mat-option [value]="exercise.id">{{exercise.name}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="medium-form-field skinny-form-field">
+            <mat-label>Contains text</mat-label>
+            <input matInput placeholder="Contains text" formControlName="containsText" type="text" />
+        </mat-form-field>
+    </div>
+    <button matFab extended type="submit">
+        Apply filters
+    </button>
+</form>
+} @else {
+    <button matButton type="button" (click)="toggleFiltersVisible()">Filter results</button>
+}
+
 @if (isLoaded()) {
     @for (completedWorkout of completedWorkouts() | orderBy:'completedDate':'desc'; track completedWorkout.id) {
         <app-completed-workout [completedWorkout]="completedWorkout" (onCompletedWorkoutChanged)="reload()"/>
     }
     @if (completedWorkouts().length == 0) {
-        <div>Looks like you haven't tried any of your workouts yet.  <a matButton="text" href="workouts" aria-label="workouts">Pick one to try?</a></div>
+        <div>No completed workouts found. <a matButton="text" href="workouts" aria-label="workouts">Pick one to try?</a></div>
     }
 } @else {
     <mat-spinner></mat-spinner>

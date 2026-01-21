@@ -1,4 +1,5 @@
 ﻿using EasyWorkout.Application.Data;
+using EasyWorkout.Application.Extensions;
 using EasyWorkout.Application.Model;
 using EasyWorkout.Contracts.Requests;
 using EasyWorkout.Identity.Api.Model;
@@ -67,10 +68,16 @@ namespace EasyWorkout.Application.Services
             return result > 0;
         }
 
-        public async Task<IEnumerable<CompletedWorkout>> GetAllForUserAsync(Guid userId, CancellationToken token = default)
+        public async Task<IEnumerable<CompletedWorkout>> GetAllForUserAsync(Guid userId, GetAllCompletedWorkoutsRequest request, CancellationToken token = default)
         {
             return await _workoutsContext.CompletedWorkouts
                 .Where(cw => cw.CompletedByUserId == userId)
+                .WhereIf(request.MinDate is not null, cw => cw.CompletedDate >= request.MinDate)
+                .WhereIf(request.MaxDate is not null, cw => cw.CompletedDate <= request.MaxDate)
+                .WhereIf(request.BasedOnWorkoutId is not null, cw => cw.WorkoutId == request.BasedOnWorkoutId)
+                .WhereIf(request.ContainsExerciseId is not null, cw => cw.CompletedExercises.Any(ce => ce.ExerciseId == request.ContainsExerciseId))
+                .WhereIf(request.ContainsText is not null, cw => cw.FallbackName.Contains(request.ContainsText!)
+                    || (cw.CompletedNotes ?? string.Empty).Contains(request.ContainsText!))
                 .Include(cw => cw.CompletedExercises)
                     .ThenInclude(ce => ce.CompletedExerciseSets)
                 .ToListAsync();

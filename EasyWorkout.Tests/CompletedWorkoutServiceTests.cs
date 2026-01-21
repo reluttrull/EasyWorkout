@@ -295,12 +295,292 @@ namespace EasyWorkout.Tests
                 };
                 success = await cwService.CreateAsync(cw);
                 Assert.True(success);
-                var completedWorkouts = await cwService.GetAllForUserAsync(userId);
+                var request = new GetAllCompletedWorkoutsRequest()
+                {
+                    MinDate = null,
+                    MaxDate = null,
+                    BasedOnWorkoutId = null,
+                    ContainsExerciseId = null,
+                    ContainsText = null
+                };
+                var completedWorkouts = await cwService.GetAllForUserAsync(userId, request);
                 Assert.NotNull(completedWorkouts);
                 Assert.Equal(completedWorkouts?.Count(), 2);
 
                 var belongsToUser = await cwService.BelongsToUserAsync(otherCwId, userId);
                 Assert.False(belongsToUser);
+            }
+        }
+
+        [Fact]
+        public async Task GetAllForUserAsync_WhenDateFilters_ShouldReturnOnlyWithinRange()
+        {
+            var options = new DbContextOptionsBuilder<WorkoutsContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            await using (var context = new WorkoutsContext(options))
+            {
+                var cwService = new CompletedWorkoutService(context);
+                var userId = Guid.NewGuid();
+                var cw = new CompletedWorkout()
+                {
+                    Id = Guid.NewGuid(),
+                    CompletedByUserId = userId,
+                    CompletedDate = DateTime.UtcNow.AddDays(-2),
+                    LastEditedDate = DateTime.UtcNow,
+                    CompletedExercises = []
+                };
+                var success = await cwService.CreateAsync(cw);
+                Assert.True(success);
+                cw = new CompletedWorkout()
+                {
+                    Id = Guid.NewGuid(),
+                    CompletedByUserId = userId,
+                    CompletedDate = DateTime.UtcNow.AddDays(-1),
+                    LastEditedDate = DateTime.UtcNow,
+                    CompletedExercises = []
+                };
+                success = await cwService.CreateAsync(cw);
+                Assert.True(success);
+                var otherCwId = Guid.NewGuid();
+                cw = new CompletedWorkout()
+                {
+                    Id = otherCwId,
+                    CompletedByUserId = userId,
+                    CompletedDate = DateTime.UtcNow,
+                    LastEditedDate = DateTime.UtcNow,
+                    CompletedExercises = []
+                };
+                success = await cwService.CreateAsync(cw);
+                Assert.True(success);
+                var request = new GetAllCompletedWorkoutsRequest()
+                {
+                    MinDate = DateTime.UtcNow.AddDays(-2),
+                    MaxDate = DateTime.UtcNow.AddDays(-1),
+                    BasedOnWorkoutId = null,
+                    ContainsExerciseId = null,
+                    ContainsText = null
+                };
+                var completedWorkouts = await cwService.GetAllForUserAsync(userId, request);
+                Assert.NotNull(completedWorkouts);
+                Assert.Equal(completedWorkouts?.Count(), 1);
+            }
+        }
+
+        [Fact]
+        public async Task GetAllForUserAsync_WhenTextFilter_ShouldReturnIfFoundInNameOrNotes()
+        {
+            var options = new DbContextOptionsBuilder<WorkoutsContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            await using (var context = new WorkoutsContext(options))
+            {
+                var cwService = new CompletedWorkoutService(context);
+                var userId = Guid.NewGuid();
+                var workout = new Workout()
+                {
+                    Id = Guid.NewGuid(),
+                    AddedByUserId = userId,
+                    AddedDate = DateOnly.FromDateTime(DateTime.UtcNow),
+                    Name = "You have to find this text",
+                    LastEditedDate = DateTime.UtcNow
+                };
+                context.Workouts.Add(workout);
+                await context.SaveChangesAsync();
+                var cw = new CompletedWorkout()
+                {
+                    Id = Guid.NewGuid(),
+                    CompletedByUserId = userId,
+                    CompletedDate = DateTime.UtcNow.AddDays(-2),
+                    LastEditedDate = DateTime.UtcNow,
+                    CompletedExercises = []
+                };
+                var success = await cwService.CreateAsync(cw);
+                Assert.True(success);
+                cw = new CompletedWorkout()
+                {
+                    Id = Guid.NewGuid(),
+                    WorkoutId = workout.Id,
+                    FallbackName = workout.Name,
+                    CompletedByUserId = userId,
+                    CompletedDate = DateTime.UtcNow.AddDays(-1),
+                    LastEditedDate = DateTime.UtcNow,
+                    CompletedExercises = []
+                };
+                success = await cwService.CreateAsync(cw);
+                Assert.True(success);
+                cw = new CompletedWorkout()
+                {
+                    Id = Guid.NewGuid(),
+                    CompletedByUserId = userId,
+                    CompletedDate = DateTime.UtcNow,
+                    LastEditedDate = DateTime.UtcNow,
+                    CompletedNotes = "Here, find this text too",
+                    CompletedExercises = []
+                };
+                success = await cwService.CreateAsync(cw);
+                Assert.True(success);
+                var request = new GetAllCompletedWorkoutsRequest()
+                {
+                    MinDate = null,
+                    MaxDate = null,
+                    BasedOnWorkoutId = null,
+                    ContainsExerciseId = null,
+                    ContainsText = "find this"
+                };
+                var completedWorkouts = await cwService.GetAllForUserAsync(userId, request);
+                Assert.NotNull(completedWorkouts);
+                Assert.Equal(completedWorkouts?.Count(), 2);
+            }
+        }
+
+        [Fact]
+        public async Task GetAllForUserAsync_WhenWorkoutFilter_ShouldReturnIfBasedOnWorkout()
+        {
+            var options = new DbContextOptionsBuilder<WorkoutsContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            await using (var context = new WorkoutsContext(options))
+            {
+                var cwService = new CompletedWorkoutService(context);
+                var userId = Guid.NewGuid();
+                var workout = new Workout()
+                {
+                    Id = Guid.NewGuid(),
+                    AddedByUserId = userId,
+                    AddedDate = DateOnly.FromDateTime(DateTime.UtcNow),
+                    Name = "",
+                    LastEditedDate = DateTime.UtcNow
+                };
+                context.Workouts.Add(workout);
+                await context.SaveChangesAsync();
+                var cw = new CompletedWorkout()
+                {
+                    Id = Guid.NewGuid(),
+                    CompletedByUserId = userId,
+                    CompletedDate = DateTime.UtcNow.AddDays(-2),
+                    LastEditedDate = DateTime.UtcNow,
+                    CompletedExercises = []
+                };
+                var success = await cwService.CreateAsync(cw);
+                Assert.True(success);
+                cw = new CompletedWorkout()
+                {
+                    Id = Guid.NewGuid(),
+                    WorkoutId = workout.Id,
+                    CompletedByUserId = userId,
+                    CompletedDate = DateTime.UtcNow.AddDays(-1),
+                    LastEditedDate = DateTime.UtcNow,
+                    CompletedExercises = []
+                };
+                success = await cwService.CreateAsync(cw);
+                Assert.True(success);
+                cw = new CompletedWorkout()
+                {
+                    Id = Guid.NewGuid(),
+                    CompletedByUserId = userId,
+                    CompletedDate = DateTime.UtcNow,
+                    LastEditedDate = DateTime.UtcNow,
+                    CompletedExercises = []
+                };
+                success = await cwService.CreateAsync(cw);
+                Assert.True(success);
+                var request = new GetAllCompletedWorkoutsRequest()
+                {
+                    MinDate = null,
+                    MaxDate = null,
+                    BasedOnWorkoutId = workout.Id,
+                    ContainsExerciseId = null,
+                    ContainsText = null
+                };
+                var completedWorkouts = await cwService.GetAllForUserAsync(userId, request);
+                Assert.NotNull(completedWorkouts);
+                Assert.Equal(completedWorkouts?.Count(), 1);
+            }
+        }
+
+        [Fact]
+        public async Task GetAllForUserAsync_WhenExerciseFilter_ShouldReturnIfContainsCEMatchingExercise()
+        {
+            var options = new DbContextOptionsBuilder<WorkoutsContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            await using (var context = new WorkoutsContext(options))
+            {
+                var cwService = new CompletedWorkoutService(context);
+                var userId = Guid.NewGuid();
+                var workout = new Workout()
+                {
+                    Id = Guid.NewGuid(),
+                    AddedByUserId = userId,
+                    AddedDate = DateOnly.FromDateTime(DateTime.UtcNow),
+                    Name = "",
+                    LastEditedDate = DateTime.UtcNow
+                };
+                var exercise = new Exercise()
+                {
+                    Id = Guid.NewGuid(),
+                    AddedByUserId = userId,
+                    AddedDate = DateOnly.FromDateTime(DateTime.UtcNow),
+                    Name = "",
+                    LastEditedDate = DateTime.UtcNow
+                };
+                workout.WorkoutExercises.Add(new WorkoutExercise() { Exercise = exercise, Workout = workout });
+                context.Workouts.Add(workout);
+                await context.SaveChangesAsync();
+                var cw = new CompletedWorkout()
+                {
+                    Id = Guid.NewGuid(),
+                    CompletedByUserId = userId,
+                    CompletedDate = DateTime.UtcNow.AddDays(-2),
+                    LastEditedDate = DateTime.UtcNow,
+                    CompletedExercises = [
+                        new CompletedExercise()
+                        {
+                            Id = Guid.NewGuid(),
+                            ExerciseId = exercise.Id,
+                            CompletedByUserId = userId,
+                            CompletedDate = DateTime.UtcNow,
+                            ExerciseNumber = 0
+                        }]
+                };
+                var success = await cwService.CreateAsync(cw);
+                Assert.True(success);
+                cw = new CompletedWorkout()
+                {
+                    Id = Guid.NewGuid(),
+                    CompletedByUserId = userId,
+                    CompletedDate = DateTime.UtcNow.AddDays(-1),
+                    LastEditedDate = DateTime.UtcNow,
+                    CompletedExercises = []
+                };
+                success = await cwService.CreateAsync(cw);
+                Assert.True(success);
+                cw = new CompletedWorkout()
+                {
+                    Id = Guid.NewGuid(),
+                    CompletedByUserId = userId,
+                    CompletedDate = DateTime.UtcNow,
+                    LastEditedDate = DateTime.UtcNow,
+                    CompletedExercises = []
+                };
+                success = await cwService.CreateAsync(cw);
+                Assert.True(success);
+                var request = new GetAllCompletedWorkoutsRequest()
+                {
+                    MinDate = null,
+                    MaxDate = null,
+                    BasedOnWorkoutId = null,
+                    ContainsExerciseId = exercise.Id,
+                    ContainsText = null
+                };
+                var completedWorkouts = await cwService.GetAllForUserAsync(userId, request);
+                Assert.NotNull(completedWorkouts);
+                Assert.Equal(completedWorkouts?.Count(), 1);
             }
         }
 

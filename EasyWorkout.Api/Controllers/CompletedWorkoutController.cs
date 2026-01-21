@@ -45,6 +45,7 @@ namespace EasyWorkout.Api.Controllers
 
             var completedWorkout = request.MapToCompletedWorkout(userId!.Value);
             // copy values from original workout
+            // todo: get this out of the controller
             if (completedWorkout.WorkoutId is not null)
             {
                 var basedOnWorkout = await _workoutService.GetByIdAsync(completedWorkout.WorkoutId!.Value);
@@ -107,7 +108,7 @@ namespace EasyWorkout.Api.Controllers
 
         [Authorize(AuthConstants.FreeMemberUserPolicyName)]
         [HttpGet(Endpoints.CompletedWorkouts.GetAllForUser)]
-        public async Task<IActionResult> GetAllForUser(CancellationToken token)
+        public async Task<IActionResult> GetAllForUser([FromQuery] GetAllCompletedWorkoutsRequest request, CancellationToken token)
         {
             var userId = HttpContext.GetUserId();
             if (userId is null)
@@ -116,7 +117,7 @@ namespace EasyWorkout.Api.Controllers
                 return BadRequest("User not found.");
             }
 
-            var detailedCompletedWorkoutsForUser = await _completedWorkoutService.GetAllForUserAsync(userId!.Value, token);
+            var detailedCompletedWorkoutsForUser = await _completedWorkoutService.GetAllForUserAsync(userId!.Value, request, token);
             var completedWorkoutResponsesForUser = detailedCompletedWorkoutsForUser.Select(w => w.MapToResponse());
 
             return Ok(completedWorkoutResponsesForUser);

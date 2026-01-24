@@ -83,6 +83,7 @@ namespace EasyWorkout.Application.Services
                     .ThenInclude(ce => ce.CompletedExerciseSets)
                 .Skip(request.PageSize * (request.Page - 1))
                 .Take(request.PageSize)
+                .OrderByDescending(cw => cw.CompletedDate)
                 .ToListAsync();
         }
 

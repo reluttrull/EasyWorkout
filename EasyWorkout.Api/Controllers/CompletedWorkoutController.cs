@@ -118,9 +118,11 @@ namespace EasyWorkout.Api.Controllers
             }
 
             var detailedCompletedWorkoutsForUser = await _completedWorkoutService.GetAllForUserAsync(userId!.Value, request, token);
-            var completedWorkoutResponsesForUser = detailedCompletedWorkoutsForUser.Select(w => w.MapToResponse());
+            var totalCount = await _completedWorkoutService.GetTotalCountAsync(userId!.Value, request, token);
 
-            return Ok(completedWorkoutResponsesForUser);
+            var completedWorkoutsResponseForUser = detailedCompletedWorkoutsForUser.MapToResponse(request.Page, request.PageSize, totalCount);
+
+            return Ok(completedWorkoutsResponseForUser);
         }
 
         [Authorize(AuthConstants.FreeMemberUserPolicyName)]

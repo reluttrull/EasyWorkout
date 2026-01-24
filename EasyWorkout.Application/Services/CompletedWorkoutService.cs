@@ -2,6 +2,7 @@
 using EasyWorkout.Application.Extensions;
 using EasyWorkout.Application.Model;
 using EasyWorkout.Contracts.Requests;
+using EasyWorkout.Contracts.Responses;
 using EasyWorkout.Identity.Api.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -80,6 +81,8 @@ namespace EasyWorkout.Application.Services
                     || (cw.CompletedNotes ?? string.Empty).Contains(request.ContainsText!))
                 .Include(cw => cw.CompletedExercises)
                     .ThenInclude(ce => ce.CompletedExerciseSets)
+                .Skip(request.PageSize * (request.Page - 1))
+                .Take(request.PageSize)
                 .ToListAsync();
         }
 
@@ -104,6 +107,19 @@ namespace EasyWorkout.Application.Services
                 .OrderByDescending(cw => cw.CompletedDate)
                 .Select(cw => cw.CompletedDate)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<int> GetTotalCountAsync(Guid userId, GetAllCompletedWorkoutsRequest request, CancellationToken token = default)
+        {
+            return _workoutsContext.CompletedWorkouts
+                .Where(cw => cw.CompletedByUserId == userId)
+                .WhereIf(request.MinDate is not null, cw => cw.CompletedDate >= request.MinDate)
+                .WhereIf(request.MaxDate is not null, cw => cw.CompletedDate <= request.MaxDate)
+                .WhereIf(request.BasedOnWorkoutId is not null, cw => cw.WorkoutId == request.BasedOnWorkoutId)
+                .WhereIf(request.ContainsExerciseId is not null, cw => cw.CompletedExercises.Any(ce => ce.ExerciseId == request.ContainsExerciseId))
+                .WhereIf(request.ContainsText is not null, cw => cw.FallbackName.Contains(request.ContainsText!)
+                    || (cw.CompletedNotes ?? string.Empty).Contains(request.ContainsText!))
+                .Count();
         }
 
         public async Task<CompletedWorkout?> UpdateAsync(Guid id, UpdateCompletedWorkoutRequest request, CancellationToken token = default)

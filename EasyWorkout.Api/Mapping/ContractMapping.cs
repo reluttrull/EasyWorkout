@@ -270,6 +270,17 @@ namespace EasyWorkout.Api.Mapping
             };
         }
 
+        public static CompletedWorkoutsResponse MapToResponse(this IEnumerable<CompletedWorkout> completedWorkouts, int page, int pageSize, int total)
+        {
+            return new CompletedWorkoutsResponse()
+            {
+                Items = completedWorkouts.Select(cw => cw.MapToResponse()),
+                Page = page,
+                PageSize = pageSize,
+                Total = total
+            };
+        }
+
         public static TotalVolumeReportResponse MapToResponse(this IEnumerable<CompletedWorkout> completedWorkouts, WeightUnit weightUnit)
         {
             return new TotalVolumeReportResponse()

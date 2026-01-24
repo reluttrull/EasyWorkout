@@ -2,7 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { FinishWorkoutRequest, UpdateCompletedWorkoutRequest, GetAllCompletedWorkoutsRequest, CompletedWorkoutResponse } from '../model/interfaces';
+import { FinishWorkoutRequest, UpdateCompletedWorkoutRequest, GetAllCompletedWorkoutsRequest, 
+  CompletedWorkoutsResponse, CompletedWorkoutResponse } from '../model/interfaces';
 
 
 @Injectable({ providedIn: 'root' })
@@ -22,9 +23,11 @@ export class CompletedWorkoutsService {
     if (getAllFilters.basedOnWorkoutId) queries.push(`basedOnWorkoutId=${getAllFilters.basedOnWorkoutId}`);
     if (getAllFilters.containsExerciseId) queries.push(`containsExerciseId=${getAllFilters.containsExerciseId}`);
     if (getAllFilters.containsText) queries.push(`containsText=${getAllFilters.containsText}`);
+    if (getAllFilters.page) queries.push(`page=${getAllFilters.page + 1}`);
+    if (getAllFilters.pageSize) queries.push(`pageSize=${getAllFilters.pageSize}`);
 
     let queryString = queries.join('&');
-    return this.http.get<CompletedWorkoutResponse[]>(`${this.baseUrl}/me${queryString.length > 0 ? '?' + queryString : ''}`);
+    return this.http.get<CompletedWorkoutsResponse>(`${this.baseUrl}/me${queryString.length > 0 ? '?' + queryString : ''}`);
   }
   
   getLastCompletedDate() {

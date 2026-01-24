@@ -1,6 +1,6 @@
 <h2>Completed Workouts</h2>
 @if (areFiltersVisible()) {
-<form [formGroup]="filters" (ngSubmit)="submit()">
+<form [formGroup]="filters" (ngSubmit)="applyFilters()">
     <div>
         <mat-form-field>
             <mat-label>Start date (optional)</mat-label>
@@ -47,13 +47,22 @@
     <button matButton type="button" (click)="toggleFiltersVisible()">Filter results</button>
 }
 
-@if (isLoaded()) {
+<div class="mat-elevation-z8">
+    <mat-paginator 
+        (page)="onPageChange($event)"
+        [length]="totalItems"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+        aria-label="Select page"
+    >
+    </mat-paginator>
     @for (completedWorkout of completedWorkouts() | orderBy:'completedDate':'desc'; track completedWorkout.id) {
-        <app-completed-workout [completedWorkout]="completedWorkout" (onCompletedWorkoutChanged)="reload()"/>
+        <app-completed-workout [completedWorkout]="completedWorkout" (onCompletedWorkoutChanged)="getCompletedWorkouts()"/>
     }
     @if (completedWorkouts().length == 0) {
         <div>No completed workouts found. <a matButton="text" href="workouts" aria-label="workouts">Pick one to try?</a></div>
     }
-} @else {
+</div>
+@if (!isLoaded()) {
     <mat-spinner></mat-spinner>
 }

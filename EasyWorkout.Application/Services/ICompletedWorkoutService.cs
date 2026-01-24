@@ -23,5 +23,7 @@ namespace EasyWorkout.Application.Services
         Task<bool> BelongsToUserAsync(Guid id, Guid userId, CancellationToken token = default);
 
         Task<bool> DeleteAllAsync(Guid userId, CancellationToken token = default);
+
+        Task<int> GetTotalCountAsync(Guid userId, GetAllCompletedWorkoutsRequest request, CancellationToken token = default);
     }
 }

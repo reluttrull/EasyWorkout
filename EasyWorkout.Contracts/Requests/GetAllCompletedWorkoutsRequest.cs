@@ -4,7 +4,7 @@ using System.Text;
 
 namespace EasyWorkout.Contracts.Requests
 {
-    public class GetAllCompletedWorkoutsRequest
+    public class GetAllCompletedWorkoutsRequest : PagedRequest
     {
         public required DateTime? MinDate { get; init; }
         public required DateTime? MaxDate { get; init; }

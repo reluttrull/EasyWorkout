@@ -63,6 +63,16 @@ export interface GetAllCompletedWorkoutsRequest {
   basedOnWorkoutId?: string | null;
   containsExerciseId?: string | null;
   containsText?: string | null;
+  page: number;
+  pageSize: number;
+}
+
+export interface CompletedWorkoutsResponse {
+  items: CompletedWorkoutResponse[];
+  pageSize: number;
+  page: number;
+  total: number;
+  hasNextPage: boolean;
 }
 
 export interface CompletedWorkoutResponse {

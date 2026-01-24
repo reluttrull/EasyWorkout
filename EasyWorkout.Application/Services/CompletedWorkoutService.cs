@@ -81,9 +81,9 @@ namespace EasyWorkout.Application.Services
                     || (cw.CompletedNotes ?? string.Empty).Contains(request.ContainsText!))
                 .Include(cw => cw.CompletedExercises)
                     .ThenInclude(ce => ce.CompletedExerciseSets)
+                .OrderByDescending(cw => cw.CompletedDate)
                 .Skip(request.PageSize * (request.Page - 1))
                 .Take(request.PageSize)
-                .OrderByDescending(cw => cw.CompletedDate)
                 .ToListAsync();
         }
 

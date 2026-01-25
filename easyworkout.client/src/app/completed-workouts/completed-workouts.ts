@@ -86,6 +86,17 @@ export class CompletedWorkoutsComponent {
     }
     this.getCompletedWorkouts();
   }
+  
+  clearFilters() {
+    this.filters = this.fb.nonNullable.group({
+      minDate: [null],
+      maxDate: [null],
+      containsText: [null],
+      basedOnWorkoutId: [null],
+      containsExerciseId: [null]
+    });
+    this.applyFilters();
+  }
 
   getCompletedWorkouts() {
     const getAllFilters:GetAllCompletedWorkoutsRequest = {

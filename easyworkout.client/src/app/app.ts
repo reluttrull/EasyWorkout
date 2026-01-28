@@ -1,4 +1,4 @@
-import { Component, signal, computed, inject } from '@angular/core';
+import { Component, OnInit, computed, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
@@ -13,11 +13,16 @@ import { AccountService } from './account/account.service';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   private accountService = inject(AccountService);
   private authService = inject(AuthService);
   user = this.accountService.user;
   currentYear = new Date().getFullYear();
+
+  ngOnInit() {
+    this.accountService.loadUser();
+    this.user = this.accountService.user;
+  }
   
   logout() {
     this.authService.logout();

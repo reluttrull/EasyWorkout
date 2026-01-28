@@ -1,19 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { AccountService } from '../account/account.service';
 import { TokenService } from '../core/token.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private baseUrl = `${environment.authApi}/api/auth`;
-
-  constructor(
-    private http: HttpClient,
-    private tokenService: TokenService,
-    private router: Router
-  ) {}
+  private accountService = inject(AccountService);
+  private tokenService = inject(TokenService);
+  private http = inject(HttpClient);
+  private router = inject(Router);
 
   login(userName: string, password: string) {
     return this.http
@@ -22,8 +21,10 @@ export class AuthService {
         password
       })
       .pipe(
-        tap(res => this.tokenService.setTokens(res.accessToken, res.refreshToken))
-      );
+        tap(res => {
+          this.tokenService.setTokens(res.accessToken, res.refreshToken);
+          this.accountService.loadUser();
+          }));
   }
 
   refreshToken() {
@@ -33,8 +34,10 @@ export class AuthService {
         refreshToken
       })
       .pipe(
-        tap(res => this.tokenService.setTokens(res.accessToken, res.refreshToken))
-      );
+        tap(res => {
+          this.tokenService.setTokens(res.accessToken, res.refreshToken);
+          this.accountService.loadUser();
+      }));
   }
 
   register(data: any) {
@@ -43,6 +46,7 @@ export class AuthService {
 
   logout() {
     this.tokenService.clear();
+    this.accountService.clear();
     this.router.navigate(['login']);
   }
 }

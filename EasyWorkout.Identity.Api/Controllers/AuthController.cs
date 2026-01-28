@@ -126,11 +126,11 @@ namespace EasyWorkout.Identity.Api.Controllers
             var user = await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
             if (user == null)
             {
-                return Unauthorized(new { Message = "Invalid Refresh Token" });
+                return Unauthorized(new { Message = "Invalid Credentials" });
             }
             if (user.RefreshTokenExpiry < DateTime.UtcNow)
             {
-                return Unauthorized(new { Message = "Refresh Token Expired" });
+                return Unauthorized(new { Message = "Login Expired" });
             }
             var newAccessToken = _tokenService.GenerateAccessToken(user);
             var newRefreshToken = _tokenService.GenerateRefreshToken();

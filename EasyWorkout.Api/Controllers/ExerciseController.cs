@@ -13,7 +13,6 @@ using static EasyWorkout.Api.Endpoints;
 namespace EasyWorkout.Api.Controllers
 {
     [ApiController]
-    [EnableRateLimiting("fixed")]
     public class ExerciseController : ControllerBase
     {
         private readonly IExerciseService _exerciseService;

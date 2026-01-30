@@ -67,7 +67,7 @@ export class CompletedWorkoutsComponent {
   }
   
   onPageChange(event: PageEvent) {
-    console.log('Page event:', event);
+    this.getCompletedWorkouts();
   }
 
   loadOnce() {

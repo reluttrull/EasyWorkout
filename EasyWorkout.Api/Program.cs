@@ -68,11 +68,6 @@ try
 
     builder.Host.UseSerilog();
 
-    //builder.WebHost.UseKestrel(options =>
-    //{
-    //    options.AddServerHeader = false;
-    //});
-
     builder.Services.AddCors(options =>
     {
         options.AddPolicy("AllowClient", policy =>
@@ -133,12 +128,15 @@ try
     builder.Services.AddRateLimiter(options =>
     {
         options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-        options.AddFixedWindowLimiter("fixed", opt =>
+        options.AddPolicy("fixed", context =>
         {
-            opt.PermitLimit = 10;
-            opt.Window = TimeSpan.FromSeconds(10);
-            opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-            opt.QueueLimit = 2;
+            return RateLimitPartition.GetFixedWindowLimiter("fixed", _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 100, // scale with number of users
+                Window = TimeSpan.FromSeconds(5),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 2
+            });
         });
     });
 
@@ -174,7 +172,7 @@ try
     app.UseAuthentication();
     app.UseAuthorization();
 
-    app.MapControllers();
+    app.MapControllers().RequireRateLimiting("fixed");
 
     app.MapFallbackToFile("/index.html");
 

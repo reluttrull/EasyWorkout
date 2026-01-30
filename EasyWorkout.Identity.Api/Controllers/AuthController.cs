@@ -19,7 +19,6 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace EasyWorkout.Identity.Api.Controllers
 {
     [ApiController]
-    [EnableRateLimiting("fixed")]
     public class AuthController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
@@ -42,6 +41,7 @@ namespace EasyWorkout.Identity.Api.Controllers
             _userService = userService;
         }
 
+        [EnableRateLimiting("register-ip")]
         [HttpPost(Endpoints.Auth.Register)]
         public async Task<IActionResult> Register([FromBody] RegistrationRequest request)
         {
@@ -95,6 +95,7 @@ namespace EasyWorkout.Identity.Api.Controllers
             }
         }
 
+        [EnableRateLimiting("login-ip")]
         [HttpPost(Endpoints.Auth.Login)]
         public async Task<IActionResult> Login([FromBody] Contracts.Requests.LoginRequest request)
         {

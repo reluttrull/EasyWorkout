@@ -42,3 +42,8 @@ Content-Type: application/json
 DELETE {{EasyWorkout.Identity.Api_HostAddress}}/api/auth/revoke/{{refreshToken}}
 
 ###
+
+
+GET {{EasyWorkout.Identity.Api_HostAddress}}/api/auth/me
+
+###

@@ -113,12 +113,35 @@ try
     builder.Services.AddRateLimiter(options =>
     {
         options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-        options.AddFixedWindowLimiter("fixed", opt =>
+        options.AddPolicy("global", context =>
         {
-            opt.PermitLimit = 10;
-            opt.Window = TimeSpan.FromSeconds(10);
-            opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-            opt.QueueLimit = 2;
+            return RateLimitPartition.GetFixedWindowLimiter("global", _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 100, // scale with number of users
+                Window = TimeSpan.FromSeconds(5),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 2
+            });
+        });
+        options.AddPolicy("login-ip", context =>
+        {
+            var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+            return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 20,
+                Window = TimeSpan.FromMinutes(20),
+                QueueLimit = 0
+            });
+        });
+        options.AddPolicy("register-ip", context =>
+        {
+            var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+            return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 5,
+                Window = TimeSpan.FromHours(1),
+                QueueLimit = 0
+            });
         });
     });
 
@@ -146,7 +169,7 @@ try
     app.UseAuthentication();
     app.UseAuthorization();
 
-    app.MapControllers();
+    app.MapControllers().RequireRateLimiting("global");
 
     app.Run();
 }

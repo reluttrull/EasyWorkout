@@ -2,7 +2,7 @@
     <h2>My Workouts</h2>
     @if (isLoaded()) {
         @for (workout of workouts(); track $index) {
-            <div>
+            <div class="top-level-container">
                 <app-workout [workout]="workout" (onWorkoutChanged)="reload()" />
             </div>
         }

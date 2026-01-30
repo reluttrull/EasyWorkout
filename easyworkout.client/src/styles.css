@@ -54,10 +54,23 @@ h5 {
     font-weight: bold;
 }
 
+.top-level-container {
+    max-width: 760px;
+}
+
 .box {
     border: 1px solid #333;
+    border-radius: 5px;
     margin: 5px;
     padding: 5px;
+}
+
+.exercise {
+    border: 1px solid #777;
+}
+
+.set {
+    border: 1px solid #aaa;
 }
 
 .borderless-box {

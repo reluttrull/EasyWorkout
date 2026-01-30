@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.RateLimiting;
 namespace EasyWorkout.Api.Controllers
 {
     [ApiController]
-    [EnableRateLimiting("fixed")]
     public class ReportController : ControllerBase
     {
         private readonly IReportService _reportService;

@@ -17,18 +17,33 @@
     font-size: 1.8em;
 }
 
-.main-logo {
-    top: 0px;
-    left: 5px;
-    color: rgb(0, 92, 187);
-    z-index: 1;
+@media (prefers-color-scheme: light) {
+    .main-logo {
+        top: 0px;
+        left: 5px;
+        z-index: 1;
+        color: rgb(0, 92, 187);
+    }
+    .offset-logo {        
+        top: 2px;
+        left: 7px;
+        color: #bbb;
+    }
 }
 
-.offset-logo {
-    top: 2px;
-    left: 7px;
-    color: #bbb;
-    z-index: -1;
+@media (prefers-color-scheme: dark) {
+    .main-logo {
+        top: 0px;
+        left: 5px;
+        z-index: 1;
+        color: rgb(178, 214, 250);
+        /* color: rgb(132, 162, 192); */
+    }
+    .offset-logo {
+        top: 2px;
+        left: 7px;
+        color: #888;
+    }
 }
 
 .horizontal-flex {

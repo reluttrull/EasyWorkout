@@ -1,4 +1,19 @@
+:root {
+  color-scheme: light dark;
+  --text-color: #111;
+  --background-color: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+    --text-color: #ccc;
+    --background-color: #111;
+    }
+}
+
 html, body, app-root {
+  color: var(--text-color);
+  background-color: var(--background-color);
   height: 100vh;
   margin: 0;
   max-width: 100%;

@@ -71,7 +71,7 @@ try
     builder.Services.AddCors(options =>
     {
         options.AddPolicy("AllowClient", policy =>
-            policy.WithOrigins("https://reluttrull.github.io", "https://localhost:4200")
+            policy.WithOrigins("https://reluttrull.github.io", "https://localhost:4200", "https://localhost:5173")
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials());

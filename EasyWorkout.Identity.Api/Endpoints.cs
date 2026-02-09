@@ -12,7 +12,7 @@ namespace EasyWorkout.Identity.Api
             public const string Register = $"{Base}/register";
             public const string Login = $"{Base}/login";
             public const string Refresh = $"{Base}/refresh";
-            public const string Revoke = $"{Base}revoke/{{refreshToken}}";
+            public const string Revoke = $"{Base}/revoke";
             public const string Get = $"{Base}/me";
             public const string Update = $"{Base}/me";
             public const string ChangeEmail = $"{Base}/email";

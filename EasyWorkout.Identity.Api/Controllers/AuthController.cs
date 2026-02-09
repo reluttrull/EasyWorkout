@@ -148,10 +148,10 @@ namespace EasyWorkout.Identity.Api.Controllers
                 });
         }
 
-        [HttpDelete(Endpoints.Auth.Revoke)]
-        public async Task<IActionResult> RevokeToken(string refreshToken)
+        [HttpPut(Endpoints.Auth.Revoke)]
+        public async Task<IActionResult> RevokeToken([FromBody] RevokeRequest request)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
             if (user is null) return NotFound($"User with specified token not found.");
 
             user.RefreshToken = string.Empty;

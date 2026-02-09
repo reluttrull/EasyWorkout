@@ -45,6 +45,14 @@ export class AuthService {
   }
 
   logout() {
+    const refreshToken = this.tokenService.getRefreshToken();
+    if (refreshToken) {
+      console.log('refresh', refreshToken);
+      this.http.put(`${this.baseUrl}/revoke`, { refreshToken })
+        .subscribe(() => {
+          console.log('user logged out');
+        });
+    }
     this.tokenService.clear();
     this.accountService.clear();
     this.router.navigate(['login']);
